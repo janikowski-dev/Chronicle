@@ -6,11 +6,10 @@
 #include "URootGraphNode.generated.h"
 
 UCLASS()
-class STORYSYSTEM_API URootGraphNode : public UStoryGraphNode
+class STORYSYSTEMEDITOR_API URootGraphNode : public UStoryGraphNode
 {
 	GENERATED_BODY()
 
 public:
 	virtual void AllocateDefaultPins() override;
-	virtual FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
 };

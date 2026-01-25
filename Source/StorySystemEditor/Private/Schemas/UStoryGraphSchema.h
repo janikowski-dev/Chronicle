@@ -4,8 +4,10 @@
 #include "EdGraph/EdGraphSchema.h"
 #include "UStoryGraphSchema.generated.h"
 
+class UStoryGraphNode;
+
 UCLASS()
-class STORYSYSTEM_API UStoryGraphSchema : public UEdGraphSchema
+class STORYSYSTEMEDITOR_API UStoryGraphSchema : public UEdGraphSchema
 {
 	GENERATED_BODY()
 
@@ -34,4 +36,9 @@ public:
 		FSlateWindowElementList& InDrawElements,
 		UEdGraph* InGraphObj)
 	const override;
+
+	void SpawnGhostNode(
+		UEdGraphPin* FromPin,
+		UStoryGraphNode* TargetNode
+	) const;
 };

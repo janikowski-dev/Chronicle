@@ -11,7 +11,7 @@ class UDialogueGraphNode : public UStoryGraphNode
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, Category = "Dialogue")
+	UPROPERTY(EditAnywhere)
 	FText DialogueText;
 
 	virtual void AllocateDefaultPins() override;

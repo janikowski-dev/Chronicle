@@ -1,6 +1,5 @@
 ﻿#include "SDialogueGraphNode.h"
-#include "UDialogueGraphNode.h"
-#include "Layout/StoryGraphLayout.h"
+#include "Nodes/UDialogueGraphNode.h"
 #include "Widgets/Input/SMultiLineEditableTextBox.h"
 
 void SDialogueGraphNode::Construct(const FArguments&, UDialogueGraphNode* InNode)
@@ -60,8 +59,8 @@ void SDialogueGraphNode::UpdateGraphNode()
 	.Padding(4)
 	[
 		SNew(SBox)
-		.MinDesiredHeight(NodeHeight)
-		.MinDesiredWidth(NodeWidth)
+		.MinDesiredHeight(150.0f)
+		.MinDesiredWidth(275.0f)
 		[
 			SNew(SMultiLineEditableTextBox)
 			.Text(this, &SDialogueGraphNode::GetDialogueText)

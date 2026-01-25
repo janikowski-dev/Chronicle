@@ -24,14 +24,16 @@ void FStoryConnectionDrawingPolicy::DrawSplineWithArrow(
 )
 {
 	TArray<FVector2f> Points;
-	
-	FVector2f TopAnchor;
-	TopAnchor.X = (StartPoint.X + EndPoint.X) * 0.5f;
-	TopAnchor.Y = StartPoint.Y;
-	
-	FVector2f BottomAnchor;
-	BottomAnchor.X = (StartPoint.X + EndPoint.X) * 0.5f;
-	BottomAnchor.Y = EndPoint.Y;
+
+	const FVector2f TopAnchor(
+		static_cast<int>((StartPoint.X + EndPoint.X) * 0.5f),
+		StartPoint.Y
+		);
+
+	const FVector2f BottomAnchor(
+		static_cast<int>((StartPoint.X + EndPoint.X) * 0.5f),
+		EndPoint.Y
+	);
 	
 	Points.Add(StartPoint);
 	Points.Add(TopAnchor);

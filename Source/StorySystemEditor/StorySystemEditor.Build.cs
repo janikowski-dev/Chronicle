@@ -1,8 +1,8 @@
 using UnrealBuildTool;
 
-public class StorySystem : ModuleRules
+public class StorySystemEditor : ModuleRules
 {
-	public StorySystem(ReadOnlyTargetRules Target) : base(Target)
+	public StorySystemEditor(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		

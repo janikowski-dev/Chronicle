@@ -7,7 +7,7 @@
 class UStoryGraph;
 
 UCLASS()
-class STORYSYSTEM_API UStoryAsset : public UDataAsset
+class STORYSYSTEMEDITOR_API UStoryAsset : public UDataAsset
 {
 	GENERATED_BODY()
 

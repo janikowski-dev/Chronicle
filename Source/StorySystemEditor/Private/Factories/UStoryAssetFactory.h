@@ -5,7 +5,7 @@
 #include "UStoryAssetFactory.generated.h"
 
 UCLASS()
-class STORYSYSTEM_API UStoryAssetFactory : public UFactory
+class STORYSYSTEMEDITOR_API UStoryAssetFactory : public UFactory
 {
 	GENERATED_BODY()
 

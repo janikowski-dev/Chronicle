@@ -1,6 +1,6 @@
 ﻿#include "FGraphSchemaAction_AddNode.h"
 #include "EdGraph/EdGraph.h"
-#include "Layout/StoryGraphLayout.h"
+#include "Graphs/UStoryGraph.h"
 
 UEdGraphNode* FGraphSchemaAction_AddNode::PerformAction(
 	UEdGraph* ParentGraph,
@@ -12,7 +12,7 @@ UEdGraphNode* FGraphSchemaAction_AddNode::PerformAction(
 	const FScopedTransaction Transaction(NSLOCTEXT("StoryGraph", "AddNode", "Add Node"));
 	UEdGraphNode* NewNode = CreateNewNode(ParentGraph);
 	TryAttachingPin(ParentGraph, NewNode, FromPin);
-	Layout(ParentGraph);
+	Cast<UStoryGraph>(ParentGraph)->AutoLayout();
 	return NewNode;
 }
 
