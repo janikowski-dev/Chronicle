@@ -1,87 +1,28 @@
 ﻿#include "UStoryGraphSchema.h"
+
+#include "Policies/StoryConnectionDrawingPolicy.h"
 #include "Actions/FGraphSchemaAction_AddNode.h"
-#include "Nodes/UDialogueGraphNode.h"
 #include "Nodes/UResponseGraphNode.h"
 #include "Nodes/URootGraphNode.h"
-#include "Policies/StoryConnectionDrawingPolicy.h"
+#include "Nodes/UDialogueGraphNode.h"
+#include "ToolMenus.h"
+#include "ToolMenuSection.h"
 
 #pragma region Initialization
 
 void UStoryGraphSchema::CreateDefaultNodesForGraph(UEdGraph& Graph) const
 {
-	URootGraphNode* EntryNode = NewObject<URootGraphNode>(
-		&Graph,
-		URootGraphNode::StaticClass(),
-		NAME_None,
-		RF_Transactional
-	);
-
-	Graph.AddNode(EntryNode, true, false);
-
-	EntryNode->CreateNewGuid();
-	EntryNode->PostPlacedNewNode();
-	EntryNode->AllocateDefaultPins();
-
-	EntryNode->NodePosX = 0;
-	EntryNode->NodePosY = 0;
+	MakeShared<FGraphSchemaAction_AddNode>(
+		FText::FromString("Root"),
+		FText::FromString("Root Node"),
+		FText::FromString("Adds a root node"),
+		URootGraphNode::StaticClass()
+	)->PerformAction(&Graph,nullptr, FVector2f::Zero(), true);
 }
 
 #pragma endregion
 
 #pragma region Connection
-
-const FPinConnectionResponse UStoryGraphSchema::CanCreateConnection(
-	const UEdGraphPin* A,
-	const UEdGraphPin* B
-) const
-{
-	if (A->Direction == B->Direction)
-	{
-		return FPinConnectionResponse(
-			CONNECT_RESPONSE_DISALLOW,
-			TEXT("Pins must be input/output")
-		);
-	}
-
-	if (A->PinType.PinCategory != B->PinType.PinCategory)
-	{
-		return FPinConnectionResponse(
-			CONNECT_RESPONSE_DISALLOW,
-			TEXT("Pin types do not match")
-		);
-	}
-
-	return FPinConnectionResponse(CONNECT_RESPONSE_MAKE, TEXT(""));
-}
-
-bool UStoryGraphSchema::TryCreateConnection(
-	UEdGraphPin* A,
-	UEdGraphPin* B
-) const
-{
-	if (!A || !B)
-	{
-		return false;
-	}
-	
-	if (const FPinConnectionResponse Response = CanCreateConnection(A, B); Response.Response == CONNECT_RESPONSE_DISALLOW)
-	{
-		return false;
-	}
-
-	UEdGraph* Graph = A->GetOwningNode()->GetGraph();
-	check(Graph);
-
-	Graph->Modify();
-
-	A->Modify();
-	B->Modify();
-
-	A->MakeLinkTo(B);
-
-	Graph->NotifyGraphChanged();
-	return true;
-}
 
 FConnectionDrawingPolicy* UStoryGraphSchema::CreateConnectionDrawingPolicy(
 	const int32 InBackLayerID,
@@ -101,31 +42,149 @@ FConnectionDrawingPolicy* UStoryGraphSchema::CreateConnectionDrawingPolicy(
 	);
 }
 
+const FPinConnectionResponse UStoryGraphSchema::CanCreateConnection(
+	const UEdGraphPin* A,
+	const UEdGraphPin* B
+) const
+{
+	return FPinConnectionResponse(
+		CONNECT_RESPONSE_MAKE,
+		TEXT("")
+	);
+}
+
+bool UStoryGraphSchema::TryCreateConnection(
+	UEdGraphPin* A,
+	UEdGraphPin* B
+) const
+{
+	A->Modify();
+	B->Modify();
+	A->MakeLinkTo(B);
+	return true;
+}
+
 #pragma endregion
 
 #pragma region Nodes Creation
 
-void AddDialogueAction(FGraphContextMenuBuilder& ContextMenuBuilder)
+void UStoryGraphSchema::GetContextMenuActions(UToolMenu* Menu, UGraphNodeContextMenuContext* Context) const
 {
-	ContextMenuBuilder.AddAction(MakeShared<FGraphSchemaAction_AddNode>(
-		FText::FromString("Dialogue"),
+	FToolMenuSection* Section = CreateSection(Menu, Context);
+
+	if (!Section)
+	{
+		return;
+	}
+
+	AddDialogueContext(Context, Section);
+	AddResponseContext(Context, Section);
+	AddRootContext(Context, Section);
+}
+
+void UStoryGraphSchema::AddDialogueContext(const UGraphNodeContextMenuContext* Context, FToolMenuSection* Section) const
+{
+	const UDialogueGraphNode* Node = Cast<UDialogueGraphNode>(Context->Node);
+	
+	if (!Node)
+	{
+		return;
+	}
+	
+	if (HasChildOfType(Node, UResponseGraphNode::StaticClass()))
+	{
+		AddResponseAction(Context, Section);
+	}
+	else if (!HasAnyChild(Node))
+	{
+		AddDialogueAction(Context, Section);
+		AddResponseAction(Context, Section);
+	}
+}
+
+void UStoryGraphSchema::AddResponseContext(const UGraphNodeContextMenuContext* Context, FToolMenuSection* Section) const
+{
+	const UResponseGraphNode* Node = Cast<UResponseGraphNode>(Context->Node);
+	
+	if (!Node)
+	{
+		return;
+	}
+	
+	if (HasAnyChild(Node))
+	{
+		return;
+	}
+	
+	AddDialogueAction(Context, Section);
+}
+
+void UStoryGraphSchema::AddRootContext(const UGraphNodeContextMenuContext* Context, FToolMenuSection* Section) const
+{
+	const URootGraphNode* Node = Cast<URootGraphNode>(Context->Node);
+	
+	if (!Node)
+	{
+		return;
+	}
+	
+	if (HasAnyChild(Node))
+	{
+		return;
+	}
+	
+	AddDialogueAction(Context, Section);
+}
+
+void UStoryGraphSchema::AddDialogueAction(const UGraphNodeContextMenuContext* Context, FToolMenuSection* Section) const
+{
+	UEdGraph* Graph = const_cast<UEdGraph*>(Context->Graph.Get());
+	UEdGraphPin* Pin = GetOutputPin(Context->Node);
+	
+	Section->AddMenuEntry(
+		"AddDialogueNode",
 		FText::FromString("Dialogue Node"),
 		FText::FromString("Adds a dialogue node"),
-		UDialogueGraphNode::StaticClass()
-	));
+		FSlateIcon(),
+		FUIAction(
+			FExecuteAction::CreateLambda([Graph, Pin]
+			{
+				MakeShared<FGraphSchemaAction_AddNode>(
+					FText::FromString("Dialogue"),
+					FText::FromString("Dialogue Node"),
+					FText::FromString("Adds a dialogue node"),
+					UDialogueGraphNode::StaticClass()
+				)->PerformAction(Graph, Pin, FVector2f::Zero(), true);
+			})
+		)
+	);
 }
 
-void AddResponseAction(FGraphContextMenuBuilder& ContextMenuBuilder)
+void UStoryGraphSchema::AddResponseAction(const UGraphNodeContextMenuContext* Context, FToolMenuSection* Section) const
 {
-	ContextMenuBuilder.AddAction(MakeShared<FGraphSchemaAction_AddNode>(
-		FText::FromString("Response"),
+	UEdGraph* Graph = const_cast<UEdGraph*>(Context->Graph.Get());
+	UEdGraphPin* Pin = GetOutputPin(Context->Node);
+	
+	Section->AddMenuEntry(
+		"AddResponseNode",
 		FText::FromString("Response Node"),
 		FText::FromString("Adds a response node"),
-		UResponseGraphNode::StaticClass()
-	));
+		FSlateIcon(),
+		FUIAction(
+			FExecuteAction::CreateLambda([Graph, Pin]
+			{
+				MakeShared<FGraphSchemaAction_AddNode>(
+					FText::FromString("Response"),
+					FText::FromString("Response Node"),
+					FText::FromString("Adds a response node"),
+					UResponseGraphNode::StaticClass()
+				)->PerformAction(Graph, Pin, FVector2f::Zero(), true);
+			})
+		)
+	);
 }
 
-bool HasChildOfType(const UEdGraphNode* Node, UClass* ChildClass)
+bool UStoryGraphSchema::HasChildOfType(const UEdGraphNode* Node, UClass* ChildClass) const
 {
 	for (const UEdGraphPin* Pin : Node->Pins)
 	{
@@ -148,7 +207,7 @@ bool HasChildOfType(const UEdGraphNode* Node, UClass* ChildClass)
 	return false;
 }
 
-bool HasAnyChild(const UEdGraphNode* Node)
+bool UStoryGraphSchema::HasAnyChild(const UEdGraphNode* Node) const
 {
 	for (const UEdGraphPin* Pin : Node->Pins)
 	{
@@ -169,58 +228,26 @@ bool HasAnyChild(const UEdGraphNode* Node)
 	return false;
 }
 
-void AddDialogueContext(const UDialogueGraphNode* Node, FGraphContextMenuBuilder& ContextMenuBuilder)
+FToolMenuSection* UStoryGraphSchema::CreateSection(UToolMenu* Menu, const UGraphNodeContextMenuContext* Context) const
 {
-	if (HasChildOfType(Node, UResponseGraphNode::StaticClass()))
+	if (!Context->Node)
 	{
-		AddResponseAction(ContextMenuBuilder);
-	}
-	else if (!HasAnyChild(Node))
-	{
-		AddDialogueAction(ContextMenuBuilder);
-		AddResponseAction(ContextMenuBuilder);
-	}
-}
-
-void AddResponseContext(const UResponseGraphNode* Node, FGraphContextMenuBuilder& ContextMenuBuilder)
-{
-	if (HasAnyChild(Node))
-	{
-		return;
+		return nullptr;
 	}
 	
-	AddDialogueAction(ContextMenuBuilder);
+	return &Menu->AddSection("SchemaNode", FText::FromString("Schema"));
 }
 
-void AddRootContext(FGraphContextMenuBuilder& ContextMenuBuilder)
+UEdGraphPin* UStoryGraphSchema::GetOutputPin(const UEdGraphNode* Node) const
 {
-	AddDialogueAction(ContextMenuBuilder);
-}
-
-void UStoryGraphSchema::GetGraphContextActions(FGraphContextMenuBuilder& ContextMenuBuilder) const
-{
-	if (!ContextMenuBuilder.FromPin)
+	for (UEdGraphPin* Pin : Node->Pins)
 	{
-		return;
+		if (Pin && Pin->Direction == EGPD_Output)
+		{
+			return Pin;
+		}
 	}
-
-	const UEdGraphNode* FromNode = ContextMenuBuilder.FromPin->GetOwningNode();
-	Super::GetGraphContextActions(ContextMenuBuilder);
-
-	if (const UDialogueGraphNode* DialogueNode = Cast<UDialogueGraphNode>(FromNode))
-	{
-		AddDialogueContext(DialogueNode, ContextMenuBuilder);
-	}
-	
-	if (const UResponseGraphNode* ResponseNode = Cast<UResponseGraphNode>(FromNode))
-	{
-		AddResponseContext(ResponseNode, ContextMenuBuilder);
-	}
-	
-	if (Cast<URootGraphNode>(FromNode))
-	{
-		AddRootContext(ContextMenuBuilder);
-	}
+	return nullptr;
 }
 
 #pragma endregion

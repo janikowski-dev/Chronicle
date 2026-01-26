@@ -4,7 +4,6 @@
 #include "Graphs/UStoryGraph.h"
 
 #include "GraphEditor.h"
-#include "GraphEditorActions.h"
 #include "Widgets/Docking/SDockTab.h"
 #include "Framework/Docking/TabManager.h"
 #include "Nodes/URootGraphNode.h"
@@ -68,17 +67,8 @@ void FStoryAssetEditor::UnregisterTabSpawners(const TSharedRef<FTabManager>& InT
 
 TSharedRef<SDockTab> FStoryAssetEditor::SpawnGraphTab(const FSpawnTabArgs&)
 {
-	GraphCommands = MakeShared<FUICommandList>();
-
-	GraphCommands->MapAction(
-		FGraphEditorCommands::Get().DeleteAndReconnectNodes,
-		FExecuteAction::CreateSP(this, &FStoryAssetEditor::DeleteSelectedNodes),
-		FCanExecuteAction::CreateSP(this, &FStoryAssetEditor::CanDeleteNodes)
-	);
-	
 	GraphEditor = SNew(SGraphEditor)
 		.GraphToEdit(EditedAsset->Graph)
-		.AdditionalCommands(GraphCommands)
 		.IsEditable(true);
 
 	return SNew(SDockTab)

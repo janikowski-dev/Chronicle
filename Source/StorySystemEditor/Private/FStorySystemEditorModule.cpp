@@ -1,4 +1,4 @@
-#include "FStorySystemModule.h"
+#include "FStorySystemEditorModule.h"
 #include "AssetToolsModule.h"
 #include "EdGraphUtilities.h"
 #include "Actions/FAssetTypeActions_Story.h"
@@ -6,17 +6,17 @@
 
 #define LOCTEXT_NAMESPACE "FStorySystemModule"
 
-void FStorySystemModule::StartupModule()
+void FStorySystemEditorModule::StartupModule()
 {
 	FEdGraphUtilities::RegisterVisualNodeFactory(MakeShared<FStorySystemNodeFactory>());
 	FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get()
 	.RegisterAssetTypeActions(MakeShared<FAssetTypeActions_Story>());
 }
 
-void FStorySystemModule::ShutdownModule()
+void FStorySystemEditorModule::ShutdownModule()
 {
 }
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FStorySystemModule, StorySystem)
+IMPLEMENT_MODULE(FStorySystemEditorModule, StorySystem)

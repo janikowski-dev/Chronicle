@@ -36,7 +36,6 @@ private:
 	TSharedRef<SDockTab> SpawnGraphTab(const FSpawnTabArgs& Args);
 
 private:
-	TSharedPtr<FUICommandList> GraphCommands;
 	TSharedPtr<SGraphEditor> GraphEditor;
 	UStoryAsset* EditedAsset = nullptr;
 };

@@ -21,7 +21,9 @@ public class StorySystemEditor : ModuleRules
 			"EditorFramework",
 			"Slate",
 			"SlateCore",
-			"GraphEditor"
+			"GraphEditor",
+			"ToolMenus",
+			"InputCore"
 		]);
 	}
 }

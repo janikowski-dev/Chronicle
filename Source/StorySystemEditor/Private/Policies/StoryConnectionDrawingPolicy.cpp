@@ -23,31 +23,145 @@ void FStoryConnectionDrawingPolicy::DrawSplineWithArrow(
 	const FConnectionParams& Params
 )
 {
+	const FVector2f PinOffset = GetPinOffset();
+	
+	if (IsStraightConnection(StartPoint, EndPoint))
+	{
+		DrawStraightConnection(StartPoint + PinOffset, EndPoint - PinOffset, Params);
+	}
+	else
+	{
+		DrawAngledConnection(StartPoint, EndPoint, PinOffset, Params);
+	}
+	
+	DrawArrow(EndPoint, PinOffset, Params);
+}
+
+void FStoryConnectionDrawingPolicy::DrawAngledConnection(
+	const FVector2f& StartPoint,
+	const FVector2f& EndPoint,
+	const FVector2f& PinOffset,
+	const FConnectionParams& Params
+) const
+{
+	const TArray<FLineSegment> Segments = BuildOrthogonalWire(StartPoint, EndPoint, PinOffset, Params);
+
+	for (const auto& [A, B] : Segments)
+	{
+		DrawStraightConnection(A, B, Params);
+	}
+}
+
+void FStoryConnectionDrawingPolicy::DrawStraightConnection(
+	const FVector2f& StartPoint,
+	const FVector2f& EndPoint,
+	const FConnectionParams& Params
+) const
+{
 	TArray<FVector2f> Points;
-
-	const FVector2f TopAnchor(
-		static_cast<int>((StartPoint.X + EndPoint.X) * 0.5f),
-		StartPoint.Y
-		);
-
-	const FVector2f BottomAnchor(
-		static_cast<int>((StartPoint.X + EndPoint.X) * 0.5f),
-		EndPoint.Y
-	);
 	
 	Points.Add(StartPoint);
-	Points.Add(TopAnchor);
-	Points.Add(BottomAnchor);
 	Points.Add(EndPoint);
-
+	
 	FSlateDrawElement::MakeLines(
 		DrawElementsList,
-		100,
+		WireLayerID,
 		FPaintGeometry(),
 		Points,
-		ESlateDrawEffect::None,
+		ESlateDrawEffect::NoBlending,
 		Params.WireColor,
 		true,
 		Params.WireThickness
 	);
+}
+
+void FStoryConnectionDrawingPolicy::DrawArrow(
+	const FVector2f& EndPoint,
+	const FVector2f& PinOffset,
+	const FConnectionParams& Params
+) const
+{
+	if (ArrowImage == nullptr)
+	{
+		return;
+	}
+
+	const FVector2f ArrowPoint = EndPoint - ArrowRadius - PinOffset;
+
+	FSlateDrawElement::MakeBox(
+		DrawElementsList,
+		ArrowLayerID,
+		FPaintGeometry(ArrowPoint, ArrowImage->ImageSize * ZoomFactor, ZoomFactor),
+		ArrowImage,
+		ESlateDrawEffect::None,
+		Params.WireColor
+	);
+}
+
+TArray<FLineSegment> FStoryConnectionDrawingPolicy::BuildOrthogonalWire(
+	const FVector2f& StartPoint,
+	const FVector2f& EndPoint,
+	const FVector2f& PinOffset,
+	const FConnectionParams& Params
+) const
+{
+	TArray<FLineSegment> Segments;
+
+	const FVector2f HorizontalAnchorOffset(
+		Params.WireThickness * 0.5f,
+		0.0f
+	);
+	
+	const FVector2f VerticalAnchorOffset(
+		0.0f,
+		Params.WireThickness * 0.5f
+	);
+	
+	const FVector2f StartAnchor(
+		(StartPoint.X + EndPoint.X) * 0.5f,
+		StartPoint.Y
+	);
+
+	const FVector2f EndAnchor(
+		(StartPoint.X + EndPoint.X) * 0.5f,
+		EndPoint.Y
+	);
+
+	FVector2f BottomAnchor;
+	FVector2f TopAnchor;
+
+	if (StartAnchor.Y > EndAnchor.Y)
+	{
+		BottomAnchor = EndAnchor;
+		TopAnchor = StartAnchor;
+	}
+	else
+	{
+		BottomAnchor = StartAnchor;
+		TopAnchor = EndAnchor;
+	}
+
+	Segments.Add(FLineSegment(StartPoint + PinOffset, StartAnchor + HorizontalAnchorOffset));
+	Segments.Add(FLineSegment(TopAnchor + VerticalAnchorOffset, BottomAnchor - VerticalAnchorOffset));
+	Segments.Add(FLineSegment(EndAnchor - HorizontalAnchorOffset, EndPoint - PinOffset));
+	
+	return Segments;
+}
+
+FVector2f FStoryConnectionDrawingPolicy::GetPinOffset() const
+{
+	const FVector2f PinOffset(
+		17.5f,
+		0.0f
+	);
+
+	return PinOffset * ZoomFactor;
+}
+
+bool FStoryConnectionDrawingPolicy::IsStraightConnection(
+	const FVector2f& StartPoint,
+	const FVector2f& EndPoint
+) const
+{
+	return StartPoint.Y == EndPoint.Y;
 }
