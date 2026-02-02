@@ -7,6 +7,26 @@
 
 static const FName NodeGraphTabName(TEXT("NodeGraph"));
 
+FName FStoryNodeEditor::GetToolkitFName() const
+{
+	return FName("NodeAssetEditor");
+}
+
+FText FStoryNodeEditor::GetBaseToolkitName() const
+{
+	return FText::FromString("Node Asset Editor");
+}
+
+FString FStoryNodeEditor::GetWorldCentricTabPrefix() const
+{
+	return TEXT("Node");
+}
+
+FLinearColor FStoryNodeEditor::GetWorldCentricTabColorScale() const
+{
+	return FLinearColor(0.1f, 0.6f, 1.0f);
+}
+
 void FStoryNodeEditor::InitNodeAssetEditor(
 	const EToolkitMode::Type Mode,
 	const TSharedPtr<IToolkitHost>& InitToolkitHost,
@@ -27,10 +47,6 @@ void FStoryNodeEditor::InitNodeAssetEditor(
 			)
 		);
 
-	TArray<UObject*> ObjectsToEdit;
-	ObjectsToEdit.Add(Node);
-	EditedNode = Node;
-
 	InitAssetEditor(
 		Mode,
 		InitToolkitHost,
@@ -38,7 +54,7 @@ void FStoryNodeEditor::InitNodeAssetEditor(
 		Layout,
 		true,
 		true,
-		ObjectsToEdit
+		Cache(Node)
 	);
 
 	RegenerateMenusAndToolbars();
@@ -46,8 +62,6 @@ void FStoryNodeEditor::InitNodeAssetEditor(
 
 void FStoryNodeEditor::RegisterTabSpawners(const TSharedRef<FTabManager>& InTabManager)
 {
-	FAssetEditorToolkit::RegisterTabSpawners(InTabManager);
-
 	InTabManager->RegisterTabSpawner(
 		NodeGraphTabName,
 		FOnSpawnTab::CreateRaw(this, &FStoryNodeEditor::SpawnGraphTab)
@@ -58,13 +72,14 @@ void FStoryNodeEditor::RegisterTabSpawners(const TSharedRef<FTabManager>& InTabM
 void FStoryNodeEditor::UnregisterTabSpawners(const TSharedRef<FTabManager>& InTabManager)
 {
 	InTabManager->UnregisterTabSpawner(NodeGraphTabName);
-	FAssetEditorToolkit::UnregisterTabSpawners(InTabManager);
 }
 
 TSharedRef<SDockTab> FStoryNodeEditor::SpawnGraphTab(const FSpawnTabArgs&)
 {
+	UEdGraph* Graph = EditedNode->GetOrCreateInnerGraph();
+	
 	GraphEditor = SNew(SGraphEditor)
-		.GraphToEdit(EditedNode->GetInnerGraph())
+		.GraphToEdit(Graph)
 		.IsEditable(true);
 	
 	return SNew(SDockTab)
@@ -74,22 +89,10 @@ TSharedRef<SDockTab> FStoryNodeEditor::SpawnGraphTab(const FSpawnTabArgs&)
 		];
 }
 
-FName FStoryNodeEditor::GetToolkitFName() const
+TArray<UObject*> FStoryNodeEditor::Cache(UStoryNode* Node)
 {
-	return FName("NodeAssetEditor");
-}
-
-FText FStoryNodeEditor::GetBaseToolkitName() const
-{
-	return FText::FromString("Node Asset Editor");
-}
-
-FString FStoryNodeEditor::GetWorldCentricTabPrefix() const
-{
-	return TEXT("Node");
-}
-
-FLinearColor FStoryNodeEditor::GetWorldCentricTabColorScale() const
-{
-	return FLinearColor(0.1f, 0.6f, 1.0f);
+	TArray<UObject*> Result;
+	EditedNode = Node;
+	Result.Add(Node);
+	return Result;
 }

@@ -11,23 +11,8 @@ public:
 		TSharedPtr<IToolkitHost> EditWithinLevelEditor
 	) override;
 	
-	virtual FText GetName() const override
-	{
-		return NSLOCTEXT("Assets", "StoryAsset", "Story Asset");
-	}
-
-	virtual FColor GetTypeColor() const override
-	{
-		return FColor::Purple;
-	}
-
-	virtual UClass* GetSupportedClass() const override
-	{
-		return UStoryAsset::StaticClass();
-	}
-
-	virtual uint32 GetCategories() override
-	{
-		return EAssetTypeCategories::Misc;
-	}
+	virtual FText GetName() const override;
+	virtual FColor GetTypeColor() const override;
+	virtual UClass* GetSupportedClass() const override;
+	virtual uint32 GetCategories() override;
 };

@@ -1,94 +1,41 @@
 ﻿#include "SStoryDialogueNode.h"
+
+#include "SGraphPanel.h"
 #include "Nodes/Unreal/UStoryDialogueNode.h"
-#include "Widgets/Input/SMultiLineEditableTextBox.h"
 
 void SStoryDialogueNode::Construct(const FArguments&, UStoryDialogueNode* InNode)
 {
-	GraphNode = InNode;
+	Cache(InNode);
 	UpdateGraphNode();
 }
 
-void SStoryDialogueNode::UpdateGraphNode()
+FText SStoryDialogueNode::GetTitle(UStoryNode* Node)
 {
-	SetupErrorReporting();
-
-	const TSharedRef<SVerticalBox> NodeBody =
-	SNew(SVerticalBox)
-
-	// Title
-	+ SVerticalBox::Slot()
-	.AutoHeight()
-	.Padding(4)
-	[
-		SNew(STextBlock)
-		.Text(FText::FromString(TEXT("Dialogue")))
-	]
-
-	// Pins row
-	+ SVerticalBox::Slot()
-	.AutoHeight()
-	.Padding(2)
-	[
-		SNew(SHorizontalBox)
-
-		// In pins (left)
-		+ SHorizontalBox::Slot()
-		.AutoWidth()
-		[
-			SAssignNew(LeftNodeBox, SVerticalBox)
-		]
-
-		// Spacer (pushes right pins to the edge)
-		+ SHorizontalBox::Slot()
-		.FillWidth(1.f)
-		[
-			SNew(SSpacer)
-		]
-
-		// Out pins (right)
-		+ SHorizontalBox::Slot()
-		.AutoWidth()
-		[
-			SAssignNew(RightNodeBox, SVerticalBox)
-		]
-	]
-
-	// Dialogue editor
-	+ SVerticalBox::Slot()
-	.AutoHeight()
-	.Padding(4)
-	[
-		SNew(SBox)
-		.MinDesiredHeight(150.0f)
-		.MinDesiredWidth(275.0f)
-		[
-			SNew(SMultiLineEditableTextBox)
-			.Text(this, &SStoryDialogueNode::GetDialogueText)
-			.OnTextCommitted(this, &SStoryDialogueNode::OnDialogueCommitted)
-			.AutoWrapText(true)
-		]
-	];
-
-	this->GetOrAddSlot(ENodeZone::Center)
-	[
-		SNew(SBorder)
-		.BorderImage(FAppStyle::GetBrush("Graph.Node.Body"))
-		[
-			NodeBody
-		]
-	];
-
-	CreatePinWidgets();
+	return FText::Format(FText::FromString("Dialogue_{0}"), Node->EditorIndex);
 }
 
-FText SStoryDialogueNode::GetDialogueText() const
+FSlateColor SStoryDialogueNode::GetHeaderColor() const
 {
-	return CastChecked<UStoryDialogueNode>(GraphNode)->DialogueText;
+	return FSlateColor(FLinearColor::Red);
 }
 
-void SStoryDialogueNode::OnDialogueCommitted(const FText& NewText, ETextCommit::Type) const
+void SStoryDialogueNode::AddBody(const TSharedRef<SVerticalBox>& Box)
+{
+	AddTextField(
+		Box,
+		TAttribute<FText>::Create(TAttribute<FText>::FGetter::CreateSP(this, &SStoryDialogueNode::GetText)),
+		FOnTextCommitted::CreateSP(this, &SStoryDialogueNode::SetText)
+	);
+}
+
+FText SStoryDialogueNode::GetText() const
+{
+	return CastChecked<UStoryDialogueNode>(GraphNode)->Text;
+}
+
+void SStoryDialogueNode::SetText(const FText& NewText, ETextCommit::Type) const
 {
 	UStoryDialogueNode* Node = CastChecked<UStoryDialogueNode>(GraphNode);
 	Node->Modify();
-	Node->DialogueText = NewText;
+	Node->Text = NewText;
 }

@@ -1,66 +1,23 @@
 ﻿#include "SStoryRootNode.h"
 
-#include "Nodes/Unreal/URootStoryNode.h"
+#include "Nodes/Unreal/UStoryRootNode.h"
 
-void SStoryRootNode::Construct(const FArguments&, URootStoryNode* InNode)
+void SStoryRootNode::Construct(const FArguments&, UStoryRootNode* InNode)
 {
-	GraphNode = InNode;
+	Cache(InNode);
 	UpdateGraphNode();
 }
 
-void SStoryRootNode::UpdateGraphNode()
+void SStoryRootNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 {
-	SetupErrorReporting();
+}
 
-	const TSharedRef<SVerticalBox> NodeBody =
-	SNew(SVerticalBox)
+FText SStoryRootNode::GetTitle(UStoryNode* Node)
+{
+	return FText::FromString("Root_0");
+}
 
-	// Title
-	+ SVerticalBox::Slot()
-	.AutoHeight()
-	.Padding(4)
-	[
-		SNew(STextBlock)
-		.Text(FText::FromString(TEXT("Root")))
-	]
-
-	// Pins row
-	+ SVerticalBox::Slot()
-	.AutoHeight()
-	.Padding(2)
-	[
-		SNew(SHorizontalBox)
-
-		// In pins (left)
-		+ SHorizontalBox::Slot()
-		.AutoWidth()
-		[
-			SAssignNew(LeftNodeBox, SVerticalBox)
-		]
-
-		// Spacer
-		+ SHorizontalBox::Slot()
-		.FillWidth(1.0f)
-		[
-			SNew(SSpacer)
-		]
-
-		// Out pins (right)
-		+ SHorizontalBox::Slot()
-		.AutoWidth()
-		[
-			SAssignNew(RightNodeBox, SVerticalBox)
-		]
-	];
-
-	this->GetOrAddSlot(ENodeZone::Center)
-	[
-		SNew(SBorder)
-		.BorderImage(FAppStyle::GetBrush("Graph.Node.Body"))
-		[
-			NodeBody
-		]
-	];
-
-	CreatePinWidgets();
+FSlateColor SStoryRootNode::GetHeaderColor() const
+{
+	return FSlateColor(FLinearColor::Black);
 }

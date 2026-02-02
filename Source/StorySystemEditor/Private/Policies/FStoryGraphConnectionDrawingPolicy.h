@@ -8,7 +8,7 @@ struct FLineSegment
 	FVector2f B;
 };
 
-class FStoryGraphConnectionDrawingPolicy : public FConnectionDrawingPolicy
+class STORYSYSTEMEDITOR_API FStoryGraphConnectionDrawingPolicy : public FConnectionDrawingPolicy
 {
 public:
 	FStoryGraphConnectionDrawingPolicy(

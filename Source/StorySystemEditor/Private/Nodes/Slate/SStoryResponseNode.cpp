@@ -3,67 +3,38 @@
 
 void SStoryResponseNode::Construct(const FArguments&, UStoryResponseNode* InNode)
 {
-	GraphNode = InNode;
+	Cache(InNode);
 	UpdateGraphNode();
 }
 
-void SStoryResponseNode::UpdateGraphNode()
+FText SStoryResponseNode::GetTitle(UStoryNode* Node)
 {
-	SetupErrorReporting();
-
-	const TSharedRef<SWidget> NodeBody =
-	SNew(SBox)
-	.WidthOverride(275.0f)
-	.HeightOverride(150.0f)
-	[
-		SNew(SVerticalBox)
-
-		// Title
-		+ SVerticalBox::Slot()
-		.AutoHeight()
-		.Padding(4)
-		[
-			SNew(STextBlock)
-			.Text(FText::FromString(TEXT("Response")))
-		]
-
-		// Pins row
-		+ SVerticalBox::Slot()
-		.FillHeight(1.0f) // IMPORTANT
-		.Padding(2)
-		[
-			SNew(SHorizontalBox)
-
-			// In pins
-			+ SHorizontalBox::Slot()
-			.AutoWidth()
-			[
-				SAssignNew(LeftNodeBox, SVerticalBox)
-			]
-
-			+ SHorizontalBox::Slot()
-			.FillWidth(1.0f)
-			[
-				SNew(SSpacer)
-			]
-
-			// Out pins
-			+ SHorizontalBox::Slot()
-			.AutoWidth()
-			[
-				SAssignNew(RightNodeBox, SVerticalBox)
-			]
-		]
-	];
-
-	this->GetOrAddSlot(ENodeZone::Center)
-	[
-		SNew(SBorder)
-		.BorderImage(FAppStyle::GetBrush("Graph.Node.Body"))
-		[
-			NodeBody
-		]
-	];
-
-	CreatePinWidgets();
+	return FText::Format(FText::FromString("Response_{0}"), Node->EditorIndex);
 }
+
+FSlateColor SStoryResponseNode::GetHeaderColor() const
+{
+	return FSlateColor(FLinearColor::Blue);
+}
+
+void SStoryResponseNode::AddBody(const TSharedRef<SVerticalBox>& Box)
+{
+	AddTextField(
+		Box,
+		TAttribute<FText>::Create(TAttribute<FText>::FGetter::CreateSP(this, &SStoryResponseNode::GetText)),
+		FOnTextCommitted::CreateSP(this, &SStoryResponseNode::SetText)
+	);
+}
+
+FText SStoryResponseNode::GetText() const
+{
+	return CastChecked<UStoryResponseNode>(GraphNode)->Text;
+}
+
+void SStoryResponseNode::SetText(const FText& NewText, ETextCommit::Type) const
+{
+	UStoryResponseNode* Node = CastChecked<UStoryResponseNode>(GraphNode);
+	Node->Modify();
+	Node->Text = NewText;
+}
+

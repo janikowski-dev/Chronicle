@@ -9,9 +9,7 @@ UEdGraphNode* FStoryNodeGraph_AddNode::PerformAction(
 )
 {
 	const FScopedTransaction Transaction(NSLOCTEXT("NodeGraph", "AddNode", "Add Node"));
-	UEdGraphNode* NewNode = CreateNewNode(ParentGraph);
-	TryAttachingPin(ParentGraph, NewNode, FromPin);
-	return NewNode;
+	return CreateNewNode(ParentGraph);
 }
 
 UEdGraphNode* FStoryNodeGraph_AddNode::CreateNewNode(UEdGraph* ParentGraph) const
@@ -26,45 +24,9 @@ UEdGraphNode* FStoryNodeGraph_AddNode::CreateNewNode(UEdGraph* ParentGraph) cons
 	);
 
 	ParentGraph->AddNode(NewNode, true, true);
-
 	NewNode->CreateNewGuid();
 	NewNode->PostPlacedNewNode();
 	NewNode->AllocateDefaultPins();
 	
 	return NewNode;
-}
-
-void FStoryNodeGraph_AddNode::TryAttachingPin(
-	const UEdGraph* ParentGraph,
-	UEdGraphNode* NewNode,
-	UEdGraphPin* FromPin
-) const
-{
-	if (!FromPin)
-	{
-		return;
-	}
-	
-	UEdGraphPin* TargetPin = nullptr;
-
-	for (UEdGraphPin* Pin : NewNode->Pins)
-	{
-		if (Pin->Direction == FromPin->Direction || Pin->PinType.PinCategory != FromPin->PinType.PinCategory)
-		{
-			continue;
-		}
-		
-		TargetPin = Pin;
-		break;
-	}
-
-	if (!TargetPin)
-	{
-		return;
-	}
-
-	ParentGraph->GetSchema()->TryCreateConnection(
-		FromPin,
-		TargetPin
-	);
 }

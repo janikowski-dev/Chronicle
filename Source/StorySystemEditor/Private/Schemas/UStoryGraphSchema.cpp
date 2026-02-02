@@ -3,7 +3,7 @@
 #include "Policies/FStoryGraphConnectionDrawingPolicy.h"
 #include "Actions/FStoryGraph_AddNode.h"
 #include "Nodes/Unreal/UStoryResponseNode.h"
-#include "Nodes/Unreal/URootStoryNode.h"
+#include "Nodes/Unreal/UStoryRootNode.h"
 #include "Nodes/Unreal/UStoryDialogueNode.h"
 #include "ToolMenus.h"
 #include "ToolMenuSection.h"
@@ -17,7 +17,7 @@ void UStoryGraphSchema::CreateDefaultNodesForGraph(UEdGraph& Graph) const
 		FText::FromString("Root"),
 		FText::FromString("Root Node"),
 		FText::FromString("Adds a root node"),
-		URootStoryNode::StaticClass()
+		UStoryRootNode::StaticClass()
 	)->PerformAction(&Graph,nullptr, FVector2f::Zero(), true);
 }
 
@@ -128,7 +128,7 @@ void UStoryGraphSchema::AddResponseContext(const UGraphNodeContextMenuContext* C
 
 void UStoryGraphSchema::AddRootContext(const UGraphNodeContextMenuContext* Context, FToolMenuSection* Section) const
 {
-	const URootStoryNode* Node = Cast<URootStoryNode>(Context->Node);
+	const UStoryRootNode* Node = Cast<UStoryRootNode>(Context->Node);
 	
 	if (!Node)
 	{

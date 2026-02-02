@@ -28,7 +28,6 @@ UEdGraphNode* FStoryGraph_AddNode::CreateNewNode(UEdGraph* ParentGraph) const
 	);
 
 	ParentGraph->AddNode(NewNode, true, true);
-
 	NewNode->CreateNewGuid();
 	NewNode->PostPlacedNewNode();
 	NewNode->AllocateDefaultPins();

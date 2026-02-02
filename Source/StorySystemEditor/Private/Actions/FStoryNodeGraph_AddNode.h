@@ -22,10 +22,4 @@ struct FStoryNodeGraph_AddNode : FEdGraphSchemaAction
 	) override;
 	
 	UEdGraphNode* CreateNewNode(UEdGraph* ParentGraph) const;
-
-	void TryAttachingPin(
-		const UEdGraph* ParentGraph,
-		UEdGraphNode* NewNode,
-		UEdGraphPin* FromPin
-	) const;
 };

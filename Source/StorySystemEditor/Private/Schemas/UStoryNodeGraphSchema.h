@@ -10,6 +10,8 @@ class STORYSYSTEMEDITOR_API UStoryNodeGraphSchema : public UEdGraphSchema
 	GENERATED_BODY()
 
 public:
+	virtual void CreateDefaultNodesForGraph(UEdGraph& Graph) const override;
+	
 	virtual void GetGraphContextActions(
 		FGraphContextMenuBuilder& ContextMenuBuilder
 	) const override;

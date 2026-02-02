@@ -9,10 +9,8 @@ class STORYSYSTEMEDITOR_API UStoryNode : public UEdGraphNode
 	GENERATED_BODY()
 
 public:
-	virtual void PostInitProperties() override;
-	virtual void PostLoad() override;
-	UEdGraph* GetInnerGraph();
+	UEdGraph* GetOrCreateInnerGraph();
 
-private:
-	void InitGraph();
+public:
+	int32 EditorIndex;
 };

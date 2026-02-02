@@ -1,6 +1,44 @@
 ﻿#include "UStoryGraph.h"
 
-#include "Nodes/Unreal/URootStoryNode.h"
+#include "SGraphPanel.h"
+#include "Nodes/Slate/SStoryNode.h"
+#include "Nodes/Unreal/UStoryRootNode.h"
+
+struct FStoryLayoutNode
+{
+	UEdGraphNode* Node = nullptr;
+	TArray<FStoryLayoutNode*> Children;
+	float Y = 0.0f;
+
+	bool IsHidden(const TSharedPtr<SGraphEditor>& Editor) const
+	{
+		if (!Editor)
+		{
+			return false;
+		}
+		
+		const SGraphPanel* GraphPanel = Editor->GetGraphPanel();
+
+		if (!GraphPanel)
+		{
+			return false;
+		}
+		
+		if (const TSharedPtr<SGraphNode> Widget = GraphPanel->GetNodeWidgetFromGuid(Node->NodeGuid))
+		{
+			const TSharedPtr<SStoryNode> StoryNode = StaticCastSharedPtr<SStoryNode>(Widget);
+			
+			if (!StoryNode)
+			{
+				return false;
+			}
+			
+			return StoryNode->bIsHidden;
+		}
+
+		return false;
+	}
+};
 
 void UStoryGraph::PostLoad()
 {
@@ -24,7 +62,7 @@ UEdGraphNode* UStoryGraph::GetRootNode() const
 {
 	for (UEdGraphNode* Node : Nodes)
 	{
-		if (auto* Root = Cast<URootStoryNode>(Node))
+		if (auto* Root = Cast<UStoryRootNode>(Node))
 		{
 			return Root;
 		}
@@ -103,12 +141,22 @@ void UStoryGraph::ApplyLayout(
 	const float CellWidth
 ) const
 {
+	constexpr float InvisibleAndOutOfSightNodeX = -1000.0f;
+	
 	if (!LayoutNode || !LayoutNode->Node)
 	{
 		return;
 	}
 
-	LayoutNode->Node->NodePosX = Depth * CellWidth;
+	if (LayoutNode->IsHidden(Editor))
+	{
+		LayoutNode->Node->NodePosX = InvisibleAndOutOfSightNodeX;
+	}
+	else
+	{
+		LayoutNode->Node->NodePosX = Depth * CellWidth;
+	}
+	
 	LayoutNode->Node->NodePosY = LayoutNode->Y;
 
 	for (FStoryLayoutNode* Child : LayoutNode->Children)

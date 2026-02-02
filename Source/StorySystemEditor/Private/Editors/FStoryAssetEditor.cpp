@@ -2,12 +2,31 @@
 
 #include "Assets/UStoryAsset.h"
 #include "Graphs/UStoryGraph.h"
-
 #include "GraphEditor.h"
 #include "Widgets/Docking/SDockTab.h"
 #include "Framework/Docking/TabManager.h"
 
 static const FName StoryGraphTabName(TEXT("StoryGraph"));
+
+FName FStoryAssetEditor::GetToolkitFName() const
+{
+	return FName("StoryAssetEditor");
+}
+
+FText FStoryAssetEditor::GetBaseToolkitName() const
+{
+	return FText::FromString("Story Asset Editor");
+}
+
+FString FStoryAssetEditor::GetWorldCentricTabPrefix() const
+{
+	return TEXT("Story");
+}
+
+FLinearColor FStoryAssetEditor::GetWorldCentricTabColorScale() const
+{
+	return FLinearColor(0.1f, 0.6f, 1.0f);
+}
 
 void FStoryAssetEditor::InitStoryAssetEditor(
 	const EToolkitMode::Type Mode,
@@ -29,10 +48,6 @@ void FStoryAssetEditor::InitStoryAssetEditor(
 			)
 		);
 
-	TArray<UObject*> ObjectsToEdit;
-	ObjectsToEdit.Add(Asset);
-	EditedAsset = Asset;
-
 	InitAssetEditor(
 		Mode,
 		InitToolkitHost,
@@ -40,7 +55,7 @@ void FStoryAssetEditor::InitStoryAssetEditor(
 		Layout,
 		true,
 		true,
-		ObjectsToEdit
+		Cache(Asset)
 	);
 
 	RegenerateMenusAndToolbars();
@@ -48,8 +63,6 @@ void FStoryAssetEditor::InitStoryAssetEditor(
 
 void FStoryAssetEditor::RegisterTabSpawners(const TSharedRef<FTabManager>& InTabManager)
 {
-	FAssetEditorToolkit::RegisterTabSpawners(InTabManager);
-
 	InTabManager->RegisterTabSpawner(
 		StoryGraphTabName,
 		FOnSpawnTab::CreateRaw(this, &FStoryAssetEditor::SpawnGraphTab)
@@ -60,16 +73,17 @@ void FStoryAssetEditor::RegisterTabSpawners(const TSharedRef<FTabManager>& InTab
 void FStoryAssetEditor::UnregisterTabSpawners(const TSharedRef<FTabManager>& InTabManager)
 {
 	InTabManager->UnregisterTabSpawner(StoryGraphTabName);
-	FAssetEditorToolkit::UnregisterTabSpawners(InTabManager);
 }
 
 TSharedRef<SDockTab> FStoryAssetEditor::SpawnGraphTab(const FSpawnTabArgs&)
 {
+	const TObjectPtr<UStoryGraph> Graph = EditedAsset->Graph;
+	
 	GraphEditor = SNew(SGraphEditor)
-		.GraphToEdit(EditedAsset->Graph)
+		.GraphToEdit(Graph)
 		.IsEditable(true);
 	
-	EditedAsset->Graph->Editor = GraphEditor;
+	Graph->Editor = GraphEditor;
 
 	return SNew(SDockTab)
 		.Label(FText::FromString("Story Graph"))
@@ -78,22 +92,10 @@ TSharedRef<SDockTab> FStoryAssetEditor::SpawnGraphTab(const FSpawnTabArgs&)
 		];
 }
 
-FName FStoryAssetEditor::GetToolkitFName() const
+TArray<UObject*> FStoryAssetEditor::Cache(UStoryAsset* Asset)
 {
-	return FName("StoryAssetEditor");
-}
-
-FText FStoryAssetEditor::GetBaseToolkitName() const
-{
-	return FText::FromString("Story Asset Editor");
-}
-
-FString FStoryAssetEditor::GetWorldCentricTabPrefix() const
-{
-	return TEXT("Story");
-}
-
-FLinearColor FStoryAssetEditor::GetWorldCentricTabColorScale() const
-{
-	return FLinearColor(0.1f, 0.6f, 1.0f);
+	TArray<UObject*> Result;
+	EditedAsset = Asset;
+	Result.Add(Asset);
+	return Result;
 }

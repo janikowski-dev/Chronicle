@@ -15,14 +15,8 @@ public:
 		UStoryNode* Node
 	);
 	
-	virtual void RegisterTabSpawners(
-		const TSharedRef<FTabManager>& InTabManager
-	) override;
-
-	virtual void UnregisterTabSpawners(
-		const TSharedRef<FTabManager>& InTabManager
-	) override;
-
+	virtual void RegisterTabSpawners(const TSharedRef<FTabManager>& InTabManager) override;
+	virtual void UnregisterTabSpawners(const TSharedRef<FTabManager>& InTabManager) override;
 	virtual FName GetToolkitFName() const override;
 	virtual FText GetBaseToolkitName() const override;
 	virtual FString GetWorldCentricTabPrefix() const override;
@@ -30,6 +24,7 @@ public:
 
 private:
 	TSharedRef<SDockTab> SpawnGraphTab(const FSpawnTabArgs& Args);
+	TArray<UObject*> Cache(UStoryNode* Node);
 
 private:
 	TSharedPtr<SGraphEditor> GraphEditor;

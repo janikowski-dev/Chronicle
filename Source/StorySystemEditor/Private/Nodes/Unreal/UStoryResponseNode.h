@@ -11,4 +11,8 @@ class STORYSYSTEMEDITOR_API UStoryResponseNode : public UStoryNode
 
 public:
 	virtual void AllocateDefaultPins() override;
+	
+public:
+	UPROPERTY(EditAnywhere)
+	FText Text;
 };

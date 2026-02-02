@@ -1,15 +1,23 @@
 ﻿#pragma once
 
-#include "SStoryNode.h"
+#include "SStoryTextNode.h"
 
 class UStoryResponseNode;
 
-class SStoryResponseNode : public SStoryNode
+class SStoryResponseNode : public SStoryTextNode
 {
 public:
 	SLATE_BEGIN_ARGS(SStoryResponseNode) {}
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs, UStoryResponseNode* InNode);
-	virtual void UpdateGraphNode() override;
+
+protected:
+	virtual void AddBody(const TSharedRef<SVerticalBox>& Box) override;
+	virtual FText GetTitle(UStoryNode* Node) override;
+	virtual FSlateColor GetHeaderColor() const override;
+
+private:
+	FText GetText() const;
+	void SetText(const FText& NewText, ETextCommit::Type) const;
 };

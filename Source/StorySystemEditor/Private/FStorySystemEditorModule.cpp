@@ -21,4 +21,4 @@ void FStorySystemEditorModule::ShutdownModule()
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FStorySystemEditorModule, StorySystem)
+IMPLEMENT_MODULE(FStorySystemEditorModule, StorySystemEditor)

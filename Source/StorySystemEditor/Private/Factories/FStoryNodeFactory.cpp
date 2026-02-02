@@ -6,7 +6,7 @@
 #include "Nodes/Slate/SStoryResponseNode.h"
 #include "Nodes/Unreal/UStoryDialogueNode.h"
 #include "Nodes/Unreal/UStoryResponseNode.h"
-#include "Nodes/Unreal/URootStoryNode.h"
+#include "Nodes/Unreal/UStoryRootNode.h"
 
 TSharedPtr<SGraphNode> FStoryNodeFactory::CreateNode(UEdGraphNode* Node) const
 {
@@ -15,7 +15,7 @@ TSharedPtr<SGraphNode> FStoryNodeFactory::CreateNode(UEdGraphNode* Node) const
 		return SNew(SStoryDialogueNode, TypedNode);
 	}
 		
-	if (URootStoryNode* TypedNode = Cast<URootStoryNode>(Node))
+	if (UStoryRootNode* TypedNode = Cast<UStoryRootNode>(Node))
 	{
 		return SNew(SStoryRootNode, TypedNode);
 	}

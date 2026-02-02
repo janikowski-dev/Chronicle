@@ -2,10 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "UStoryNode.h"
-#include "URootStoryNode.generated.h"
+#include "UStoryRootNode.generated.h"
 
 UCLASS()
-class STORYSYSTEMEDITOR_API URootStoryNode : public UStoryNode
+class STORYSYSTEMEDITOR_API UStoryRootNode : public UStoryNode
 {
 	GENERATED_BODY()
 
