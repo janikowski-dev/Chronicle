@@ -2,7 +2,7 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "0.1.0",
-	"FriendlyName": "StorySystem",
+	"FriendlyName": "Story System",
 	"Description": "",
 	"Category": "Other",
 	"CreatedBy": "Adam Janikowski",
@@ -16,7 +16,7 @@
 	"Installed": false,
 	"Modules": [
 		{
-			"Name": "StorySystemEditor",
+			"Name": "DialogueSystemEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
 		}
