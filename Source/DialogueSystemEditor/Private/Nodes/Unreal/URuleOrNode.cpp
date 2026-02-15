@@ -1,5 +1,7 @@
 ﻿#include "URuleOrNode.h"
 
+#include "Utils/FColors.h"
+
 void URuleOrNode::AllocateDefaultPins()
 {
 	CreatePin(EGPD_Input, TEXT("Condition"), NAME_None, nullptr, TEXT("Condition A"));
@@ -7,12 +9,12 @@ void URuleOrNode::AllocateDefaultPins()
 	CreatePin(EGPD_Output, TEXT("Condition"), NAME_None, nullptr, TEXT("A or B"));
 }
 
-FText URuleOrNode::GetNodeTitle(ENodeTitleType::Type) const
+FText URuleOrNode::GetTitle() const
 {
 	return FText::FromString("Or");
 }
 
-FLinearColor URuleOrNode::GetNodeTitleColor() const
+FSlateColor URuleOrNode::GetBackgroundColor() const
 {
-	return FLinearColor::Blue;
+	return FColors::Turquoise;
 }

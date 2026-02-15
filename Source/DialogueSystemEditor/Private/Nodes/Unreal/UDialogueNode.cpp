@@ -1,6 +1,7 @@
 ﻿#include "UDialogueNode.h"
 
 #include "Assets/UDialogueAsset.h"
+#include "Graphs/URuleGraph.h"
 #include "Schemas/UDialogueNodeGraphSchema.h"
 
 void UDialogueNode::PostPlacedNewNode()
@@ -9,18 +10,18 @@ void UDialogueNode::PostPlacedNewNode()
 	AssignId();
 }
 
-UEdGraph* UDialogueNode::GetOrCreateInnerGraph()
+URuleGraph* UDialogueNode::GetOrCreateInnerGraph()
 {
 	if (UDialogueAsset* Asset = GetTypedOuter<UDialogueAsset>())
 	{
-		if (const TObjectPtr<UEdGraph>* Found = Asset->InnerGraphsByNode.Find(this))
+		if (const TObjectPtr<URuleGraph>* Found = Asset->InnerGraphsByNode.Find(this))
 		{
 			return Found->Get();
 		}
 
-		UEdGraph* InnerGraph = NewObject<UEdGraph>(
+		URuleGraph* InnerGraph = NewObject<URuleGraph>(
 			Asset,
-			UEdGraph::StaticClass(),
+			URuleGraph::StaticClass(),
 			NAME_None,
 			RF_Transactional
 		);

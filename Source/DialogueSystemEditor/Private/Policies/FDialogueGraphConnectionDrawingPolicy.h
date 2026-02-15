@@ -1,12 +1,10 @@
 ﻿#pragma once
 
 #include "ConnectionDrawingPolicy.h"
+#include "Graphs/URuleGraph.h"
 
-struct FLineSegment
-{
-	FVector2f A;
-	FVector2f B;
-};
+class UDialogueAsset;
+struct FLineSegment;
 
 class DIALOGUESYSTEMEDITOR_API FDialogueGraphConnectionDrawingPolicy : public FConnectionDrawingPolicy
 {
@@ -46,6 +44,24 @@ private:
 		const FConnectionParams& Params
 	) const;
 
+	void DrawOutLinkIcon(
+		const FVector2f& StartPoint,
+		const FVector2f& EndPoint,
+		const FConnectionParams& Params
+	) const;
+	
+	void DrawInLinkIcon(
+		const FVector2f& StartPoint,
+		const FVector2f& EndPoint,
+		const FConnectionParams& Params
+	) const;
+	
+	void DrawKeyIcon(
+		const FVector2f& StartPoint,
+		const FVector2f& EndPoint,
+		const FConnectionParams& Params
+	) const;
+
 	TArray<FLineSegment> BuildOrthogonalWire(
 		const FVector2f& StartPoint,
 		const FVector2f& EndPoint,
@@ -61,4 +77,9 @@ private:
 	) const;
 
 	bool IsTargetNodeEnabled(const FConnectionParams& Params) const;
+	void CacheOwner(const FConnectionParams& Params);
+	bool HasRules(const UEdGraphPin* Pin, const EOutputType Type) const;
+
+private:
+	UDialogueAsset* Owner;
 };

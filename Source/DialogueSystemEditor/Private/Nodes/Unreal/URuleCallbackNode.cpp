@@ -1,16 +1,18 @@
 ﻿#include "URuleCallbackNode.h"
 
+#include "Utils/FColors.h"
+
 void URuleCallbackNode::AllocateDefaultPins()
 {
 	CreatePin(EGPD_Output, TEXT("Callback"), NAME_None, nullptr, TEXT("Output"));
 }
 
-FText URuleCallbackNode::GetNodeTitle(ENodeTitleType::Type Param) const
+FText URuleCallbackNode::GetTitle() const
 {
 	return FText::FromString("Callback");
 }
 
-FLinearColor URuleCallbackNode::GetNodeTitleColor() const
+FSlateColor URuleCallbackNode::GetBackgroundColor() const
 {
-	return FLinearColor::Red;
+	return FColors::Purple;
 }

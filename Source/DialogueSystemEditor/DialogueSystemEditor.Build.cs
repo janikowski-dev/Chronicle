@@ -24,7 +24,11 @@ public class DialogueSystemEditor : ModuleRules
 			"GraphEditor",
 			"ToolMenus",
 			"InputCore",
-			"WorkspaceMenuStructure"
+			"WorkspaceMenuStructure",
+			"GameplayTags",
+			"GameplayTagsEditor",
+			"EditorStyle",
+			"Projects"
 		]);
 	}
 }

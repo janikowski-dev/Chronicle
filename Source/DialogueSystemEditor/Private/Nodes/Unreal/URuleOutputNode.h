@@ -18,11 +18,11 @@ class DIALOGUESYSTEMEDITOR_API URuleOutputNode : public URuleNode
 	
 public:
 	virtual void AllocateDefaultPins() override;
-	virtual FText GetNodeTitle(ENodeTitleType::Type) const override;
 	virtual bool AllowMultipleInputs() const override;
-	virtual FLinearColor GetNodeTitleColor() const override;
+	virtual FText GetTitle() const override;
+	virtual FSlateColor GetBackgroundColor() const override;
 	
 public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	EOutputType Type;
 };

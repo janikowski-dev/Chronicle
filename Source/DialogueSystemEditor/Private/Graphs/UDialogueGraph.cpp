@@ -26,7 +26,7 @@ void UDialogueGraph::Refresh() const
 
 void UDialogueGraph::ApplyLayout() const
 {
-	constexpr float CellWidth  = 350.0f;
+	constexpr float CellWidth  = 450.0f;
 	constexpr float CellHeight = 300.0f;
 	float CursorY = 0.0f;
 

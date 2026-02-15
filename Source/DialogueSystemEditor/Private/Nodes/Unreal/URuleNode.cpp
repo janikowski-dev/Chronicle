@@ -4,3 +4,13 @@ bool URuleNode::AllowMultipleInputs() const
 {
 	return false;
 }
+
+FText URuleNode::GetTitle() const
+{
+	return FText::GetEmpty();
+}
+
+FSlateColor URuleNode::GetBackgroundColor() const
+{
+	return FSlateColor();
+}

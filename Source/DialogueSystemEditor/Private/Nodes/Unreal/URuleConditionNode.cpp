@@ -1,16 +1,18 @@
 ﻿#include "URuleConditionNode.h"
 
+#include "Utils/FColors.h"
+
 void URuleConditionNode::AllocateDefaultPins()
 {
 	CreatePin(EGPD_Output, TEXT("Condition"), NAME_None, nullptr, TEXT("Value"));
 }
 
-FText URuleConditionNode::GetNodeTitle(ENodeTitleType::Type) const
+FText URuleConditionNode::GetTitle() const
 {
 	return FText::FromString("Condition");
 }
 
-FLinearColor URuleConditionNode::GetNodeTitleColor() const
+FSlateColor URuleConditionNode::GetBackgroundColor() const
 {
-	return FLinearColor::Blue;
+	return FColors::Turquoise;
 }

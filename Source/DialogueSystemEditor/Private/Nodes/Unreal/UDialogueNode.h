@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "UDialogueNode.generated.h"
 
+class URuleGraph;
+
 UCLASS()
 class DIALOGUESYSTEMEDITOR_API UDialogueNode : public UEdGraphNode
 {
@@ -11,7 +13,7 @@ class DIALOGUESYSTEMEDITOR_API UDialogueNode : public UEdGraphNode
 public:
     virtual void PostPlacedNewNode() override;
 	
-	UEdGraph* GetOrCreateInnerGraph();
+	URuleGraph* GetOrCreateInnerGraph();
 
 private:
 	void AssignId();

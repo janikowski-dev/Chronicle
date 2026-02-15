@@ -10,6 +10,6 @@ class DIALOGUESYSTEMEDITOR_API URuleAndNode : public URuleNode
 	
 public:
 	virtual void AllocateDefaultPins() override;
-	virtual FText GetNodeTitle(ENodeTitleType::Type) const override;
-	virtual FLinearColor GetNodeTitleColor() const override;
+	virtual FText GetTitle() const override;
+	virtual FSlateColor GetBackgroundColor() const override;
 };

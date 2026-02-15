@@ -4,6 +4,7 @@
 #include "Widgets/Docking/SDockTab.h"
 #include "Framework/Docking/TabManager.h"
 #include "Nodes/Unreal/UDialogueNode.h"
+#include "Graphs/URuleGraph.h"
 
 static const FName NodeGraphTabName(TEXT("NodeGraph"));
 
@@ -76,7 +77,7 @@ void FDialogueNodeEditor::UnregisterTabSpawners(const TSharedRef<FTabManager>& I
 
 TSharedRef<SDockTab> FDialogueNodeEditor::SpawnGraphTab(const FSpawnTabArgs&)
 {
-	UEdGraph* Graph = EditedNode->GetOrCreateInnerGraph();
+	URuleGraph* Graph = EditedNode->GetOrCreateInnerGraph();
 	
 	GraphEditor = SNew(SGraphEditor)
 		.GraphToEdit(Graph)

@@ -1,15 +1,15 @@
 ﻿#pragma once
 
-#include "URuleNode.h"
+#include "URuleTagNode.h"
 #include "URuleConditionNode.generated.h"
 
 UCLASS()
-class DIALOGUESYSTEMEDITOR_API URuleConditionNode : public URuleNode
+class DIALOGUESYSTEMEDITOR_API URuleConditionNode : public URuleTagNode
 {
 	GENERATED_BODY()
 	
 public:
 	virtual void AllocateDefaultPins() override;
-	virtual FText GetNodeTitle(ENodeTitleType::Type) const override;
-	virtual FLinearColor GetNodeTitleColor() const override;
+	virtual FText GetTitle() const override;
+	virtual FSlateColor GetBackgroundColor() const override;
 };

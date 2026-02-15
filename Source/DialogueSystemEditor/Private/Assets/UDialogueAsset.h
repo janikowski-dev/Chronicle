@@ -6,6 +6,8 @@
 #include "Nodes/Unreal/UDialogueNode.h"
 #include "UDialogueAsset.generated.h"
 
+class URuleGraph;
+
 UCLASS()
 class DIALOGUESYSTEMEDITOR_API UDialogueAsset : public UDataAsset
 {
@@ -15,5 +17,5 @@ public:
 	UPROPERTY()
 	TObjectPtr<UDialogueGraph> Graph;
 	UPROPERTY()
-	TMap<TObjectPtr<UDialogueNode>, TObjectPtr<UEdGraph>> InnerGraphsByNode;
+	TMap<UDialogueNode*, TObjectPtr<URuleGraph>> InnerGraphsByNode;
 };

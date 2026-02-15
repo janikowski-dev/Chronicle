@@ -1,5 +1,7 @@
 ﻿#include "URuleAndNode.h"
 
+#include "Utils/FColors.h"
+
 void URuleAndNode::AllocateDefaultPins()
 {
 	CreatePin(EGPD_Input, TEXT("Condition"), NAME_None, nullptr, TEXT("Condition A"));
@@ -7,12 +9,12 @@ void URuleAndNode::AllocateDefaultPins()
 	CreatePin(EGPD_Output, TEXT("Condition"), NAME_None, nullptr, TEXT("A and B"));
 }
 
-FText URuleAndNode::GetNodeTitle(ENodeTitleType::Type) const
+FText URuleAndNode::GetTitle() const
 {
 	return FText::FromString("And");
 }
 
-FLinearColor URuleAndNode::GetNodeTitleColor() const
+FSlateColor URuleAndNode::GetBackgroundColor() const
 {
-	return FLinearColor::Blue;
+	return FColors::Turquoise;
 }

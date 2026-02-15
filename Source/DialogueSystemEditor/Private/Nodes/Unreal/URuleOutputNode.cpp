@@ -1,5 +1,7 @@
 ﻿#include "URuleOutputNode.h"
 
+#include "Utils/FColors.h"
+
 void URuleOutputNode::AllocateDefaultPins()
 {
 	if (Type == EOutputType::Requirements)
@@ -12,7 +14,12 @@ void URuleOutputNode::AllocateDefaultPins()
 	}
 }
 
-FText URuleOutputNode::GetNodeTitle(ENodeTitleType::Type) const
+bool URuleOutputNode::AllowMultipleInputs() const
+{
+	return Type != EOutputType::Requirements;
+}
+
+FText URuleOutputNode::GetTitle() const
 {
 	switch (Type)
 	{
@@ -23,18 +30,12 @@ FText URuleOutputNode::GetNodeTitle(ENodeTitleType::Type) const
 	}
 }
 
-bool URuleOutputNode::AllowMultipleInputs() const
+FSlateColor URuleOutputNode::GetBackgroundColor() const
 {
-	return Type != EOutputType::Requirements;
-}
-
-FLinearColor URuleOutputNode::GetNodeTitleColor() const
-{
-	switch (Type)
+	if (Type == EOutputType::Requirements)
 	{
-	case EOutputType::PreCallback: return FLinearColor::Red;
-	case EOutputType::PostCallback: return FLinearColor::Red;
-	case EOutputType::Requirements: return FLinearColor::Blue;
-	default: return FLinearColor::White;
+		return FColors::Turquoise;
 	}
+	
+	return FColors::Purple;
 }
