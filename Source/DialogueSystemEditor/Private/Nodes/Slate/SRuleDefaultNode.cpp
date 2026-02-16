@@ -4,9 +4,7 @@
 
 void SRuleDefaultNode::Construct(const FArguments&, URuleNode* InNode)
 {
-	TypedNode = Cast<URuleNode>(InNode);
-	GraphNode = InNode;
-
+	Cache(InNode);
 	UpdateGraphNode();
 }
 
@@ -62,4 +60,10 @@ void SRuleDefaultNode::UpdateGraphNode()
 	];
 	
 	CreatePinWidgets();
+}
+
+void SRuleDefaultNode::Cache(URuleNode* InNode)
+{
+	TypedNode = Cast<URuleNode>(InNode);
+	GraphNode = InNode;
 }

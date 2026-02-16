@@ -11,4 +11,5 @@ class DIALOGUESYSTEMEDITOR_API UDialogueRootNode : public UDialogueNode
 
 public:
 	virtual void AllocateDefaultPins() override;
+	virtual FText GetTitle() override;
 };

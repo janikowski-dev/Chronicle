@@ -21,6 +21,7 @@ public:
 	virtual bool AllowMultipleInputs() const override;
 	virtual FText GetTitle() const override;
 	virtual FSlateColor GetBackgroundColor() const override;
+	virtual bool CanUserDeleteNode() const override;
 	
 public:
 	UPROPERTY()

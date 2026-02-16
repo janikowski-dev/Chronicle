@@ -4,15 +4,19 @@
 
 class URuleTagNode;
 
-class SRuleTagNode : public SGraphNode
+class SRuleCallbackNode : public SGraphNode
 {
 public:
-	SLATE_BEGIN_ARGS(SRuleTagNode) {}
+	SLATE_BEGIN_ARGS(SRuleCallbackNode) {}
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments&, URuleTagNode* InNode);
 	virtual void UpdateGraphNode() override;
 
+private:
+	void Cache(URuleTagNode* InNode);
+	void InitCallbacks();
+	
 private:
 	TWeakObjectPtr<URuleTagNode> TypedNode;
 	TArray<TSharedPtr<FString>> AllTags;

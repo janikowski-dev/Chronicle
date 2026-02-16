@@ -31,7 +31,7 @@ void UDialogueNodeGraphSchema::CreateDefaultNodesForGraph(UEdGraph& Graph) const
 void UDialogueNodeGraphSchema::GetGraphContextActions(FGraphContextMenuBuilder& ContextMenuBuilder) const
 {
 	ContextMenuBuilder.AddAction(MakeShared<FDialogueNodeGraph_AddNode>(
-			FText::FromString("Nodes"),
+			FText::FromString("Requirements"),
 			FText::FromString("Condition Node"),
 			FText::FromString("Adds a condition node"),
 			URuleConditionNode::StaticClass()
@@ -39,7 +39,7 @@ void UDialogueNodeGraphSchema::GetGraphContextActions(FGraphContextMenuBuilder& 
 	);
 	
 	ContextMenuBuilder.AddAction(MakeShared<FDialogueNodeGraph_AddNode>(
-			FText::FromString("Nodes"),
+			FText::FromString("Requirements"),
 			FText::FromString("And Node"),
 			FText::FromString("Adds an and node"),
 			URuleAndNode::StaticClass()
@@ -47,7 +47,7 @@ void UDialogueNodeGraphSchema::GetGraphContextActions(FGraphContextMenuBuilder& 
 	);
 	
 	ContextMenuBuilder.AddAction(MakeShared<FDialogueNodeGraph_AddNode>(
-			FText::FromString("Nodes"),
+			FText::FromString("Requirements"),
 			FText::FromString("Or Node"),
 			FText::FromString("Adds an or node"),
 			URuleOrNode::StaticClass()
@@ -55,7 +55,7 @@ void UDialogueNodeGraphSchema::GetGraphContextActions(FGraphContextMenuBuilder& 
 	);
 	
 	ContextMenuBuilder.AddAction(MakeShared<FDialogueNodeGraph_AddNode>(
-			FText::FromString("Nodes"),
+			FText::FromString("Callbacks"),
 			FText::FromString("Callback Node"),
 			FText::FromString("Adds a callback node"),
 			URuleCallbackNode::StaticClass()

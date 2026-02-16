@@ -21,7 +21,6 @@ public:
 
 protected:
 	virtual void AddBody(const TSharedRef<SVerticalBox>& Box) = 0;
-	virtual FText GetTitle(UDialogueNode* Node) = 0;
 	virtual FSlateColor GetHeaderColor() const = 0;
 	void Cache(UEdGraphNode* Node);
 

@@ -14,3 +14,8 @@ FSlateColor URuleNode::GetBackgroundColor() const
 {
 	return FSlateColor();
 }
+
+bool URuleNode::CanUserDeleteNode() const
+{
+	return true;
+}

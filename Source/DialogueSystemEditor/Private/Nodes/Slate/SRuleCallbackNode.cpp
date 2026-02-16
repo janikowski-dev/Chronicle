@@ -1,34 +1,16 @@
-﻿#include "SRuleTagNode.h"
+﻿#include "SRuleCallbackNode.h"
 
-#include "GameplayTagsManager.h"
+#include "Data/EDialogueCallback.h"
 #include "Nodes/Unreal/URuleTagNode.h"
 
-void SRuleTagNode::Construct(const FArguments&, URuleTagNode* InNode)
+void SRuleCallbackNode::Construct(const FArguments&, URuleTagNode* InNode)
 {
-	TypedNode = Cast<URuleTagNode>(InNode);
-	GraphNode = InNode;
-
-	const UGameplayTagsManager& Manager = UGameplayTagsManager::Get();
-	FGameplayTagContainer Container;
-	Manager.RequestAllGameplayTags(Container, false);
-
-	AllTags.Empty();
-	
-	for (const FGameplayTag& GameplayTag : Container.GetGameplayTagArray())
-	{
-		FString TagName = GameplayTag.GetTagName().ToString();
-		AllTags.Add(MakeShared<FString>(TagName));
-	}
-
-	if (AllTags.Num() > 0)
-	{
-		SelectedTag = AllTags[0];
-	}
-	
+	Cache(InNode);
+	InitCallbacks();
 	UpdateGraphNode();
 }
 
-void SRuleTagNode::UpdateGraphNode()
+void SRuleCallbackNode::UpdateGraphNode()
 {
 	SetupErrorReporting();
 
@@ -96,4 +78,27 @@ void SRuleTagNode::UpdateGraphNode()
 	];
 	
 	CreatePinWidgets();
+}
+
+void SRuleCallbackNode::Cache(URuleTagNode* InNode)
+{
+	TypedNode = Cast<URuleTagNode>(InNode);
+	GraphNode = InNode;
+}
+
+void SRuleCallbackNode::InitCallbacks()
+{
+	const UEnum* CallbacksEnum = StaticEnum<EDialogueCallback>();
+
+	AllTags.Empty();
+	
+	for (int32 i = 0; i < CallbacksEnum->NumEnums() - 1; i++)
+	{
+		AllTags.Add(MakeShared<FString>(CallbacksEnum->GetDisplayNameTextByIndex(i).ToString()));
+	}
+
+	if (AllTags.Num() > 0)
+	{
+		SelectedTag = AllTags[0];
+	}
 }

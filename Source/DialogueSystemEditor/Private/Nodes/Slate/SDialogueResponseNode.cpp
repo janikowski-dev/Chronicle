@@ -9,12 +9,6 @@ void SDialogueResponseNode::Construct(const FArguments&, UDialogueResponseNode* 
 	UpdateGraphNode();
 }
 
-FText SDialogueResponseNode::GetTitle(UDialogueNode* Node)
-{
-	const UDialogueResponseNode* Response = Cast<UDialogueResponseNode>(Node);
-	return FText::Format(FText::FromString("Response #{0}.{1}"), Response->ParentIndex, Response->OrderIndex);
-}
-
 FSlateColor SDialogueResponseNode::GetHeaderColor() const
 {
 	return FSlateColor(FLinearColor::Blue);

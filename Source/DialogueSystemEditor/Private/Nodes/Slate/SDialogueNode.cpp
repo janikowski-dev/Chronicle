@@ -70,7 +70,7 @@ void SDialogueNode::UpdateGraphNode()
 
 void SDialogueNode::AddHeader(const TSharedRef<SVerticalBox>& Box)
 {
-	const FText Title = GetTitle(Cast<UDialogueNode>(GraphNode));
+	const FText Title = Cast<UDialogueNode>(GraphNode)->GetTitle();
 	
 	Box->AddSlot()
 	.AutoHeight()

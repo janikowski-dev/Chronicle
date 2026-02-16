@@ -28,7 +28,8 @@ public class DialogueSystemEditor : ModuleRules
 			"GameplayTags",
 			"GameplayTagsEditor",
 			"EditorStyle",
-			"Projects"
+			"Projects",
+			"StorySystemCore"
 		]);
 	}
 }

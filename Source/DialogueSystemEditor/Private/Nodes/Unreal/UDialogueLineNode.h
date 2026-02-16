@@ -11,6 +11,7 @@ class DIALOGUESYSTEMEDITOR_API UDialogueLineNode : public UDialogueNode
 
 public:
 	virtual void AllocateDefaultPins() override;
+	virtual FText GetTitle() override;
 	
 public:
 	UPROPERTY(EditAnywhere)

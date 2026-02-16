@@ -12,11 +12,6 @@ void SDialogueRootNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 {
 }
 
-FText SDialogueRootNode::GetTitle(UDialogueNode* Node)
-{
-	return FText::FromString("ROOT");
-}
-
 FSlateColor SDialogueRootNode::GetHeaderColor() const
 {
 	return FSlateColor(FLinearColor::Black);

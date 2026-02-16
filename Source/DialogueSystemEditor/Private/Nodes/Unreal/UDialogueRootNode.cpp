@@ -4,3 +4,8 @@ void UDialogueRootNode::AllocateDefaultPins()
 {
 	CreatePin(EGPD_Output, TEXT("DialoguePin"), NAME_None, nullptr, TEXT("Out"));
 }
+
+FText UDialogueRootNode::GetTitle()
+{
+	return FText::FromString("ROOT");
+}

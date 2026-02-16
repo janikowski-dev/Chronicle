@@ -39,3 +39,8 @@ FSlateColor URuleOutputNode::GetBackgroundColor() const
 	
 	return FColors::Purple;
 }
+
+bool URuleOutputNode::CanUserDeleteNode() const
+{
+	return false;
+}

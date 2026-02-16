@@ -14,6 +14,5 @@ public:
 
 protected:
 	virtual void AddBody(const TSharedRef<SVerticalBox>& Box) override;
-	virtual FText GetTitle(UDialogueNode* Node) override;
 	virtual FSlateColor GetHeaderColor() const override;
 };

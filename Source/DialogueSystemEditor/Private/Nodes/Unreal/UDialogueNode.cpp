@@ -10,6 +10,11 @@ void UDialogueNode::PostPlacedNewNode()
 	AssignId();
 }
 
+FText UDialogueNode::GetTitle()
+{
+	return FText::GetEmpty();
+}
+
 URuleGraph* UDialogueNode::GetOrCreateInnerGraph()
 {
 	if (UDialogueAsset* Asset = GetTypedOuter<UDialogueAsset>())

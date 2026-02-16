@@ -9,11 +9,6 @@ void SDialogueLineNode::Construct(const FArguments&, UDialogueLineNode* InNode)
 	UpdateGraphNode();
 }
 
-FText SDialogueLineNode::GetTitle(UDialogueNode* Node)
-{
-	return FText::Format(FText::FromString("Line #{0}"), Cast<UDialogueLineNode>(Node)->LineIndex);
-}
-
 FSlateColor SDialogueLineNode::GetHeaderColor() const
 {
 	return FSlateColor(FLinearColor::Red);

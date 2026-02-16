@@ -12,4 +12,5 @@ public:
 	virtual bool AllowMultipleInputs() const;
 	virtual FText GetTitle() const;
 	virtual FSlateColor GetBackgroundColor() const;
+	virtual bool CanUserDeleteNode() const override;
 };

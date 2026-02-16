@@ -1,7 +1,6 @@
 ﻿#include "FDialogueGraphConnectionDrawingPolicy.h"
 
 #include "Assets/UDialogueAsset.h"
-#include "Graphs/UDialogueGraph.h"
 #include "Graphs/URuleGraph.h"
 #include "Nodes/Unreal/UDialogueNode.h"
 #include "Nodes/Unreal/UDialogueResponseNode.h"
@@ -293,8 +292,8 @@ bool FDialogueGraphConnectionDrawingPolicy::HasRules(const UEdGraphPin* Pin, con
 	{
 		return false;
 	}
-	
-	auto RuleGraphPointer = Owner->InnerGraphsByNode.Find(TypedNode);
+
+	const TObjectPtr<URuleGraph>* RuleGraphPointer = Owner->InnerGraphsByNode.Find(TypedNode);
 	
 	if (!RuleGraphPointer)
 	{
