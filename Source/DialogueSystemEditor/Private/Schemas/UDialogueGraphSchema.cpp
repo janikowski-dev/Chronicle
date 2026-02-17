@@ -150,15 +150,12 @@ void UDialogueGraphSchema::AddLineAction(const UGraphNodeContextMenuContext* Con
 	Section->AddMenuEntry(
 		"AddLineNode",
 		FText::FromString("Line Node"),
-		FText::FromString("Adds a dialogue node"),
+		FText::FromString("Adds a line node"),
 		FSlateIcon(),
 		FUIAction(
 			FExecuteAction::CreateLambda([Graph, Pin]
 			{
 				MakeShared<FDialogueGraph_AddNode>(
-					FText::FromString("Line"),
-					FText::FromString("Line Node"),
-					FText::FromString("Adds a dialogue node"),
 					UDialogueLineNode::StaticClass()
 				)->PerformAction(Graph, Pin, FVector2f::Zero(), true);
 			})
@@ -180,9 +177,6 @@ void UDialogueGraphSchema::AddResponseAction(const UGraphNodeContextMenuContext*
 			FExecuteAction::CreateLambda([Graph, Pin]
 			{
 				MakeShared<FDialogueGraph_AddNode>(
-					FText::FromString("Response"),
-					FText::FromString("Response Node"),
-					FText::FromString("Adds a response node"),
 					UDialogueResponseNode::StaticClass()
 				)->PerformAction(Graph, Pin, FVector2f::Zero(), true);
 			})

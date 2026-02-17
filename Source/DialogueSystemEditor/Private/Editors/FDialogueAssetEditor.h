@@ -26,7 +26,9 @@ private:
 	TSharedRef<SDockTab> SpawnGraphTab(const FSpawnTabArgs& Args);
 	TArray<UObject*> Cache(UDialogueAsset* Asset);
 
-private:
+public:
 	TSharedPtr<SGraphEditor> GraphEditor;
+
+private:
 	UDialogueAsset* EditedAsset = nullptr;
 };

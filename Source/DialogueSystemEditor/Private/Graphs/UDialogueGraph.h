@@ -45,7 +45,4 @@ private:
 	) const;
 
 	void ApplyResponseIndexes() const;
-
-public:
-	TSharedPtr<SGraphEditor> Editor;
 };

@@ -83,8 +83,6 @@ TSharedRef<SDockTab> FDialogueAssetEditor::SpawnGraphTab(const FSpawnTabArgs&)
 		.GraphToEdit(Graph)
 		.IsEditable(true);
 	
-	Graph->Editor = GraphEditor;
-
 	return SNew(SDockTab)
 		.Label(FText::FromString("Dialogue Graph"))
 		[

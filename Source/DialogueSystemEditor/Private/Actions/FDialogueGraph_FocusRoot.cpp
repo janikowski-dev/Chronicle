@@ -1,5 +1,6 @@
 ﻿#include "FDialogueGraph_FocusRoot.h"
 
+#include "Editors/FDialogueAssetEditor.h"
 #include "Nodes/Unreal/UDialogueNode.h"
 #include "Graphs/UDialogueGraph.h"
 
@@ -11,12 +12,19 @@ UEdGraphNode* FDialogueGraph_FocusRoot::PerformAction(
 )
 {
 	const UDialogueNode* RootNode = Cast<UDialogueGraph>(ParentGraph)->GetRootNode();
-
+	
 	if (!RootNode)
 	{
 		return nullptr;
 	}
 
-	Cast<UDialogueGraph>(ParentGraph)->Editor->JumpToNode(Cast<UEdGraphNode>(RootNode));
+	UAssetEditorSubsystem* AssetEditorSubsystem = GEditor->GetEditorSubsystem<UAssetEditorSubsystem>();
+	IAssetEditorInstance* EditorInstance = AssetEditorSubsystem->FindEditorForAsset(ParentGraph->GetOuter(), false);
+    
+	if (const FDialogueAssetEditor* DialogueEditor = static_cast<FDialogueAssetEditor*>(EditorInstance))
+	{
+		DialogueEditor->GraphEditor->JumpToNode(Cast<UEdGraphNode>(RootNode));
+	}
+	
 	return nullptr;
 }
