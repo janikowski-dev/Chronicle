@@ -6,7 +6,6 @@
 UENUM()
 enum class EOutputType : int8
 {
-	PreCallback,
 	PostCallback,
 	Requirements
 };

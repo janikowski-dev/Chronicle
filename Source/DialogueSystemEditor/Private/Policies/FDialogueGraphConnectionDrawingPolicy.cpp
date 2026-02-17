@@ -59,14 +59,9 @@ void FDialogueGraphConnectionDrawingPolicy::DrawSplineWithArrow(
 		DrawKeyIcon(StartPoint, EndPoint, Params);
 	}
 	
-	if (HasRules(Params.AssociatedPin2, EOutputType::PreCallback))
-	{
-		DrawInLinkIcon(StartPoint, EndPoint, Params);
-	}
-	
 	if (HasRules(Params.AssociatedPin1, EOutputType::PostCallback))
 	{
-		DrawOutLinkIcon(StartPoint, EndPoint, Params);
+		DrawLinkIcon(StartPoint, EndPoint, Params);
 	}
 }
 
@@ -126,7 +121,7 @@ void FDialogueGraphConnectionDrawingPolicy::DrawArrow(
 	);
 }
 
-void FDialogueGraphConnectionDrawingPolicy::DrawOutLinkIcon(
+void FDialogueGraphConnectionDrawingPolicy::DrawLinkIcon(
 		const FVector2f& StartPoint,
 		const FVector2f& EndPoint,
 		const FConnectionParams& Params
@@ -136,28 +131,6 @@ void FDialogueGraphConnectionDrawingPolicy::DrawOutLinkIcon(
 	const FVector2f LinkPoint = FVector2f(
 		StartPoint.X + (EndPoint.X - StartPoint.X) * 0.5f - LinkBrush->ImageSize.X * ZoomFactor * 0.5f,
 		StartPoint.Y - LinkBrush->ImageSize.X * ZoomFactor * 0.5f
-	);
-	
-	FSlateDrawElement::MakeBox(
-		DrawElementsList,
-		ArrowLayerID,
-		FPaintGeometry(LinkPoint, LinkBrush->ImageSize * ZoomFactor, ZoomFactor),
-		LinkBrush,
-		ESlateDrawEffect::None,
-		Params.WireColor
-	);
-}
-
-void FDialogueGraphConnectionDrawingPolicy::DrawInLinkIcon(
-		const FVector2f& StartPoint,
-		const FVector2f& EndPoint,
-		const FConnectionParams& Params
-) const
-{
-	const FSlateBrush* LinkBrush = FSlateIcon("FDialogueGraphEditorStyle", "Icons.Link").GetIcon();
-	const FVector2f LinkPoint = FVector2f(
-		StartPoint.X + (EndPoint.X - StartPoint.X) * 0.75f - LinkBrush->ImageSize.X * ZoomFactor * 0.75f,
-		EndPoint.Y - LinkBrush->ImageSize.X * ZoomFactor * 0.5f
 	);
 	
 	FSlateDrawElement::MakeBox(

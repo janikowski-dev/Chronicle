@@ -44,13 +44,7 @@ private:
 		const FConnectionParams& Params
 	) const;
 
-	void DrawOutLinkIcon(
-		const FVector2f& StartPoint,
-		const FVector2f& EndPoint,
-		const FConnectionParams& Params
-	) const;
-	
-	void DrawInLinkIcon(
+	void DrawLinkIcon(
 		const FVector2f& StartPoint,
 		const FVector2f& EndPoint,
 		const FConnectionParams& Params

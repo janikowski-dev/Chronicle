@@ -21,8 +21,8 @@
 			"LoadingPhase": "Default"
 		},
         {
-          "Name": "StorySystemCore",
-          "Type": "Runtime",
+          "Name": "RuleSystemEditor",
+          "Type": "Editor",
           "LoadingPhase": "Default"
         }
 	]

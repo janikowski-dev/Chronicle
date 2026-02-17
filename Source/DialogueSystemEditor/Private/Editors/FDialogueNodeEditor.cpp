@@ -1,5 +1,6 @@
 ﻿#include "FDialogueNodeEditor.h"
 
+#include "FRuleDirectory.h"
 #include "GraphEditor.h"
 #include "Framework/Commands/GenericCommands.h"
 #include "Widgets/Docking/SDockTab.h"
@@ -40,6 +41,8 @@ void FDialogueNodeEditor::InitNodeAssetEditor(
 	UDialogueNode* Node
 )
 {
+	FRuleDirectory::Refresh();
+	
 	const TSharedRef<FTabManager::FLayout> Layout =
 		FTabManager::NewLayout("NodeAssetEditor")
 		->AddArea

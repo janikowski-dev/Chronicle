@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-class FStorySystemCoreModule : public IModuleInterface
+class FRuleSystemEditorModule : public IModuleInterface
 {
 public:
 	virtual void StartupModule() override;

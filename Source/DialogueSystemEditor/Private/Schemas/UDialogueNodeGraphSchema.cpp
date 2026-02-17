@@ -15,12 +15,7 @@ void UDialogueNodeGraphSchema::CreateDefaultNodesForGraph(UEdGraph& Graph) const
 	MakeShared<FDialogueNodeGraph_AddOutputNode>(
 		URuleOutputNode::StaticClass(),
 		EOutputType::Requirements
-	)->PerformAction(&Graph, nullptr, FVector2f(0.0f, -128.0f));
-	
-	MakeShared<FDialogueNodeGraph_AddOutputNode>(
-		URuleOutputNode::StaticClass(),
-		EOutputType::PreCallback
-	)->PerformAction(&Graph, nullptr, FVector2f::Zero());
+	)->PerformAction(&Graph, nullptr, FVector2f(0.0f, 0.0f));
 	
 	MakeShared<FDialogueNodeGraph_AddOutputNode>(
 		URuleOutputNode::StaticClass(),
