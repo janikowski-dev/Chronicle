@@ -22,7 +22,7 @@ The system is designed to give game developers full control over storytelling me
     -   Callbacks after node
         ![Callbacks](Assets/Callbacks.png)
 
--   **Inner State Visualization (Key - Requirements | Link - Callbacks)**  
+-   **Inner State Visualization: Key - Requirements & Link - Callbacks**  
     ![Requirements And Callbacks Visuals](Assets/Requirements_And_Callbacks.png)
 
 ### Planned Features
