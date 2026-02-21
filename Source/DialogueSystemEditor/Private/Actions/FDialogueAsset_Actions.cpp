@@ -50,7 +50,7 @@ void FDialogueAsset_Actions::OpenAssetEditor(
 void FDialogueAsset_Actions::GetActions(const TArray<UObject*>& InObjects, FMenuBuilder& MenuBuilder)
 {
 	MenuBuilder.AddMenuEntry(
-		FText::FromString("Export"),
+		FText::FromString("Export to runtime UObject"),
 		FText::FromString("Export dialogue to runtime asset"),
 		FSlateIcon(FAppStyle::GetAppStyleSetName(), "Icons.Save"),
 		FUIAction(FExecuteAction::CreateLambda([InObjects]
@@ -66,8 +66,8 @@ void FDialogueAsset_Actions::GetActions(const TArray<UObject*>& InObjects, FMenu
 	);
 	
 	MenuBuilder.AddMenuEntry(
-		FText::FromString("Copy as Json"),
-		FText::FromString("Copies asset as Json to clipboard"),
+		FText::FromString("Copy JSON to clipboard"),
+		FText::FromString("Copies asset as JSON to clipboard"),
 		FSlateIcon(FAppStyle::GetAppStyleSetName(), "Icons.Clipboard"),
 		FUIAction(FExecuteAction::CreateLambda([InObjects]
 		{

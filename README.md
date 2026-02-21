@@ -46,25 +46,22 @@ The system is designed to give game developers full control over storytelling me
 
     `Double LMB Dialogue Asset`
 
--   **Modify Graph**
+-   **Modify Dialogue Graph**
 
     `RMB on existing node inside Dialogue Asset (Context Menu will pop up)`
 
--   **Modify Requirements And Callbacks**
+-   **Modify Requirements And Callbacks For Particular Node**
 
     `Double LMB on existing node (Node Graph will pop up)`
-
--   **Add Requirements And Callbacks**
-
     `RMB when inside Node Graph (Context Menu will pop up)`
 
 -   **Export To Runtime UObject**
 
-    `RMB on Dialogue Asset/Export`
+    `RMB on Dialogue Asset/Export to runtime UObject`
 
--   **Copy To JSON**
+-   **Copy JSON To Clipboard**
 
-    `RMB on Dialogue Asset/Copy as Json`
+    `RMB on Dialogue Asset/Copy JSON to clipboard`
 
 # Rule System (WIP)
 
