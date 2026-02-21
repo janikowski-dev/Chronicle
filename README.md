@@ -30,6 +30,14 @@ The system is designed to give game developers full control over storytelling me
 
     ![Requirements And Callbacks Visuals](Assets/Requirements_And_Callbacks.png)
 
+-   **Export To Runtime UObject**
+
+    ![UObject Export](Assets/UObject_Export.png)
+
+-   **Copy To JSON**
+
+    ![JSON Copy](Assets/JSON_Copy.png)
+
 ### Planned Features
 
 -   Separating dialogue lines per character
