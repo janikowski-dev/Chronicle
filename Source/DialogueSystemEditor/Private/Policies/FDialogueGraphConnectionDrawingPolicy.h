@@ -71,9 +71,5 @@ private:
 	) const;
 
 	bool IsTargetNodeEnabled(const FConnectionParams& Params) const;
-	void CacheOwner(const FConnectionParams& Params);
 	bool HasRules(const UEdGraphPin* Pin, const EOutputType Type) const;
-
-private:
-	UDialogueAsset* Owner;
 };

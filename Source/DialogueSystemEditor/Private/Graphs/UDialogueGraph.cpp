@@ -86,7 +86,7 @@ FDialogueLayoutNode* UDialogueGraph::BuildLayoutTree(
 		{
 			UDialogueNode* Child = Cast<UDialogueNode>(Linked->GetOwningNode());
 			
-			if (!Child)
+			if (!Child || Child->bIsHidden)
 			{
 				continue;
 			}

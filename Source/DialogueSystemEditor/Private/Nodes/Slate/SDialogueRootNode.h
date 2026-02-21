@@ -4,7 +4,7 @@
 
 class UDialogueRootNode;
 
-class SDialogueRootNode : public SDialogueNode
+class SDialogueRootNode : public SDialogueNode<UDialogueRootNode>
 {
 public:
 	SLATE_BEGIN_ARGS(SDialogueRootNode) {}

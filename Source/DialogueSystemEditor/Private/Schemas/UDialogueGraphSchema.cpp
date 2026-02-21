@@ -9,6 +9,7 @@
 #include "ToolMenuSection.h"
 #include "Actions/FDialogueGraph_DeleteNodeWithChildren.h"
 #include "Actions/FDialogueGraph_FocusRoot.h"
+#include "Nodes/Unreal/UDialogueLinkNode.h"
 
 #pragma region Initialization
 
@@ -97,15 +98,9 @@ void UDialogueGraphSchema::AddLineContext(const UGraphNodeContextMenuContext* Co
 		return;
 	}
 	
-	if (HasChildOfType(Node, UDialogueResponseNode::StaticClass()))
-	{
-		AddResponseAction(Context, Section);
-	}
-	else if (!HasAnyChild(Node))
-	{
-		AddLineAction(Context, Section);
-		AddResponseAction(Context, Section);
-	}
+	AddResponseAction(Context, Section);
+	AddLinkAction(Context, Section);
+	AddLineAction(Context, Section);
 }
 
 void UDialogueGraphSchema::AddResponseContext(const UGraphNodeContextMenuContext* Context, FToolMenuSection* Section) const
@@ -121,7 +116,8 @@ void UDialogueGraphSchema::AddResponseContext(const UGraphNodeContextMenuContext
 	{
 		return;
 	}
-	
+
+	AddLinkAction(Context, Section);
 	AddLineAction(Context, Section);
 }
 
@@ -163,6 +159,27 @@ void UDialogueGraphSchema::AddLineAction(const UGraphNodeContextMenuContext* Con
 	);
 }
 
+void UDialogueGraphSchema::AddLinkAction(const UGraphNodeContextMenuContext* Context, FToolMenuSection* Section) const
+{
+	UEdGraph* Graph = const_cast<UEdGraph*>(Context->Graph.Get());
+	UEdGraphPin* Pin = GetOutputPin(Context->Node);
+	
+	Section->AddMenuEntry(
+		"AddLinkNode",
+		FText::FromString("Link Node"),
+		FText::FromString("Adds a link node"),
+		FSlateIcon(),
+		FUIAction(
+			FExecuteAction::CreateLambda([Graph, Pin]
+			{
+				MakeShared<FDialogueGraph_AddNode>(
+					UDialogueLinkNode::StaticClass()
+				)->PerformAction(Graph, Pin, FVector2f::Zero(), true);
+			})
+		)
+	);
+}
+
 void UDialogueGraphSchema::AddResponseAction(const UGraphNodeContextMenuContext* Context, FToolMenuSection* Section) const
 {
 	UEdGraph* Graph = const_cast<UEdGraph*>(Context->Graph.Get());
@@ -187,7 +204,7 @@ void UDialogueGraphSchema::AddResponseAction(const UGraphNodeContextMenuContext*
 void UDialogueGraphSchema::AddDeleteAction(const UGraphNodeContextMenuContext* Context, FToolMenuSection* Section) const
 {
 	UEdGraph* Graph = const_cast<UEdGraph*>(Context->Graph.Get());
-	UEdGraphPin* Pin = GetOutputPin(Context->Node);
+	UEdGraphPin* Pin = Context->Node->Pins[0];
 	
 	Section->AddMenuEntry(
 		"DeleteNode",

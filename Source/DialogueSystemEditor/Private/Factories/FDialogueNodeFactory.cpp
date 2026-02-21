@@ -2,9 +2,11 @@
 
 #include "FDialogueNodeFactory.h"
 #include "Nodes/Slate/SDialogueLineNode.h"
+#include "Nodes/Slate/SDialogueLinkNode.h"
 #include "Nodes/Slate/SDialogueRootNode.h"
 #include "Nodes/Slate/SDialogueResponseNode.h"
 #include "Nodes/Unreal/UDialogueLineNode.h"
+#include "Nodes/Unreal/UDialogueLinkNode.h"
 #include "Nodes/Unreal/UDialogueResponseNode.h"
 #include "Nodes/Unreal/UDialogueRootNode.h"
 
@@ -23,6 +25,11 @@ TSharedPtr<SGraphNode> FDialogueNodeFactory::CreateNode(UEdGraphNode* Node) cons
 	if (UDialogueResponseNode* TypedNode = Cast<UDialogueResponseNode>(Node))
 	{
 		return SNew(SDialogueResponseNode, TypedNode);
+	}
+		
+	if (UDialogueLinkNode* TypedNode = Cast<UDialogueLinkNode>(Node))
+	{
+		return SNew(SDialogueLinkNode, TypedNode);
 	}
 		
 	return nullptr;

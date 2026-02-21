@@ -56,7 +56,7 @@ void FDialogueGraphEditorStyle::InitializeIcons()
 		"Icons.Key",
 		new FSlateImageBrush(
 			StyleInstance->RootToContentDir(TEXT("Key.png")),
-			FVector2D(32.0f, 32.0f)
+			FVector2D(24.0f, 24.0f)
 		)
 	);
 

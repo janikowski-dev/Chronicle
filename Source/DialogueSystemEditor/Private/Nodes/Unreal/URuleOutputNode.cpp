@@ -23,8 +23,8 @@ FText URuleOutputNode::GetTitle() const
 {
 	switch (Type)
 	{
-	case EOutputType::PostCallback: return FText::FromString("Callback After Response");
-	case EOutputType::Requirements: return FText::FromString("Requirements For Response");
+	case EOutputType::PostCallback: return FText::FromString("Post Callbacks");
+	case EOutputType::Requirements: return FText::FromString("Availability Requirements");
 	default: return FText::FromString("Invalid Node");
 	}
 }

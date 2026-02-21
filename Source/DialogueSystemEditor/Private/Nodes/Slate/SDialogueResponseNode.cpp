@@ -2,6 +2,7 @@
 
 #include "Editors/FDialogueNodeEditor.h"
 #include "Nodes/Unreal/UDialogueResponseNode.h"
+#include "Utils/FSlateHelper.h"
 
 void SDialogueResponseNode::Construct(const FArguments&, UDialogueResponseNode* InNode)
 {
@@ -22,11 +23,14 @@ FReply SDialogueResponseNode::OnMouseButtonDoubleClick(const FGeometry&, const F
 
 void SDialogueResponseNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 {
-	AddTextField(
-		Box,
-		TAttribute<FText>::Create(TAttribute<FText>::FGetter::CreateSP(this, &SDialogueResponseNode::GetText)),
-		FOnTextCommitted::CreateSP(this, &SDialogueResponseNode::SetText)
-	);
+	Box->AddSlot()
+	.AutoHeight()
+	[
+		MakeTextField(
+			TAttribute<FText>(this, &SDialogueResponseNode::GetText),
+			FOnTextCommitted::CreateSP(this, &SDialogueResponseNode::SetText)
+		)
+	];
 }
 
 FText SDialogueResponseNode::GetText() const

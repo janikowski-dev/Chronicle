@@ -6,21 +6,25 @@
 #include "SGraphPanel.h"
 #include "Graphs/UDialogueGraph.h"
 
-void SDialogueNode::MoveTo(const FVector2f& NewPosition, FNodeSet& NodeFilter, bool bMarkDirty)
+template<typename TNodeType>
+void SDialogueNode<TNodeType>::MoveTo(const FVector2f& NewPosition, FNodeSet& NodeFilter, bool bMarkDirty)
 {
 }
 
-TSharedPtr<SGraphPin> SDialogueNode::CreatePinWidget(UEdGraphPin* Pin) const
+template<typename TNodeType>
+TSharedPtr<SGraphPin> SDialogueNode<TNodeType>::CreatePinWidget(UEdGraphPin* Pin) const
 {
 	return SNew(SDialogueGraphPin, Pin);
 }
 
-TSharedPtr<SGraphPin> SDialogueNode::GetHoveredPin(const FGeometry&, const FPointerEvent&) const
+template<typename TNodeType>
+TSharedPtr<SGraphPin> SDialogueNode<TNodeType>::GetHoveredPin(const FGeometry&, const FPointerEvent&) const
 {
 	return nullptr;
 }
 
-void SDialogueNode::UpdateGraphNode()
+template<typename TNodeType>
+void SDialogueNode<TNodeType>::UpdateGraphNode()
 {
 	SGraphNode::UpdateGraphNode();
 	SetupErrorReporting();
@@ -68,9 +72,10 @@ void SDialogueNode::UpdateGraphNode()
 	CreatePinWidgets();
 }
 
-void SDialogueNode::AddHeader(const TSharedRef<SVerticalBox>& Box)
+template<typename TNodeType>
+void SDialogueNode<TNodeType>::AddHeader(const TSharedRef<SVerticalBox>& Box)
 {
-	const FText Title = Cast<UDialogueNode>(GraphNode)->GetTitle();
+	const FText Title = TypedNode->GetTitle();
 	
 	Box->AddSlot()
 	.AutoHeight()
@@ -134,7 +139,8 @@ void SDialogueNode::AddHeader(const TSharedRef<SVerticalBox>& Box)
 	];
 }
 
-FReply SDialogueNode::ToggleCollapse() const
+template<typename TNodeType>
+FReply SDialogueNode<TNodeType>::ToggleCollapse() const
 {
 	ToggleCollapsedState();
 	ApplyCollapse();
@@ -142,13 +148,15 @@ FReply SDialogueNode::ToggleCollapse() const
 	return FReply::Handled();
 }
 
-void SDialogueNode::ApplyCollapse() const
+template<typename TNodeType>
+void SDialogueNode<TNodeType>::ApplyCollapse() const
 {
 	TSet<UDialogueNode*> Visited;
 	ApplyCollapse(TypedNode.Get(), false, Visited);
 }
 
-void SDialogueNode::ApplyCollapse(
+template<typename TNodeType>
+void SDialogueNode<TNodeType>::ApplyCollapse(
 	UDialogueNode* CurrentNode,
 	const bool bParentHidden,
 	TSet<UDialogueNode*>& Visited
@@ -180,18 +188,21 @@ void SDialogueNode::ApplyCollapse(
 	}
 }
 
-void SDialogueNode::ToggleCollapsedState() const
+template<typename TNodeType>
+void SDialogueNode<TNodeType>::ToggleCollapsedState() const
 {
 	TypedNode->bIsCollapsed = !TypedNode->bIsCollapsed;
 }
 
-void SDialogueNode::RefreshGraph() const
+template<typename TNodeType>
+void SDialogueNode<TNodeType>::RefreshGraph() const
 {
 	const UDialogueGraph* TypedGraph = Cast<UDialogueGraph>(GraphNode->GetGraph());
 	TypedGraph->Refresh();
 }
 
-int SDialogueNode::GetBodyIndex() const
+template<typename TNodeType>
+int SDialogueNode<TNodeType>::GetBodyIndex() const
 {
 	if (TypedNode->bIsCollapsed)
 	{
@@ -206,8 +217,9 @@ int SDialogueNode::GetBodyIndex() const
 	return Regular;
 }
 
-void SDialogueNode::Cache(UEdGraphNode* Node)
+template<typename TNodeType>
+void SDialogueNode<TNodeType>::Cache(UEdGraphNode* Node)
 {
-	TypedNode = Cast<UDialogueNode>(Node);
+	TypedNode = Cast<TNodeType>(Node);
 	GraphNode = Node;
 }

@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "SDialogueTextNode.h"
+#include "SDialogueNode.h"
 
 class UDialogueResponseNode;
 
-class SDialogueResponseNode : public SDialogueTextNode
+class SDialogueResponseNode : public SDialogueNode<UDialogueResponseNode>
 {
 public:
 	SLATE_BEGIN_ARGS(SDialogueResponseNode) {}

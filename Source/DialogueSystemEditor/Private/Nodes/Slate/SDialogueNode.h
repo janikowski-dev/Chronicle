@@ -1,6 +1,10 @@
 ﻿#pragma once
 
 #include "SGraphNode.h"
+#include "Nodes/Unreal/UDialogueLineNode.h"
+#include "Nodes/Unreal/UDialogueLinkNode.h"
+#include "Nodes/Unreal/UDialogueResponseNode.h"
+#include "Nodes/Unreal/UDialogueRootNode.h"
 
 enum ENodeViewType : int32
 {
@@ -11,6 +15,7 @@ enum ENodeViewType : int32
 
 class UDialogueNode;
 
+template<typename TNodeType>
 class SDialogueNode : public SGraphNode
 {
 public:
@@ -22,6 +27,7 @@ public:
 protected:
 	virtual void AddBody(const TSharedRef<SVerticalBox>& Box) = 0;
 	virtual FSlateColor GetHeaderColor() const = 0;
+	
 	void Cache(UEdGraphNode* Node);
 
 private:
@@ -37,9 +43,14 @@ private:
 	FReply ToggleCollapse() const;
 	int GetBodyIndex() const;
 	
-public:
-	TWeakObjectPtr<UDialogueNode> TypedNode;
+protected:
+	TWeakObjectPtr<TNodeType> TypedNode;
 
 private:
 	TSharedPtr<SWidgetSwitcher> WidgetSwitcher;
 };
+
+extern template class SDialogueNode<UDialogueResponseNode>;
+extern template class SDialogueNode<UDialogueLineNode>;
+extern template class SDialogueNode<UDialogueLinkNode>;
+extern template class SDialogueNode<UDialogueRootNode>;

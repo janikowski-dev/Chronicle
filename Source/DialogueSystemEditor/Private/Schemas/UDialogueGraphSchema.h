@@ -45,6 +45,11 @@ private:
 		const UGraphNodeContextMenuContext* Context,
 		FToolMenuSection* Section
 	) const;
+	
+	void AddLinkAction(
+		const UGraphNodeContextMenuContext* Context,
+		FToolMenuSection* Section
+	) const;
 
 	void AddResponseAction(
 		const UGraphNodeContextMenuContext* Context,

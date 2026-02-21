@@ -52,7 +52,6 @@ void FDialogueGraphConnectionDrawingPolicy::DrawSplineWithArrow(
 	}
 	
 	DrawArrow(EndPoint, PinOffset, Params);
-	CacheOwner(Params);
 	
 	if (HasRules(Params.AssociatedPin2, EOutputType::Requirements))
 	{
@@ -129,7 +128,7 @@ void FDialogueGraphConnectionDrawingPolicy::DrawLinkIcon(
 {
 	const FSlateBrush* LinkBrush = FSlateIcon("FDialogueGraphEditorStyle", "Icons.Link").GetIcon();
 	const FVector2f LinkPoint = FVector2f(
-		StartPoint.X + (EndPoint.X - StartPoint.X) * 0.5f - LinkBrush->ImageSize.X * ZoomFactor * 0.5f,
+		StartPoint.X + (EndPoint.X - StartPoint.X) * 0.25f - LinkBrush->ImageSize.X * ZoomFactor * 0.25f,
 		StartPoint.Y - LinkBrush->ImageSize.X * ZoomFactor * 0.5f
 	);
 	
@@ -151,7 +150,7 @@ void FDialogueGraphConnectionDrawingPolicy::DrawKeyIcon(
 {
 	const FSlateBrush* KeyBrush = FSlateIcon("FDialogueGraphEditorStyle", "Icons.Key").GetIcon();
 	const FVector2f KeyPoint = FVector2f(
-		(StartPoint.X + EndPoint.X) * 0.5f - KeyBrush->ImageSize.X * ZoomFactor * 0.5f,
+		StartPoint.X + (EndPoint.X - StartPoint.X) * 0.75f - KeyBrush->ImageSize.X * ZoomFactor * 0.75f,
 		EndPoint.Y - KeyBrush->ImageSize.X * ZoomFactor * 0.5f
 	);
 	
@@ -240,11 +239,6 @@ bool FDialogueGraphConnectionDrawingPolicy::IsTargetNodeEnabled(const FConnectio
 	return !TypedNode->bIsHidden;
 }
 
-void FDialogueGraphConnectionDrawingPolicy::CacheOwner(const FConnectionParams& Params)
-{
-	Owner = Params.AssociatedPin1->GetOwningNode()->GetGraph()->GetTypedOuter<UDialogueAsset>();
-}
-
 bool FDialogueGraphConnectionDrawingPolicy::HasRules(const UEdGraphPin* Pin, const EOutputType Type) const
 {
 	if (!Pin)
@@ -259,13 +253,14 @@ bool FDialogueGraphConnectionDrawingPolicy::HasRules(const UEdGraphPin* Pin, con
 		return false;
 	}
 
-	const UDialogueResponseNode* TypedNode = Cast<UDialogueResponseNode>(Node);
+	const UDialogueNode* TypedNode = Cast<UDialogueNode>(Node);
 
 	if (!TypedNode)
 	{
 		return false;
 	}
-
+	
+	const UDialogueAsset* Owner = Pin->GetOwningNode()->GetGraph()->GetTypedOuter<UDialogueAsset>();
 	const TObjectPtr<URuleGraph>* RuleGraphPointer = Owner->InnerGraphsByNode.Find(TypedNode);
 	
 	if (!RuleGraphPointer)
