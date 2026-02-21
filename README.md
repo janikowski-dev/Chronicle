@@ -38,30 +38,20 @@ The system is designed to give game developers full control over storytelling me
 
 ### How To Use
 
--   **Create Dialogue Graph**
+-   **Create Dialogue Graph:** RMB on Content Browser/Miscellaneous/Dialogue Asset
 
-    RMB on Content Browser/Miscellaneous/Dialogue Asset
+-   **Open Dialogue Graph:** Double LMB Dialogue Asset
 
--   **Open Dialogue Graph**
+-   **Modify Dialogue Graph:** RMB on existing node inside Dialogue Asset (Context Menu will pop up)
 
-    Double LMB Dialogue Asset
-
--   **Modify Dialogue Graph**
-
-    RMB on existing node inside Dialogue Asset (Context Menu will pop up)
-
--   **Modify Requirements And Callbacks For Particular Node**
+-   **Modify Requirements And Callbacks For Particular Node:**
 
     - Double LMB on existing node (Node Graph will pop up)
     - RMB when inside Node Graph (Context Menu will pop up)
 
--   **Export To Runtime UObject**
+-   **Export To Runtime UObject:** RMB on Dialogue Asset/Export to runtime UObject
 
-    RMB on Dialogue Asset/Export to runtime UObject
-
--   **Copy JSON To Clipboard**
-
-    RMB on Dialogue Asset/Copy JSON to clipboard
+-   **Copy JSON To Clipboard:** RMB on Dialogue Asset/Copy JSON to clipboard
 
 # Rule System (WIP)
 
