@@ -7,7 +7,7 @@ void UDialogueLinkNode::AllocateDefaultPins()
 	CreatePin(EGPD_Input, TEXT("DialoguePin"), NAME_None, nullptr, TEXT("In"));
 }
 
-FText UDialogueLinkNode::GetTitle()
+FText UDialogueLinkNode::GetTitle() const
 {
 	if (LinkedNode)
 	{

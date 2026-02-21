@@ -8,11 +8,18 @@ static TSharedRef<SWidget> MakeTextField(
 )
 {
 	return SNew(SBox)
-	.MinDesiredHeight(150.0f)
-	.MinDesiredWidth(275.0f)
+	.HeightOverride(150.0f)
+	.WidthOverride(225.0f)
 	.Padding(4)
 	[
 		SNew(SMultiLineEditableTextBox)
+		.HScrollBar(
+			SNew(SScrollBar)
+			.Thickness(FVector2D(0, 0))
+			.AlwaysShowScrollbar(false)
+			.AlwaysShowScrollbarTrack(false).
+			Visibility(EVisibility::Hidden)
+		)
 		.Text(Getter)
 		.OnTextCommitted(Setter)
 		.AutoWrapText(true)
@@ -24,12 +31,19 @@ static TSharedRef<SWidget> MakeTextField(
 )
 {
 	return SNew(SBox)
-	.MinDesiredHeight(150.0f)
-	.MinDesiredWidth(275.0f)
+	.HeightOverride(122.0f)
+	.WidthOverride(225.0f)
 	.Padding(4)
 	[
 		SNew(SMultiLineEditableTextBox)
 		.BackgroundColor(FLinearColor::Transparent)
+		.HScrollBar(
+			SNew(SScrollBar)
+			.Thickness(FVector2D(0, 0))
+			.AlwaysShowScrollbar(false)
+			.AlwaysShowScrollbarTrack(false).
+			Visibility(EVisibility::Hidden)
+		)
 		.Text(Getter)
 		.IsReadOnly(true)
 		.AutoWrapText(true)

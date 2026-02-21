@@ -6,7 +6,7 @@ void UDialogueLineNode::AllocateDefaultPins()
 	CreatePin(EGPD_Output, TEXT("DialoguePin"), NAME_None, nullptr, TEXT("Out"));
 }
 
-FText UDialogueLineNode::GetTitle()
+FText UDialogueLineNode::GetTitle() const
 {
 	return  FText::Format(FText::FromString("Line #{0}"), LineIndex);
 }

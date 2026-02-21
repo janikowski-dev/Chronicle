@@ -10,7 +10,7 @@ void UDialogueNode::PostPlacedNewNode()
 	AssignId();
 }
 
-FText UDialogueNode::GetTitle()
+FText UDialogueNode::GetTitle() const
 {
 	return FText::GetEmpty();
 }

@@ -13,7 +13,7 @@ class DIALOGUESYSTEMEDITOR_API UDialogueLinkNode : public UDialogueNode
 
 public:
 	virtual void AllocateDefaultPins() override;
-	virtual FText GetTitle() override;
+	virtual FText GetTitle() const override;
 
 	UDialogueLineNode* GetLinkedNode() const { return LinkedNode; }
 	void SetLinkedNode(UDialogueLineNode* InNode) { LinkedNode = InNode; }

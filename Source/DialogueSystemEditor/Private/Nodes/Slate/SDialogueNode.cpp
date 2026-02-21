@@ -90,7 +90,7 @@ void SDialogueNode<TNodeType>::AddHeader(const TSharedRef<SVerticalBox>& Box)
 		+ SOverlay::Slot()
 		[
 			SNew(SBox)
-			.WidthOverride(275.0f)
+			.WidthOverride(225.0f)
 			.Padding(4)
 			[
 				SNew(STextBlock)

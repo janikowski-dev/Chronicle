@@ -13,7 +13,7 @@ class DIALOGUESYSTEMEDITOR_API UDialogueNode : public UEdGraphNode
 public:
     virtual void PostPlacedNewNode() override;
 	
-	virtual FText GetTitle();
+	virtual FText GetTitle() const;
 	
 	URuleGraph* GetOrCreateInnerGraph();
 

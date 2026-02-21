@@ -26,8 +26,8 @@ void UDialogueGraph::Refresh() const
 
 void UDialogueGraph::ApplyLayout() const
 {
-	constexpr float CellWidth  = 450.0f;
-	constexpr float CellHeight = 300.0f;
+	constexpr float CellWidth  = 350.0f;
+	constexpr float CellHeight = 225.0f;
 	float CursorY = 0.0f;
 
 	TMap<UDialogueNode*, FDialogueLayoutNode*> LayoutMap;
@@ -86,7 +86,7 @@ FDialogueLayoutNode* UDialogueGraph::BuildLayoutTree(
 		{
 			UDialogueNode* Child = Cast<UDialogueNode>(Linked->GetOwningNode());
 			
-			if (!Child || Child->bIsHidden)
+			if (!Child)
 			{
 				continue;
 			}

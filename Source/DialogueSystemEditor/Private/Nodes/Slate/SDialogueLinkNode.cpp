@@ -46,7 +46,7 @@ void SDialogueLinkNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 
 FSlateColor SDialogueLinkNode::GetHeaderColor() const
 {
-    return FSlateColor(FLinearColor(0.9f, 0.0f, 0.0f));
+    return FSlateColor(FLinearColor(0.8f, 0.0f, 0.0f));
 }
 
 TSharedRef<SWidget> SDialogueLinkNode::GetLineNodesMenu()
@@ -125,4 +125,9 @@ void SDialogueLinkNode::RefreshAvailableNodes()
             AvailableNodes.Add(LineNode);
         }
     }
+    
+    AvailableNodes.Sort([](const TWeakObjectPtr<UDialogueLineNode>& A, const TWeakObjectPtr<UDialogueLineNode>& B)
+    {
+        return A->GetTitle().ToString() < B->GetTitle().ToString();
+    });
 }
