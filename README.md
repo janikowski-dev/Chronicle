@@ -30,19 +30,41 @@ The system is designed to give game developers full control over storytelling me
 
     ![Requirements And Callbacks Visuals](Assets/Requirements_And_Callbacks.png)
 
--   **Export To Runtime UObject**
-
-    ![UObject Export](Assets/UObject_Export.png)
-
--   **Copy To JSON**
-
-    ![JSON Copy](Assets/JSON_Copy.png)
-
 ### Planned Features
 
 -   Separating dialogue lines per character
 -   Visuals polishing
 -   Data export
+
+### How To Use
+
+-   **Create Dialogue Graph**
+
+    `RMB on Content Browser/Miscellaneous/Dialogue Asset`
+
+-   **Open Dialogue Graph**
+
+    `Double LMB Dialogue Asset`
+
+-   **Modify Graph**
+
+    `RMB on existing node inside Dialogue Asset (Context Menu will pop up)`
+
+-   **Modify Requirements And Callbacks**
+
+    `Double LMB on existing node (Node Graph will pop up)`
+
+-   **Add Requirements And Callbacks**
+
+    `RMB when inside Node Graph (Context Menu will pop up)`
+
+-   **Export To Runtime UObject**
+
+    `RMB on Dialogue Asset/Export`
+
+-   **Copy To JSON**
+
+    `RMB on Dialogue Asset/Copy as Json`
 
 # Rule System (WIP)
 
