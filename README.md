@@ -1,8 +1,6 @@
 # Story System
 
-**Story System** is a toolkit designed for creating rich, interactive narrative experiences in games. While still a work in progress, it already supports dialogue graph editing and will eventually include character database, rule-driven logic, cinematic timelines, and quest editor.
-
-The system is designed to give game developers full control over storytelling mechanics, from branching dialogue paths to complex callback logic.
+**Story System** is an Unreal Engine plugin for building narrative-driven games. It gives developers a visual way to create branching dialogues, hook up game logic through a rule system, and eventually manage characters, quests, and cinematic timelines — all from within the editor.
 
 ## Dialogue Graph (WIP)
 
