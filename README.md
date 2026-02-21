@@ -28,6 +28,8 @@ The system is designed to give game developers full control over storytelling me
 ### Planned Features
 
 -   Separating dialogue lines per character
+-   Visuals polishing
+-   Data export
 
 # Rule System (WIP)
 
