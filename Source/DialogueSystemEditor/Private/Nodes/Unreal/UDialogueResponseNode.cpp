@@ -10,3 +10,8 @@ FText UDialogueResponseNode::GetTitle() const
 {
 	return FText::Format(FText::FromString("Response #{0}.{1}"), ParentIndex, OrderIndex);
 }
+
+FText UDialogueResponseNode::GetText() const
+{
+	return Text;
+}

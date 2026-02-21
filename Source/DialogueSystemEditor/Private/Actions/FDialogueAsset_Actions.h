@@ -1,14 +1,18 @@
 ﻿#pragma once
 
 #include "AssetTypeActions_Base.h"
-#include "Assets/UDialogueAsset.h"
 
-class FDialogueAsset_OpenEditor : public FAssetTypeActions_Base
+class FDialogueAsset_Actions : public FAssetTypeActions_Base
 {
 public:
 	virtual void OpenAssetEditor(
 		const TArray<UObject*>& InObjects,
 		TSharedPtr<IToolkitHost> EditWithinLevelEditor
+	) override;
+
+	virtual void GetActions(
+		const TArray<UObject*>& InObjects,
+		FMenuBuilder& MenuBuilder
 	) override;
 	
 	virtual FText GetName() const override;

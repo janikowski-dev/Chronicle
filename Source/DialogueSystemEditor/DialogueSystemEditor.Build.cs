@@ -29,7 +29,10 @@ public class DialogueSystemEditor : ModuleRules
 			"GameplayTagsEditor",
 			"EditorStyle",
 			"Projects",
-			"RuleSystemEditor"
+			"RuleSystemEditor",
+			"StorySystemCore",
+			"JsonUtilities",
+			"ApplicationCore"
 		]);
 	}
 }

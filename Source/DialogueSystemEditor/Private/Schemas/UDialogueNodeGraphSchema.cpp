@@ -7,6 +7,7 @@
 #include "Nodes/Unreal/URuleAndNode.h"
 #include "Nodes/Unreal/URuleCallbackNode.h"
 #include "Nodes/Unreal/URuleConditionNode.h"
+#include "Nodes/Unreal/URuleNotNode.h"
 #include "Nodes/Unreal/URuleOrNode.h"
 #include "Nodes/Unreal/URuleOutputNode.h"
 
@@ -54,6 +55,14 @@ void UDialogueNodeGraphSchema::GetGraphContextActions(FGraphContextMenuBuilder& 
 			FText::FromString("2.2. Or Node"),
 			FText::FromString("Adds an or node"),
 			URuleOrNode::StaticClass()
+		)
+	);
+	
+	ContextMenuBuilder.AddAction(MakeShared<FDialogueNodeGraph_AddNode>(
+			FText::FromString("2. Operations"),
+			FText::FromString("2.3. Not Node"),
+			FText::FromString("Adds a not node"),
+			URuleNotNode::StaticClass()
 		)
 	);
 }

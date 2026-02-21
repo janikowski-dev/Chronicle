@@ -12,6 +12,7 @@ class DIALOGUESYSTEMEDITOR_API UDialogueResponseNode : public UDialogueNode
 public:
 	virtual void AllocateDefaultPins() override;
 	virtual FText GetTitle() const override;
+	virtual FText GetText() const override;
 	
 public:
 	UPROPERTY()

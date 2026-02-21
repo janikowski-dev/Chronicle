@@ -10,3 +10,8 @@ FText UDialogueLineNode::GetTitle() const
 {
 	return  FText::Format(FText::FromString("Line #{0}"), LineIndex);
 }
+
+FText UDialogueLineNode::GetText() const
+{
+	return Text;
+}

@@ -14,8 +14,10 @@ public:
     virtual void PostPlacedNewNode() override;
 	
 	virtual FText GetTitle() const;
+	virtual FText GetText() const;
 	
 	URuleGraph* GetOrCreateInnerGraph();
+	URuleGraph* GetInnerGraph() const;
 
 private:
 	void AssignId();

@@ -15,6 +15,11 @@ FText UDialogueNode::GetTitle() const
 	return FText::GetEmpty();
 }
 
+FText UDialogueNode::GetText() const
+{
+	return FText::GetEmpty();
+}
+
 URuleGraph* UDialogueNode::GetOrCreateInnerGraph()
 {
 	if (UDialogueAsset* Asset = GetTypedOuter<UDialogueAsset>())
@@ -35,6 +40,19 @@ URuleGraph* UDialogueNode::GetOrCreateInnerGraph()
 		InnerGraph->GetSchema()->CreateDefaultNodesForGraph(*InnerGraph);
 		Asset->InnerGraphsByNode.Add(this, InnerGraph);
 		return InnerGraph;
+	}
+
+	return nullptr;
+}
+
+URuleGraph* UDialogueNode::GetInnerGraph() const
+{
+	if (UDialogueAsset* Asset = GetTypedOuter<UDialogueAsset>())
+	{
+		if (const TObjectPtr<URuleGraph>* Found = Asset->InnerGraphsByNode.Find(this))
+		{
+			return Found->Get();
+		}
 	}
 
 	return nullptr;

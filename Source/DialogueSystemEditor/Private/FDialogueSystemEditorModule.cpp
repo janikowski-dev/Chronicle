@@ -2,7 +2,7 @@
 
 #include "AssetToolsModule.h"
 #include "EdGraphUtilities.h"
-#include "Actions/FDialogueAsset_OpenEditor.h"
+#include "Actions/FDialogueAsset_Actions.h"
 #include "Factories/FRuleNodeFactory.h"
 #include "Factories/FDialogueNodeFactory.h"
 #include "Utils/FDialogueGraphEditorStyle.h"
@@ -11,7 +11,7 @@
 
 void FDialogueSystemEditorModule::StartupModule()
 {
-	FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get().RegisterAssetTypeActions(MakeShared<FDialogueAsset_OpenEditor>());
+	FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get().RegisterAssetTypeActions(MakeShared<FDialogueAsset_Actions>());
 	FEdGraphUtilities::RegisterVisualNodeFactory(MakeShared<FDialogueNodeFactory>());
 	FEdGraphUtilities::RegisterVisualNodeFactory(MakeShared<FRuleNodeFactory>());
 	FDialogueGraphEditorStyle::Initialize();
