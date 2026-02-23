@@ -2,14 +2,14 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "0.1.0",
-	"FriendlyName": "Story System",
+	"FriendlyName": "Chronicle",
 	"Description": "Narration-driven game toolkit: dialogue graphs, asset-driven rules, character management, quest system and cinematic timeline.",
 	"Category": "Tools",
 	"CreatedBy": "Adam Janikowski",
 	"CreatedByURL": "https://github.com/janikowski-dev",
-	"DocsURL": "https://github.com/janikowski-dev/story-system",
+	"DocsURL": "https://github.com/janikowski-dev/chronicle",
 	"MarketplaceURL": "",
-	"SupportURL": "https://github.com/janikowski-dev/story-system/issues",
+	"SupportURL": "https://github.com/janikowski-dev/chronicle/issues",
 	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
@@ -28,11 +28,6 @@
         {
           "Name": "CharacterSystemEditor",
           "Type": "Editor",
-          "LoadingPhase": "Default"
-        },
-        {
-          "Name": "StorySystemCore",
-          "Type": "Runtime",
           "LoadingPhase": "Default"
         }
 	]

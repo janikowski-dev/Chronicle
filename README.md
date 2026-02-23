@@ -1,112 +1,59 @@
-# Story System
+![Logo](Assets/Logo.png)
 
-**Story System** is an Unreal Engine plugin for building narrative-driven games. It gives developers a visual way to create branching dialogues, hook up game logic through a rule system, and eventually manage characters, quests, and cinematic timelines — all from within the editor.
+**Chronicle** is an Unreal Engine plugin for building narrative-driven games. It gives developers a visual way to create branching dialogues, hook up game logic through a rule system, and eventually manage characters, quests, and cinematic timelines - all from within the editor.
 
-## Dialogue Graph
+## Modules
 
-### Features
+Chronicle is divided into separate modules for clarity and easier maintenance. Each module has its own detailed README in the `Docs/` folder.
 
--   **Branching Dialogue Paths**
+### [Dialogue System](Docs/DialogueSystem.md)
 
-    ![Overview_Example](Assets/Overview_Example.png)
+![Dialogue System Overview](Assets/Dialogue_System_Overview.png)
 
--   **Node Collapsing**
+[See full Dialogue System documentation →](Docs/DialogueSystem.md)
 
-    ![Overview Collapse](Assets/Overview_Collapse.png)
-    
--   **Node Inner Graph**
-    
-    -   Requirements for node availability
-  
-        ![Requirements](Assets/Requirements_Inner_Visuals.png)
-        
-    -   Callbacks after node
- 
-        ![Callbacks](Assets/Callbacks_Inner_Visuals.png)
+### [Rule System](Docs/RuleSystem.md)
 
--   **Inner State Visualization: Key - Requirements & Link - Callbacks**
+![Rule System Overview](Assets/Rule_System_Overview.png)
 
-    ![Requirements Outer Visuals](Assets/Requirements_Outer_Visuals.png)
+[See full Rule System documentation →](Docs/RuleSystem.md)
 
-    ![Callbacks Outer Visuals](Assets/Callbacks_Outer_Visuals.png)
+----------
 
-### How To Use
+### [Character System](Docs/CharacterSystem.md)
 
--   **Create Dialogue Graph:**
+![Character System Overview](Assets/Character_System_Overview.png)
 
-    ![Tutorial Create](Assets/Tutorial_Create.gif)
-
--   **Open Dialogue Graph:** Double LMB on `Dialogue Asset`
-
--   **Add Participants:**
-
-    ![Tutorial Participants](Assets/Tutorial_Participants.gif)
-
--   **Add Nodes:**
-
-    ![Tutorial Nodes](Assets/Tutorial_Nodes.gif)
-
--   **Add Requirements:**
-
-    ![Tutorial Requirements](Assets/Tutorial_Requirements.gif)
-
--   **Add Callbacks:**
-
-    ![Tutorial Callbacks](Assets/Tutorial_Callbacks.gif)
-
--   **Export To Runtime UObject:**
-
-    ![Tutorial UObject](Assets/Tutorial_UObject.gif)
-
--   **Copy JSON To Clipboard:**
-
-    ![Tutorial JSON](Assets/Tutorial_JSON.gif)
-
-# Rule System (On Hold)
-
-### Current Features
-
-- Asset-based rules creation
-- GUID-oriented rule recognition
-
-### How To Use
-
--   **Create Rule (Inside `Game/Rules/Conditions` Or Inside `Game/Rules/Callbacks`):**
-
-    ![Tutorial Rules](Assets/Tutorial_Rules.gif)
-
-### Planned Features
-
-- Browser for rules
-- Validator
-
-# Character System
-
-### Current Features
-
-- Asset-based character creation
-- GUID-oriented character recognition
-
-### How To Use
-
--   **Create Character (Inside `Game/Characters`):**
-
-    ![Tutorial Characters](Assets/Tutorial_Characters.gif)
-
-### Planned Features
-
-- Browser for characters
-- Validator
+[See full Character System documentation →](Docs/CharacterSystem.md)
 
 ## Roadmap
 
-1.  Cinematic Timeline
-2.  Quest Editor
+Future planned modules and features for Chronicle:
 
-## Getting Started
+1.  **Cinematic Timeline** – in-editor cutscenes and timeline management
+2. **Quest Editor** – asset-based quests and branching objectives
 
-> Instructions will be added soon once core systems stabilize.
+## Installation
+
+1.  Clone or download this repository
+2.  Place the plugin in: `(Project)/Plugins/Chronicle`
+3.  Open the project in Unreal Engine
+4.  Enable  **Chronicle**  in: `Edit → Plugins → Tools`
+5.  Restart the editor
+
+## Requirements
+
+-   Unreal Engine 5.x
+-   Editor build (plugin is editor-only)
+
+## How To Use
+
+Usage and integration instructions are included in each module’s README:
+
+- [Dialogue System](Docs/DialogueSystem.md)
+- [Rule System](Docs/RuleSystem.md)
+- [Character System](Docs/CharacterSystem.md)
 
 ## Contributing
 
-Story System is open for contributions! If you'd like to help expand features, improve documentation, or provide bug fixes, please fork the repository and submit a pull request.
+Chronicle is open for contributions! If you'd like to help expand features, improve documentation, or provide bug fixes, please fork the repository and submit a pull request.

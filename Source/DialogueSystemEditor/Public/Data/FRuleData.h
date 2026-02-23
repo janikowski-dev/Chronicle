@@ -4,7 +4,7 @@
 #include "FRuleData.generated.h"
 
 USTRUCT()
-struct FRuleData
+struct DIALOGUESYSTEMEDITOR_API FRuleData
 {
 	GENERATED_BODY()
 

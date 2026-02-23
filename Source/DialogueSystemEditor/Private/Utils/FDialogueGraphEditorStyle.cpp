@@ -45,7 +45,7 @@ bool FDialogueGraphEditorStyle::TryInitializing()
 
 void FDialogueGraphEditorStyle::InitializeContentDirectory()
 {
-	const FString PluginDirectory = IPluginManager::Get().FindPlugin(TEXT("StorySystem"))->GetBaseDir();
+	const FString PluginDirectory = IPluginManager::Get().FindPlugin(TEXT("Chronicle"))->GetBaseDir();
 	const FString ContentDirectory = PluginDirectory / TEXT("Resources");
 	StyleInstance->SetContentRoot(ContentDirectory);
 }

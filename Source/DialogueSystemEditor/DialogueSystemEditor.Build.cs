@@ -30,7 +30,6 @@ public class DialogueSystemEditor : ModuleRules
 			"EditorStyle",
 			"Projects",
 			"RuleSystemEditor",
-			"StorySystemCore",
 			"JsonUtilities",
 			"ApplicationCore",
 			"CharacterSystemEditor"
