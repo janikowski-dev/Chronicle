@@ -4,7 +4,7 @@
 
 ## Dialogue Graph
 
-### Current Features
+### Features
 
 -   **Branching Dialogue Paths**
 
