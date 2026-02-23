@@ -12,7 +12,7 @@
 
 -   **Node Collapsing**
 
-    ![Node Collapsing](Assets/Node_Collapsing.png)
+    ![Overview Collapse](Assets/Overview_Collapse.png)
     
 -   **Node Inner Graph**
     
