@@ -1,8 +1,6 @@
 # Story System
 
-**Story System** is a toolkit designed for creating rich, interactive narrative experiences in games. While still a work in progress, it already supports dialogue graph editing and will eventually include character database, rule-driven logic, cinematic timelines, and quest editor.
-
-The system is designed to give game developers full control over storytelling mechanics, from branching dialogue paths to complex callback logic.
+**Story System** is an Unreal Engine plugin for building narrative-driven games. It gives developers a visual way to create branching dialogues, hook up game logic through a rule system, and eventually manage characters, quests, and cinematic timelines — all from within the editor.
 
 ## Dialogue Graph (WIP)
 
@@ -33,35 +31,23 @@ The system is designed to give game developers full control over storytelling me
 ### Planned Features
 
 -   Separating dialogue lines per character
--   Visuals polishing
--   Data export
 
 ### How To Use
 
--   **Create Dialogue Graph**
+-   **Create Dialogue Graph:** RMB on `Content Browser` then select `Miscellaneous/Dialogue Asset`
 
-    `RMB on Content Browser/Miscellaneous/Dialogue Asset`
+-   **Open Dialogue Graph:** Double LMB on `Dialogue Asset`
 
--   **Open Dialogue Graph**
+-   **Modify Dialogue Graph:** RMB on existing `Node` inside `Dialogue Asset` (`Context Menu` will pop up)
 
-    `Double LMB Dialogue Asset`
+-   **Modify Requirements And Callbacks For Particular Node:**
 
--   **Modify Dialogue Graph**
+    - Double LMB on existing `Node` (`Node Graph` will pop up)
+    - RMB when inside `Node Graph` (`Context Menu` will pop up)
 
-    `RMB on existing node inside Dialogue Asset (Context Menu will pop up)`
+-   **Export To Runtime UObject:** RMB on `Dialogue Asset` then click `Export to runtime UObject`
 
--   **Modify Requirements And Callbacks For Particular Node**
-
-    `Double LMB on existing node (Node Graph will pop up)`
-    `RMB when inside Node Graph (Context Menu will pop up)`
-
--   **Export To Runtime UObject**
-
-    `RMB on Dialogue Asset/Export to runtime UObject`
-
--   **Copy JSON To Clipboard**
-
-    `RMB on Dialogue Asset/Copy JSON to clipboard`
+-   **Copy JSON To Clipboard:** RMB on `Dialogue Asset` then click `Copy JSON to clipboard`
 
 # Rule System (WIP)
 
