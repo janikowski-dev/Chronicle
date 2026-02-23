@@ -4,13 +4,13 @@
 
 ## Example
 
-![Dialogue System Overview](Assets/Dialogue_System_Overview.png)
+![Dialogue System Overview](../Assets/Dialogue_System_Overview.png)
 
 ## Nodes
 
 ### Root Node
 
-![Root Node](Assets/Node_Root.png)
+![Root Node](../Assets/Node_Root.png)
 
 The **Root Node** is the entry point of every dialogue. It defines the starting point of the conversation and manages its participants.
 
@@ -21,7 +21,7 @@ Within this node, you can:
 
 ### Line Node
 
-![Line Node](Assets/Node_Line.png)
+![Line Node](../Assets/Node_Line.png)
 
 The **Line Node** represents a single spoken line in the conversation.
 
@@ -35,7 +35,7 @@ By default, the **Player** is set as the listener, but this can be manually set 
 
 ### Response Node
 
-![Response Node](Assets/Node_Response.png)
+![Response Node](../Assets/Node_Response.png)
 
 The **Response Node** represents a player dialogue choice.
 
@@ -47,7 +47,7 @@ Unlike Line Nodes, Response Nodes do not define a speaker or listener - the **Pl
 
 ### Link Node
 
-![Link Node](Assets/Node_Link.png)
+![Link Node](../Assets/Node_Link.png)
 
 The **Link Node** references an existing **Line Node** to avoid unnecessary graph duplication and visual clutter.
 
@@ -72,7 +72,7 @@ Each node supports:
 
 Inside the node editor, requirements and callbacks can be created and connected visually:
 
-![Inner Requirements And Callbacks](Assets/Inner_Requirements_And_Callbacks.png)
+![Inner Requirements And Callbacks](../Assets/Inner_Requirements_And_Callbacks.png)
 
 ### Dialogue Graph View
 
@@ -83,7 +83,7 @@ From the main dialogue graph, nodes visually indicate whether they contain:
 
 This allows you to quickly inspect dialogue logic without opening each node individually:
 
-![Outer Requirements And Callbacks](Assets/Outer_Requirements_And_Callbacks.png)
+![Outer Requirements And Callbacks](../Assets/Outer_Requirements_And_Callbacks.png)
 
 ## How To Use
 

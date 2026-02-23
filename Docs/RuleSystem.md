@@ -4,7 +4,7 @@
 
 ## Example
 
-![Rule System Overview](Assets/Rule_System_Overview.png)
+![Rule System Overview](../Assets/Rule_System_Overview.png)
 
 ## How To Set Up
 

@@ -4,7 +4,7 @@
 
 ## Example
 
-![Character System Overview](Assets/Character_System_Overview.png)
+![Character System Overview](../Assets/Character_System_Overview.png)
 
 ## How To Set Up
 
