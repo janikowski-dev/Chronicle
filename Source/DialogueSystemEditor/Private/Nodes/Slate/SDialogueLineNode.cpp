@@ -128,6 +128,22 @@ void SDialogueLineNode::RefreshParticipantIds()
 			ParticipantIds.Add(Id);
 		}
 	}
+	
+	ParticipantIds.Sort([](const TSharedPtr<FGuid>& A, const TSharedPtr<FGuid>& B)
+	{
+		const FName NameA = FCharacterDirectory::GetAll().GetName(*A);
+		const FName NameB = FCharacterDirectory::GetAll().GetName(*B);
+
+		const bool bAIsPlayer = NameA == "Player";
+		const bool bBIsPlayer = NameB == "Player";
+
+		if (bAIsPlayer != bBIsPlayer)
+		{
+			return bAIsPlayer;
+		}
+
+		return NameA.LexicalLess(NameB);
+	});
 }
 
 void SDialogueLineNode::FixAssignedIds()
@@ -144,8 +160,8 @@ void SDialogueLineNode::FixAssignedIds()
 	
 	if (!bContainsListener && !bContainsSpeaker && ParticipantIds.Num() > 1)
 	{
-		TypedNode->ListenerId = *ParticipantIds[1];
-		TypedNode->SpeakerId = *ParticipantIds[0];
+		TypedNode->ListenerId = *ParticipantIds[0];
+		TypedNode->SpeakerId = *ParticipantIds[1];
 		return;
 	}
 	
