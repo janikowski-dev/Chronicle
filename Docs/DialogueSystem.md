@@ -10,7 +10,7 @@
 
 ### Root Node
 
-![Root Node](../Assets/Node_Root.png)
+![Root Node](../Assets/ Nodes_Root.png)
 
 The **Root Node** is the entry point of every dialogue. It defines the starting point of the conversation and manages its participants.
 
@@ -21,7 +21,7 @@ Within this node, you can:
 
 ### Line Node
 
-![Line Node](../Assets/Node_Line.png)
+![Line Node](../Assets/ Nodes_Line.png)
 
 The **Line Node** represents a single spoken line in the conversation.
 
@@ -35,7 +35,7 @@ By default, the **Player** is set as the listener, but this can be manually set 
 
 ### Response Node
 
-![Response Node](../Assets/Node_Response.png)
+![Response Node](../Assets/ Nodes_Response.png)
 
 The **Response Node** represents a player dialogue choice.
 
@@ -47,7 +47,7 @@ Unlike Line Nodes, Response Nodes do not define a speaker or listener - the **Pl
 
 ### Link Node
 
-![Link Node](../Assets/Node_Link.png)
+![Link Node](../Assets/ Nodes_Link.png)
 
 The **Link Node** references an existing **Line Node** to avoid unnecessary graph duplication and visual clutter.
 
