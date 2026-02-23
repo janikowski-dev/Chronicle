@@ -3,6 +3,7 @@
 #include "Graphs/UDialogueGraph.h"
 #include "Nodes/Unreal/UDialogueLineNode.h"
 #include "Nodes/Unreal/UDialogueLinkNode.h"
+#include "Utils/FDialogueGraphEditorStyle.h"
 #include "Utils/FSlateHelper.h"
 
 void SDialogueLinkNode::Construct(const FArguments&, UDialogueLinkNode* InNode)
@@ -21,6 +22,7 @@ void SDialogueLinkNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 {
     Box->AddSlot()
     .AutoHeight()
+    .Padding(0, 0, 0, 4)
     [
         SNew(SComboButton)
         .OnGetMenuContent(this, &SDialogueLinkNode::GetLineNodesMenu)
@@ -35,9 +37,28 @@ void SDialogueLinkNode::AddBody(const TSharedRef<SVerticalBox>& Box)
     {
         return;
     }
+
+    Box->AddSlot()
+    .AutoHeight()
+    .Padding(4)
+    [
+        MakeCharacterDisplay(
+            FDialogueGraphEditorStyle::Get().GetBrush("Icons.Speaker"),
+            TAttribute<FText>(this, &SDialogueLinkNode::GetSpeakerName)
+        )
+    ];
+
+    Box->AddSlot()
+    .AutoHeight()
+    .Padding(4)
+    [
+        MakeCharacterDisplay(
+            FDialogueGraphEditorStyle::Get().GetBrush("Icons.Listener"),
+            TAttribute<FText>(this, &SDialogueLinkNode::GetListenerName)
+        )
+    ];
     
     Box->AddSlot()
-    .Padding(0.0f, 5.0f, 0.0f, 0.0f)
     .AutoHeight()
     [
         MakeTextField(TAttribute<FText>(this, &SDialogueLinkNode::GetSelectedNodeText))
@@ -91,6 +112,16 @@ FText SDialogueLinkNode::GetSelectedNodeText() const
     }
     
     return FText::FromString("Node is not linked");
+}
+
+FText SDialogueLinkNode::GetListenerName() const
+{
+    return FText::FromName(FCharacterDirectory::GetAll().GetName(TypedNode->LinkedNode->ListenerId));
+}
+
+FText SDialogueLinkNode::GetSpeakerName() const
+{
+    return FText::FromName(FCharacterDirectory::GetAll().GetName(TypedNode->LinkedNode->SpeakerId));
 }
 
 void SDialogueLinkNode::SelectNode(UDialogueLineNode* Node) const

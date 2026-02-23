@@ -14,6 +14,12 @@ struct FDialogueNodeData
 	FString Text;
 
 	UPROPERTY(VisibleAnywhere)
+	FGuid SpeakerId;
+
+	UPROPERTY(VisibleAnywhere)
+	FGuid ListenerId;
+
+	UPROPERTY(VisibleAnywhere)
 	int32 RequirementsIndex = -1; 
 
 	UPROPERTY(VisibleAnywhere)

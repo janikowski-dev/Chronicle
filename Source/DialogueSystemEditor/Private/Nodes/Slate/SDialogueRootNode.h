@@ -15,4 +15,13 @@ public:
 protected:
 	virtual void AddBody(const TSharedRef<SVerticalBox>& Box) override;
 	virtual FSlateColor GetHeaderColor() const override;
+	FReply OpenAddParticipantWindow() const;
+
+private:
+	void AddCurrentParticipantList(const TSharedRef<SVerticalBox>& Box) const;
+	void AddNewParticipantButton(const TSharedRef<SVerticalBox>& Box) const;
+	
+	bool HasParticipant(const FGuid Id) const;
+	void AddParticipant(const FGuid Id) const;
+	void RemoveParticipant(const FGuid Id) const;
 };

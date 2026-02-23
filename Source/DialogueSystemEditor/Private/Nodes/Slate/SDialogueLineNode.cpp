@@ -1,8 +1,12 @@
 ﻿#include "SDialogueLineNode.h"
 
+#include "FCharacterDirectory.h"
 #include "SGraphPanel.h"
 #include "Editors/FDialogueNodeEditor.h"
+#include "Graphs/UDialogueGraph.h"
 #include "Nodes/Unreal/UDialogueLineNode.h"
+#include "Nodes/Unreal/UDialogueRootNode.h"
+#include "Utils/FDialogueGraphEditorStyle.h"
 #include "Utils/FSlateHelper.h"
 
 void SDialogueLineNode::Construct(const FArguments&, UDialogueLineNode* InNode)
@@ -16,6 +20,13 @@ FSlateColor SDialogueLineNode::GetHeaderColor() const
 	return FSlateColor(FLinearColor::Red);
 }
 
+void SDialogueLineNode::UpdateGraphNode()
+{
+	SDialogueNode::UpdateGraphNode();
+	RefreshParticipantIds();
+	FixAssignedIds();
+}
+
 FReply SDialogueLineNode::OnMouseButtonDoubleClick(const FGeometry& InMyGeometry, const FPointerEvent& InMouseEvent)
 {
 	OpenNodeEditor();
@@ -24,6 +35,30 @@ FReply SDialogueLineNode::OnMouseButtonDoubleClick(const FGeometry& InMyGeometry
 
 void SDialogueLineNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 {
+	Box->AddSlot()
+	.AutoHeight()
+	.Padding(4)
+	[
+		MakeCharacterSelector(
+			FDialogueGraphEditorStyle::Get().GetBrush("Icons.Speaker"),
+			TAttribute<FText>(this, &SDialogueLineNode::GetSpeakerName),
+			SComboBox<TSharedPtr<FGuid>>::FOnSelectionChanged::CreateSP(this, &SDialogueLineNode::SetSpeaker),
+			&ParticipantIds
+		)
+	];
+	
+	Box->AddSlot()
+	.AutoHeight()
+	.Padding(4)
+	[
+		MakeCharacterSelector(
+			FDialogueGraphEditorStyle::Get().GetBrush("Icons.Listener"),
+			TAttribute<FText>(this, &SDialogueLineNode::GetListenerName),
+			SComboBox<TSharedPtr<FGuid>>::FOnSelectionChanged::CreateSP(this, &SDialogueLineNode::SetListener),
+			&ParticipantIds
+		)
+	];
+	
 	Box->AddSlot()
 	.AutoHeight()
 	[
@@ -36,14 +71,93 @@ void SDialogueLineNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 
 FText SDialogueLineNode::GetText() const
 {
-	return CastChecked<UDialogueLineNode>(GraphNode)->Text;
+	return TypedNode->Text;
 }
 
 void SDialogueLineNode::SetText(const FText& NewText, ETextCommit::Type) const
 {
-	UDialogueLineNode* Node = CastChecked<UDialogueLineNode>(GraphNode);
-	Node->Modify();
-	Node->Text = NewText;
+	TypedNode->Modify();
+	TypedNode->Text = NewText;
+}
+
+FText SDialogueLineNode::GetListenerName() const
+{
+	return FText::FromName(FCharacterDirectory::GetAll().GetName(TypedNode->ListenerId));
+}
+
+void SDialogueLineNode::SetListener(TSharedPtr<FGuid> Id, ESelectInfo::Type) const
+{
+	if (TypedNode->SpeakerId == *Id)
+	{
+		TypedNode->SpeakerId = TypedNode->ListenerId;
+	}
+	
+	TypedNode->ListenerId = *Id;
+}
+
+FText SDialogueLineNode::GetSpeakerName() const
+{
+	return FText::FromName(FCharacterDirectory::GetAll().GetName(TypedNode->SpeakerId));
+}
+
+void SDialogueLineNode::SetSpeaker(TSharedPtr<FGuid> Id, ESelectInfo::Type) const
+{
+	if (TypedNode->ListenerId == *Id)
+	{
+		TypedNode->ListenerId = TypedNode->SpeakerId;
+	}
+	
+	TypedNode->SpeakerId = *Id;
+}
+
+void SDialogueLineNode::RefreshParticipantIds()
+{
+	ParticipantIds.Empty();
+
+	const UDialogueRootNode* Root = Cast<UDialogueRootNode>(Cast<UDialogueGraph>(GraphNode->GetGraph())->GetRootNode());
+	
+	if (!Root)
+	{
+		return;
+	}
+
+	for (const TSharedPtr<FGuid>& Id : FCharacterDirectory::GetAll().GetSharedIds())
+	{
+		if (Root->ParticipantIds.Contains(*Id))
+		{
+			ParticipantIds.Add(Id);
+		}
+	}
+}
+
+void SDialogueLineNode::FixAssignedIds()
+{
+	const bool bContainsListener = ParticipantIds.ContainsByPredicate([&](const TSharedPtr<FGuid>& Id)
+	{
+		return Id && *Id == TypedNode->ListenerId;
+	});
+
+	const bool bContainsSpeaker = ParticipantIds.ContainsByPredicate([&](const TSharedPtr<FGuid>& Id)
+	{
+		return Id && *Id == TypedNode->SpeakerId;
+	});
+	
+	if (!bContainsListener && !bContainsSpeaker && ParticipantIds.Num() > 1)
+	{
+		TypedNode->ListenerId = *ParticipantIds[1];
+		TypedNode->SpeakerId = *ParticipantIds[0];
+		return;
+	}
+	
+	if (!bContainsListener)
+	{
+		TypedNode->ListenerId = FGuid();
+	}
+	
+	if (!bContainsSpeaker)
+	{
+		TypedNode->SpeakerId = FGuid();
+	}
 }
 
 void SDialogueLineNode::OpenNodeEditor() const

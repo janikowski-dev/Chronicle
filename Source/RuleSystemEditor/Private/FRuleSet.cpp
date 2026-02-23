@@ -59,7 +59,8 @@ void FRuleSet::Refresh()
 
 			UE_LOG(LogTemp, Warning, TEXT("Loaded Rule Asset: %s | RuleId: %s"), 
 				*Asset->RuleName.ToString(), 
-				*Asset->RuleId.ToString());
+				*Asset->RuleId.ToString()
+			);
 		}
 	}
 

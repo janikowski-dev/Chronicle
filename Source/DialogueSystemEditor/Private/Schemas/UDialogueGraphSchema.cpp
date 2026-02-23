@@ -86,7 +86,6 @@ void UDialogueGraphSchema::GetContextMenuActions(UToolMenu* Menu, UGraphNodeCont
 	AddLineContext(Context, Section);
 	AddResponseContext(Context, Section);
 	AddRootContext(Context, Section);
-	AddDeleteAction(Context, Section);
 }
 
 void UDialogueGraphSchema::AddLineContext(const UGraphNodeContextMenuContext* Context, FToolMenuSection* Section) const
@@ -98,6 +97,7 @@ void UDialogueGraphSchema::AddLineContext(const UGraphNodeContextMenuContext* Co
 		return;
 	}
 	
+	AddDeleteAction(Context, Section);
 	AddResponseAction(Context, Section);
 	AddLinkAction(Context, Section);
 	AddLineAction(Context, Section);
@@ -111,6 +111,8 @@ void UDialogueGraphSchema::AddResponseContext(const UGraphNodeContextMenuContext
 	{
 		return;
 	}
+	
+	AddDeleteAction(Context, Section);
 	
 	if (HasAnyChild(Node))
 	{

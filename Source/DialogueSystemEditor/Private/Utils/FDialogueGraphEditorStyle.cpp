@@ -67,4 +67,28 @@ void FDialogueGraphEditorStyle::InitializeIcons()
 			FVector2D(24.0f, 24.0f)
 		)
 	);
+
+	StyleInstance->Set(
+		"Icons.Listener",
+		new FSlateImageBrush(
+			StyleInstance->RootToContentDir(TEXT("Listener.png")),
+			FVector2D(24.0f, 24.0f)
+		)
+	);
+
+	StyleInstance->Set(
+		"Icons.Speaker",
+		new FSlateImageBrush(
+			StyleInstance->RootToContentDir(TEXT("Speaker.png")),
+			FVector2D(24.0f, 24.0f)
+		)
+	);
+
+	StyleInstance->Set(
+		"Icons.Participant",
+		new FSlateImageBrush(
+			StyleInstance->RootToContentDir(TEXT("Participant.png")),
+			FVector2D(24.0f, 24.0f)
+		)
+	);
 }

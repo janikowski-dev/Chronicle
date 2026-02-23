@@ -7,5 +7,5 @@ void UDialogueRootNode::AllocateDefaultPins()
 
 FText UDialogueRootNode::GetTitle() const
 {
-	return FText::FromString("ROOT");
+	return FText::FromString("Root #0");
 }

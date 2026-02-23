@@ -7,6 +7,7 @@
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Nodes/Unreal/UDialogueLinkNode.h"
 #include "Nodes/Unreal/UDialogueLineNode.h"
+#include "Nodes/Unreal/UDialogueRootNode.h"
 #include "Nodes/Unreal/URuleAndNode.h"
 #include "Nodes/Unreal/URuleCallbackNode.h"
 #include "Nodes/Unreal/URuleConditionNode.h"
@@ -46,7 +47,11 @@ UDialogueData* FDialogueExporter::PopulateData(UDialogueData* Data, const UDialo
 {
     for (UEdGraphNode* GraphNode : Asset->Graph->Nodes)
     {
-        if (UDialogueNode* Node = Cast<UDialogueNode>(GraphNode))
+        if (const UDialogueRootNode* RootNode = Cast<UDialogueRootNode>(GraphNode))
+        {
+            Data->ParticipantIds = RootNode->ParticipantIds;
+        }
+        else if (UDialogueNode* Node = Cast<UDialogueNode>(GraphNode))
         {
             Data->Nodes.Add(PopulateNodeData(Node, Data));
         }
@@ -71,6 +76,12 @@ FDialogueNodeData FDialogueExporter::PopulateNodeData(UDialogueNode* Node, UDial
     NodeData.Id = Node->Id;
     NodeData.Text = Node->GetText().ToString();
 
+    if (const UDialogueLineNode* LineNode = Cast<UDialogueLineNode>(Node))
+    {
+        NodeData.ListenerId = LineNode->ListenerId;
+        NodeData.SpeakerId = LineNode->SpeakerId;
+    }
+    
     if (const URuleGraph* RuleGraph = Node->GetInnerGraph())
     {
         const TArray<URuleNode*> Rules = RuleGraph->GetRules(EOutputType::Requirements);

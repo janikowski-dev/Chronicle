@@ -32,7 +32,8 @@ public class DialogueSystemEditor : ModuleRules
 			"RuleSystemEditor",
 			"StorySystemCore",
 			"JsonUtilities",
-			"ApplicationCore"
+			"ApplicationCore",
+			"CharacterSystemEditor"
 		]);
 	}
 }

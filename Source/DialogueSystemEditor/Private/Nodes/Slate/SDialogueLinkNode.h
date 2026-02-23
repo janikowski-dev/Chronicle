@@ -23,6 +23,8 @@ private:
 	void SelectNode(UDialogueLineNode* Node) const;
 	FText GetSelectedNodeTitle() const;
 	FText GetSelectedNodeText() const;
+	FText GetListenerName() const;
+	FText GetSpeakerName() const;
 	void RefreshAvailableNodes();
 
 private:

@@ -26,6 +26,11 @@
           "LoadingPhase": "Default"
         },
         {
+          "Name": "CharacterSystemEditor",
+          "Type": "Editor",
+          "LoadingPhase": "Default"
+        },
+        {
           "Name": "StorySystemCore",
           "Type": "Runtime",
           "LoadingPhase": "Default"

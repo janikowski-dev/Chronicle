@@ -19,4 +19,8 @@ public:
 	FText Text;
 	UPROPERTY()
 	int32 LineIndex;
+	UPROPERTY()
+	FGuid SpeakerId;
+	UPROPERTY()
+	FGuid ListenerId;
 };
