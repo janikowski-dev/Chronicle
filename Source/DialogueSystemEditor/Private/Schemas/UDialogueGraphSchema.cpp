@@ -103,6 +103,18 @@ void UDialogueGraphSchema::AddLineContext(const UGraphNodeContextMenuContext* Co
 	AddLineAction(Context, Section);
 }
 
+void UDialogueGraphSchema::AddLinkContext(const UGraphNodeContextMenuContext* Context, FToolMenuSection* Section) const
+{
+	const UDialogueLinkNode* Node = Cast<UDialogueLinkNode>(Context->Node);
+	
+	if (!Node)
+	{
+		return;
+	}
+	
+	AddDeleteAction(Context, Section);
+}
+
 void UDialogueGraphSchema::AddResponseContext(const UGraphNodeContextMenuContext* Context, FToolMenuSection* Section) const
 {
 	const UDialogueResponseNode* Node = Cast<UDialogueResponseNode>(Context->Node);
