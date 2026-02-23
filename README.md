@@ -2,13 +2,13 @@
 
 **Story System** is an Unreal Engine plugin for building narrative-driven games. It gives developers a visual way to create branching dialogues, hook up game logic through a rule system, and eventually manage characters, quests, and cinematic timelines — all from within the editor.
 
-## Dialogue Graph (WIP)
+## Dialogue Graph
 
 ### Current Features
 
 -   **Branching Dialogue Paths**
 
-    ![Example Dialogue](Assets/Example_Dialogue.png)
+    ![Overview_Example](Assets/Overview_Example.png)
 
 -   **Node Collapsing**
 
@@ -18,56 +18,90 @@
     
     -   Requirements for node availability
   
-        ![Requirements](Assets/Requirements.png)
+        ![Requirements](Assets/Requirements_Inner_Visuals.png)
         
     -   Callbacks after node
  
-        ![Callbacks](Assets/Callbacks.png)
+        ![Callbacks](Assets/Callbacks_Inner_Visuals.png)
 
 -   **Inner State Visualization: Key - Requirements & Link - Callbacks**
 
-    ![Requirements And Callbacks Visuals](Assets/Requirements_And_Callbacks.png)
+    ![Requirements Outer Visuals](Assets/Requirements_Outer_Visuals.png)
 
-### Planned Features
-
--   Separating dialogue lines per character
+    ![Callbacks Outer Visuals](Assets/Callbacks_Outer_Visuals.png)
 
 ### How To Use
 
--   **Create Dialogue Graph:** RMB on `Content Browser` then select `Miscellaneous/Dialogue Asset`
+-   **Create Dialogue Graph:**
+
+    ![Tutorial Create](Assets/Tutorial_Create.gif)
 
 -   **Open Dialogue Graph:** Double LMB on `Dialogue Asset`
 
--   **Modify Dialogue Graph:** RMB on existing `Node` inside `Dialogue Asset` (`Context Menu` will pop up)
+-   **Add Participants:**
 
--   **Modify Requirements And Callbacks For Particular Node:**
+    ![Tutorial Participants](Assets/Tutorial_Participants.gif)
 
-    - Double LMB on existing `Node` (`Node Graph` will pop up)
-    - RMB when inside `Node Graph` (`Context Menu` will pop up)
+-   **Add Nodes:**
 
--   **Export To Runtime UObject:** RMB on `Dialogue Asset` then click `Export to runtime UObject`
+    ![Tutorial Nodes](Assets/Tutorial_Nodes.gif)
 
--   **Copy JSON To Clipboard:** RMB on `Dialogue Asset` then click `Copy JSON to clipboard`
+-   **Add Requirements:**
 
-# Rule System (WIP)
+    ![Tutorial Requirements](Assets/Tutorial_Requirements.gif)
+
+-   **Add Callbacks:**
+
+    ![Tutorial Callbacks](Assets/Tutorial_Callbacks.gif)
+
+-   **Export To Runtime UObject:**
+
+    ![Tutorial UObject](Assets/Tutorial_UObject.gif)
+
+-   **Copy JSON To Clipboard:**
+
+    ![Tutorial JSON](Assets/Tutorial_JSON.gif)
+
+# Rule System (On Hold)
 
 ### Current Features
 
-- Asset-based rules creation `RMB/Miscellaneous/Data Asset/Rule Asset`
+- Asset-based rules creation
 - GUID-oriented rule recognition
-- Rule database fetching conditions from `Rules/Conditions` and callbacks from `Rules/Callbacks`
+
+### How To Use
+
+-   **Create Rule (Inside `Game/Rules/Conditions` Or Inside `Game/Rules/Callbacks`):**
+
+    ![Tutorial Rules](Assets/Tutorial_Rules.gif)
 
 ### Planned Features
 
 - Browser for rules
-- Validator for assets
-- Parametrized rules (?)
+- Validator
+
+# Character System
+
+### Current Features
+
+- Asset-based character creation
+- GUID-oriented character recognition
+
+### How To Use
+
+-   **Create Character (Inside `Game/Characters`):**
+
+    ![Tutorial Characters](Assets/Tutorial_Characters.gif)
+
+### Planned Features
+
+- Browser for characters
+- Validator
 
 ## Roadmap
 
-1.  Character Database
-2.  Cinematic Timeline
-3.  Quest Editor
+1.  Cinematic Timeline
+2.  Quest Editor
 
 ## Getting Started
 
