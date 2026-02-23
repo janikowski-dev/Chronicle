@@ -1,5 +1,16 @@
 ﻿#include "URuleNode.h"
 
+void URuleNode::PostPlacedNewNode()
+{
+	Super::PostPlacedNewNode();
+	AssignId();
+}
+
+bool URuleNode::CanUserDeleteNode() const
+{
+	return true;
+}
+
 bool URuleNode::AllowMultipleInputs() const
 {
 	return false;
@@ -15,7 +26,12 @@ FSlateColor URuleNode::GetBackgroundColor() const
 	return FSlateColor();
 }
 
-bool URuleNode::CanUserDeleteNode() const
+void URuleNode::AssignId()
 {
-	return true;
+	if (Id.IsValid())
+	{
+		return;
+	}
+	
+	Id = FGuid::NewGuid();
 }

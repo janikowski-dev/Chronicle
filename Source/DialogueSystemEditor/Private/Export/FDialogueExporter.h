@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Data/FDialogueNodeData.h"
+#include "Nodes/Unreal/UDialogueRootNode.h"
 
 class UDialogueData;
 class UDialogueNode;
@@ -16,7 +17,17 @@ public:
 private:
 	static UDialogueData* ConvertToAsset(const UDialogueAsset* Asset);
 	static UDialogueData* ConvertToTemporaryAsset(const UDialogueAsset* Asset);
-	static UDialogueData* PopulateData(UDialogueData* Data, const UDialogueAsset* Asset);
-	static FDialogueNodeData PopulateNodeData(UDialogueNode* Node, UDialogueData* Data);
-	static int32 PopulateRuleData(URuleNode* Rule, UDialogueData* Data);
+	
+	static void ReadData(const UDialogueAsset* Asset, UDialogueData* Data);
+	static FDialogueNodeData ReadNodeData(UDialogueNode* Node);
+	
+	static void TryReadRootData(UDialogueData* Data, UEdGraphNode* Node);
+	static void ReadNodeData(UDialogueData* Data, const FDialogueNodeData& NodeData);
+	
+	static bool TryGetLinkNodeTarget(UDialogueNode*& Node);
+	static void ReadSharedData(const UDialogueNode* Node, FDialogueNodeData& NodeData);
+	static void ReadRoles(UDialogueNode* Node, FDialogueNodeData& NodeData);
+	static void ReadRequirements(const UDialogueNode* Node, FDialogueNodeData& NodeData);
+	static void ReadCallbacks(const UDialogueNode* Node, FDialogueNodeData& NodeData);
+	static void ReadChildren(UDialogueNode* Node, FDialogueNodeData& NodeData);
 };

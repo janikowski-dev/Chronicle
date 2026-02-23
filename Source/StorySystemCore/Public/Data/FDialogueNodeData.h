@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "FRuleData.h"
 #include "FDialogueNodeData.generated.h"
 
 USTRUCT()
@@ -18,9 +19,9 @@ struct FDialogueNodeData
 
 	UPROPERTY(VisibleAnywhere)
 	FGuid ListenerId;
-
+	
 	UPROPERTY(VisibleAnywhere)
-	int32 RequirementsIndex = -1; 
+	TArray<FRuleData> Rules;
 
 	UPROPERTY(VisibleAnywhere)
 	TArray<FGuid> Callbacks;

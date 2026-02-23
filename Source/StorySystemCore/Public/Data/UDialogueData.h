@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "FDialogueNodeData.h"
-#include "FRuleData.h"
 #include "UDialogueData.generated.h"
 
 UCLASS()
@@ -15,7 +14,4 @@ public:
 	
 	UPROPERTY(VisibleAnywhere)
 	TArray<FGuid> ParticipantIds;
-	
-	UPROPERTY(VisibleAnywhere)
-	TArray<FRuleData> Rules;
 };

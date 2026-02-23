@@ -34,33 +34,58 @@ UDialogueData* FDialogueExporter::ConvertToAsset(const UDialogueAsset* Asset)
     const FString AssetName = FString::Printf(TEXT("%s_Data"), *Asset->GetName());
     UPackage* Package = CreatePackage(*(FPackageName::GetLongPackagePath(Asset->GetOutermost()->GetName()) / AssetName));
     UDialogueData* Data = NewObject<UDialogueData>(Package, *AssetName, RF_Public | RF_Standalone);
-    return PopulateData(Data, Asset);
+    ReadData(Asset, Data);
+    return Data;
 }
 
 UDialogueData* FDialogueExporter::ConvertToTemporaryAsset(const UDialogueAsset* Asset)
 {
     UDialogueData* Data = NewObject<UDialogueData>(GetTransientPackage());
-    return PopulateData(Data, Asset);
-}
-
-UDialogueData* FDialogueExporter::PopulateData(UDialogueData* Data, const UDialogueAsset* Asset)
-{
-    for (UEdGraphNode* GraphNode : Asset->Graph->Nodes)
-    {
-        if (const UDialogueRootNode* RootNode = Cast<UDialogueRootNode>(GraphNode))
-        {
-            Data->ParticipantIds = RootNode->ParticipantIds;
-        }
-        else if (UDialogueNode* Node = Cast<UDialogueNode>(GraphNode))
-        {
-            Data->Nodes.Add(PopulateNodeData(Node, Data));
-        }
-    }
-
+    ReadData(Asset, Data);
     return Data;
 }
 
-FDialogueNodeData FDialogueExporter::PopulateNodeData(UDialogueNode* Node, UDialogueData* Data)
+void FDialogueExporter::ReadData(const UDialogueAsset* Asset, UDialogueData* Data)
+{
+    for (UEdGraphNode* GraphNode : Asset->Graph->Nodes)
+    {
+        UDialogueNode* Node = Cast<UDialogueNode>(GraphNode);
+        FDialogueNodeData NodeData = ReadNodeData(Node);
+        TryReadRootData(Data, GraphNode);
+        ReadNodeData(Data, NodeData);
+    }
+}
+
+FDialogueNodeData FDialogueExporter::ReadNodeData(UDialogueNode* Node)
+{
+    if (!TryGetLinkNodeTarget(Node))
+    {
+        return {};
+    }
+    
+    FDialogueNodeData NodeData;
+    ReadSharedData(Node, NodeData);
+    ReadRoles(Node, NodeData);
+    ReadRequirements(Node, NodeData);
+    ReadCallbacks(Node, NodeData);
+    ReadChildren(Node, NodeData);
+    return NodeData;
+}
+
+void FDialogueExporter::TryReadRootData(UDialogueData* Data, UEdGraphNode* Node)
+{
+    if (const UDialogueRootNode* RootNode = Cast<UDialogueRootNode>(Node))
+    {
+        Data->ParticipantIds = RootNode->ParticipantIds;
+    }
+}
+
+void FDialogueExporter::ReadNodeData(UDialogueData* Data, const FDialogueNodeData& NodeData)
+{
+    Data->Nodes.Add(NodeData);
+}
+
+bool FDialogueExporter::TryGetLinkNodeTarget(UDialogueNode*& Node)
 {
     if (const UDialogueLinkNode* LinkNode = Cast<UDialogueLinkNode>(Node))
     {
@@ -68,29 +93,102 @@ FDialogueNodeData FDialogueExporter::PopulateNodeData(UDialogueNode* Node, UDial
         
         if (!Node)
         {
-            return {};
+            return false;
         }
     }
     
-    FDialogueNodeData NodeData;
+    return true;
+}
+
+void FDialogueExporter::ReadSharedData(const UDialogueNode* Node, FDialogueNodeData& NodeData)
+{
     NodeData.Id = Node->Id;
     NodeData.Text = Node->GetText().ToString();
+}
 
+void FDialogueExporter::ReadRoles(UDialogueNode* Node, FDialogueNodeData& NodeData)
+{
     if (const UDialogueLineNode* LineNode = Cast<UDialogueLineNode>(Node))
     {
         NodeData.ListenerId = LineNode->ListenerId;
         NodeData.SpeakerId = LineNode->SpeakerId;
     }
-    
+}
+
+void FDialogueExporter::ReadRequirements(const UDialogueNode* Node, FDialogueNodeData& NodeData)
+{
     if (const URuleGraph* RuleGraph = Node->GetInnerGraph())
     {
-        const TArray<URuleNode*> Rules = RuleGraph->GetRules(EOutputType::Requirements);
-        
-        if (Rules.Num() > 0)
+        for (URuleNode* Rule : RuleGraph->GetRules(EOutputType::Requirements))
         {
-            NodeData.RequirementsIndex = PopulateRuleData(Rules[0], Data);
-        }
+            FRuleData RuleData;
 
+            if (Cast<URuleOutputNode>(Rule))
+            {
+                RuleData.Type = EConditionNodeType::Output;
+            }
+            else if (Cast<URuleConditionNode>(Rule))
+            {
+                RuleData.Type = EConditionNodeType::Raw;
+            }
+            else if (Cast<URuleAndNode>(Rule))
+            {
+                RuleData.Type = EConditionNodeType::And;
+            }
+            else if (Cast<URuleOrNode>(Rule))
+            {
+                RuleData.Type = EConditionNodeType::Or;
+            }
+            else if (Cast<URuleNotNode>(Rule))
+            {
+                RuleData.Type = EConditionNodeType::Not;
+            }
+            else
+            {
+                continue;
+            }
+
+            RuleData.Id = Rule->Id;
+
+            for (UEdGraphPin* Pin : Rule->Pins)
+            {
+                if (Pin->Direction != EGPD_Input)
+                {
+                    continue;
+                }
+
+                for (const UEdGraphPin* Linked : Pin->LinkedTo)
+                {
+                    const URuleNode* Input = Cast<URuleNode>(Linked->GetOwningNode());
+                    RuleData.Input.Add(Input->Id);
+                }
+
+                NodeData.Rules.Add(RuleData);
+            }
+            
+            for (UEdGraphPin* Pin : Rule->Pins)
+            {
+                if (Pin->Direction != EGPD_Output)
+                {
+                    continue;
+                }
+                
+                for (const UEdGraphPin* Linked : Pin->LinkedTo)
+                {
+                    const URuleNode* Output = Cast<URuleNode>(Linked->GetOwningNode());
+                    RuleData.Output.Add(Output->Id);
+                }
+
+                NodeData.Rules.Add(RuleData);
+            }
+        }
+    }
+}
+
+void FDialogueExporter::ReadCallbacks(const UDialogueNode* Node, FDialogueNodeData& NodeData)
+{
+    if (const URuleGraph* RuleGraph = Node->GetInnerGraph())
+    {
         for (URuleNode* Rule : RuleGraph->GetRules(EOutputType::PostCallback))
         {
             if (const URuleCallbackNode* Callback = Cast<URuleCallbackNode>(Rule))
@@ -99,7 +197,10 @@ FDialogueNodeData FDialogueExporter::PopulateNodeData(UDialogueNode* Node, UDial
             }
         }
     }
+}
 
+void FDialogueExporter::ReadChildren(UDialogueNode* Node, FDialogueNodeData& NodeData)
+{
     for (UEdGraphPin* Pin : Node->Pins)
     {
         if (Pin->Direction != EGPD_Output)
@@ -109,74 +210,8 @@ FDialogueNodeData FDialogueExporter::PopulateNodeData(UDialogueNode* Node, UDial
         
         for (const UEdGraphPin* Linked : Pin->LinkedTo)
         {
-            if (const UDialogueNode* Response = Cast<UDialogueNode>(Linked->GetOwningNode()))
-            {
-                NodeData.Children.Add(Response->Id);
-            }
+            const UDialogueNode* Response = Cast<UDialogueNode>(Linked->GetOwningNode());
+            NodeData.Children.Add(Response->Id);
         }
     }
-
-    return NodeData;
-}
-
-int32 FDialogueExporter::PopulateRuleData(URuleNode* Rule, UDialogueData* Data)
-{
-    FRuleData RuleData;
-
-    if (const URuleConditionNode* Condition = Cast<URuleConditionNode>(Rule))
-    {
-        RuleData.ConditionId = Condition->TagId;
-        RuleData.Type = EConditionNodeType::Raw;
-
-        const int Index = Data->Rules.IndexOfByPredicate([&Condition](const FRuleData& ExistingRule)
-        {
-            if (ExistingRule.Type != EConditionNodeType::Raw)
-            {
-                return false;
-            }
-            
-            return ExistingRule.ConditionId == Condition->TagId;
-        });
-
-        if (Index != INDEX_NONE)
-        {
-            return Index;
-        }
-    }
-    else if (Cast<URuleAndNode>(Rule))
-    {
-        RuleData.Type = EConditionNodeType::And;
-    }
-    else if (Cast<URuleOrNode>(Rule))
-    {
-        RuleData.Type = EConditionNodeType::Or;
-    }
-    else if (Cast<URuleNotNode>(Rule))
-    {
-        RuleData.Type = EConditionNodeType::Not;
-    }
-
-    for (UEdGraphPin* Pin : Rule->Pins)
-    {
-        if (Pin->Direction != EGPD_Input)
-        {
-            continue;
-        }
-        
-        for (const UEdGraphPin* LinkedTo : Pin->LinkedTo)
-        {
-            if (URuleNode* Child = Cast<URuleNode>(LinkedTo->GetOwningNode()))
-            {
-                RuleData.InputIndices.Add(PopulateRuleData(Child, Data));
-            }
-        }
-    }
-
-    if (RuleData.Type == EConditionNodeType::Raw && !RuleData.ConditionId.IsValid())
-    {
-        return INDEX_NONE;
-    }
-    
-    const int32 Index = Data->Rules.Add(RuleData);
-    return Index;
 }
