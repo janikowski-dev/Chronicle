@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "EdialogueNodeType.h"
 #include "FRuleData.h"
 #include "FDialogueNodeData.generated.h"
 
@@ -10,6 +11,9 @@ struct CHRONICLECORE_API FDialogueNodeData
 
 	UPROPERTY(VisibleAnywhere)
 	FGuid Id;
+
+	UPROPERTY(VisibleAnywhere)
+	EDialogueNodeType Type;
 
 	UPROPERTY(VisibleAnywhere)
 	FString Text;

@@ -119,7 +119,15 @@ This allows you to quickly inspect dialogue logic without opening each node indi
 
 ## Integration
 
-Dialogue data can be used in your runtime systems via:
+The package is still work in progress. If you were to use it right now, you'd need:
+
+- System that runs dialogues
+- Resolver for conditions checks
+- Handler for callbacks
+
+All of which will be implemented as soon as possible.
+
+Right now, dialogue data can be used in your runtime systems via:
 
 - **UDialogueData instance** – the runtime UObject generated from your Dialogue Asset
 - **JSON export** – copy dialogue data to the clipboard for external tools or runtime parsing

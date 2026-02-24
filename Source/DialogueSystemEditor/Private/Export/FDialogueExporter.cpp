@@ -8,6 +8,7 @@
 #include "Nodes/Unreal/UDialogueLinkNode.h"
 #include "Nodes/Unreal/UDialogueLineNode.h"
 #include "Nodes/Unreal/UDialogueRootNode.h"
+#include "Nodes/Unreal/UDialogueResponseNode.h"
 #include "Nodes/Unreal/URuleAndNode.h"
 #include "Nodes/Unreal/URuleCallbackNode.h"
 #include "Nodes/Unreal/URuleConditionNode.h"
@@ -22,6 +23,7 @@ void FDialogueExporter::CopyToClipboard(const UDialogueAsset* Asset)
     FString JsonString;
     FJsonObjectConverter::UStructToJsonObjectString(UDialogueData::StaticClass(), ConvertToTemporaryAsset(Asset), JsonString);
     FPlatformApplicationMisc::ClipboardCopy(*JsonString);
+    UE_LOG(LogTemp, Log, TEXT("Copied dialogue to clipboard!"));
 }
 
 void FDialogueExporter::ExportToAsset(const UDialogueAsset* Asset)
@@ -65,6 +67,7 @@ FDialogueNodeData FDialogueExporter::ReadNodeData(UDialogueNode* Node)
     
     FDialogueNodeData NodeData;
     ReadSharedData(Node, NodeData);
+    ReadType(Node,NodeData);
     ReadRoles(Node, NodeData);
     ReadRequirements(Node, NodeData);
     ReadCallbacks(Node, NodeData);
@@ -104,6 +107,22 @@ void FDialogueExporter::ReadSharedData(const UDialogueNode* Node, FDialogueNodeD
 {
     NodeData.Id = Node->Id;
     NodeData.Text = Node->GetText().ToString();
+}
+
+void FDialogueExporter::ReadType(const UDialogueNode* Node, FDialogueNodeData& NodeData)
+{
+    if (Cast<UDialogueRootNode>(Node))
+    {
+        NodeData.Type = EDialogueNodeType::Root;
+    }
+    else if (Cast<UDialogueResponseNode>(Node))
+    {
+        NodeData.Type = EDialogueNodeType::Response;
+    }
+    else if (Cast<UDialogueLineNode>(Node))
+    {
+        NodeData.Type = EDialogueNodeType::Line;
+    }
 }
 
 void FDialogueExporter::ReadRoles(UDialogueNode* Node, FDialogueNodeData& NodeData)
