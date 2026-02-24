@@ -42,7 +42,7 @@ Future planned modules and features for Chronicle:
 ## Requirements
 
 -   Unreal Engine 5.x
--   Editor build (plugin is editor-only)
+-   Editor build
 
 ## How To Use
 
