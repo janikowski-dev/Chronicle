@@ -26,6 +26,7 @@ private:
 	
 	static bool TryGetLinkNodeTarget(UDialogueNode*& Node);
 	static void ReadSharedData(const UDialogueNode* Node, FDialogueNodeData& NodeData);
+	static void ReadType(const UDialogueNode* Node, FDialogueNodeData& NodeData);
 	static void ReadRoles(UDialogueNode* Node, FDialogueNodeData& NodeData);
 	static void ReadRequirements(const UDialogueNode* Node, FDialogueNodeData& NodeData);
 	static void ReadCallbacks(const UDialogueNode* Node, FDialogueNodeData& NodeData);
