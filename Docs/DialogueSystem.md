@@ -17,6 +17,8 @@ Within this node, you can:
 - Add participants to the dialogue
 - Remove participants from the dialogue
 
+This node ensures that the dialogue has a clear starting context.
+
 ![Root Node](../Assets/Nodes_Root.png)
 
 ### Line Node
