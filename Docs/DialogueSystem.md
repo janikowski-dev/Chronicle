@@ -129,8 +129,8 @@ This allows you to integrate dialogues directly into gameplay logic, AI systems,
 
 ## Extend Conditions & Callbacks
 
-Conditions and Callbacks are defined through the **Rule System**. To learn how to create and register them, please refer to the dedicated documentation: [https://github.com/janikowski-dev/Story-System/Docs/RuleSystem.md](https://github.com/janikowski-dev/Story-System/Docs/RuleSystem.md)
+Conditions and Callbacks are defined through the **Rule System**. To learn how to create and register them, please refer to the dedicated documentation: [Rule System Documentation](../Docs/RuleSystem.md)
 
 ## Extend Participants
 
-Characters are defined through the **Character System**. To learn how to create and register them, please refer to the dedicated documentation: [https://github.com/janikowski-dev/Story-System/Docs/CharacterSystem.md](https://github.com/janikowski-dev/Story-System/Docs/CharacterSystem.md)
+Characters are defined through the **Character System**. To learn how to create and register them, please refer to the dedicated documentation: [Character System Documentation](../Docs/CharacterSystem.md)
