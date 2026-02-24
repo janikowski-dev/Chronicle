@@ -9,6 +9,8 @@ class CHARACTERSYSTEMEDITOR_API UCharacterAsset : public UDataAsset
 
 public:
 	UCharacterAsset();
+
+	virtual void PostDuplicate(EDuplicateMode::Type) override;
 	
 public:
 	UPROPERTY(EditAnywhere)

@@ -12,9 +12,7 @@
 
 1. Create the directory: `Game/Characters`
 2. Right-click in the Content Browser within that directory
-3. Select **Miscellaneous → Data Asset**
-4. Search for the **Character Asset** type
-5. Click **Select** to create a new character
+3. Select **Chronicle → Character Asset**
 
 ### Modify character
 

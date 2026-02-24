@@ -68,12 +68,12 @@ private:
 
 	bool HasAnyChild(
 		const UEdGraphNode* Node
-		) const;
+	) const;
 
 	void AddLineContext(
 		const UGraphNodeContextMenuContext* Context,
 		FToolMenuSection* Section
-		) const;
+	) const;
 
 	void AddLinkContext(
 		const UGraphNodeContextMenuContext* Context,

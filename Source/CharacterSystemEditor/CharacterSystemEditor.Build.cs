@@ -13,7 +13,8 @@ public class CharacterSystemEditor : ModuleRules
 		]);
 
 		PrivateDependencyModuleNames.AddRange([
-			"AssetRegistry"
+			"AssetRegistry",
+			"UnrealEd"
 		]);
 	}
 }

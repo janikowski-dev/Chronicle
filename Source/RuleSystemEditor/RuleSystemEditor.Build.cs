@@ -13,7 +13,8 @@ public class RuleSystemEditor : ModuleRules
 		]);
 
 		PrivateDependencyModuleNames.AddRange([
-			"AssetRegistry"
+			"AssetRegistry",
+			"UnrealEd"
 		]);
 	}
 }

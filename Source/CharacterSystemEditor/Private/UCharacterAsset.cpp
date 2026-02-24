@@ -9,3 +9,8 @@ UCharacterAsset::UCharacterAsset()
 	
 	CharacterId = FGuid::NewGuid();
 }
+
+void UCharacterAsset::PostDuplicate(EDuplicateMode::Type)
+{
+	CharacterId = FGuid::NewGuid();
+}

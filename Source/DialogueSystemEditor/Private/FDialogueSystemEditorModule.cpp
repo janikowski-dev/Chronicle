@@ -11,9 +11,17 @@
 
 void FDialogueSystemEditorModule::StartupModule()
 {
-	FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get().RegisterAssetTypeActions(MakeShared<FDialogueAsset_Actions>());
+	FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get().RegisterAdvancedAssetCategory(
+		FName("Chronicle"),
+		FText::FromString("Chronicle")
+	);
+	FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get().RegisterAssetTypeActions(
+		MakeShared<FDialogueAsset_Actions>()
+	);
+	
 	FEdGraphUtilities::RegisterVisualNodeFactory(MakeShared<FDialogueNodeFactory>());
 	FEdGraphUtilities::RegisterVisualNodeFactory(MakeShared<FRuleNodeFactory>());
+	
 	FDialogueGraphEditorStyle::Initialize();
 }
 

@@ -20,7 +20,7 @@ UClass* FDialogueAsset_Actions::GetSupportedClass() const
 
 uint32 FDialogueAsset_Actions::GetCategories()
 {
-	return EAssetTypeCategories::Misc;
+	return FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get().FindAdvancedAssetCategory(FName("Chronicle"));
 }
 
 void FDialogueAsset_Actions::OpenAssetEditor(

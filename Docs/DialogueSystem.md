@@ -92,8 +92,7 @@ This allows you to quickly inspect dialogue logic without opening each node indi
 ### Create a dialogue
 
 1. Right-click in the **Content Browser**
-2. Select **Miscellaneous**
-3. Click **Dialogue Asset**
+2. Select **Chronicle -> Dialogue Asset**
 
 ### Modify a dialogue
 

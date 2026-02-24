@@ -9,6 +9,8 @@ class RULESYSTEMEDITOR_API URuleAsset : public UDataAsset
 
 public:
 	URuleAsset();
+
+	virtual void PostDuplicate(EDuplicateMode::Type) override;
 	
 public:
 	UPROPERTY(EditAnywhere)

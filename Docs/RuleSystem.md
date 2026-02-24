@@ -12,17 +12,13 @@
 
 1. Create the directory: `Game/Rules/Callbacks`
 2. Right-click in the Content Browser within that directory
-3. Select **Miscellaneous → Data Asset**
-4. Search for the **Rule Asset** type
-5. Click **Select** to create a new callback rule
+3. Select **Chronicle → Rule Asset**
 
 ### Add a condition
 
 1. Create the directory: `Game/Rules/Conditions`
 2. Right-click in the Content Browser within that directory
-3. Select **Miscellaneous → Data Asset**
-4. Search for the **Rule Asset** type
-5. Click **Select** to create a new condition rule
+3. Select **Chronicle → Rule Asset**
 
 ### Modify rule
 
