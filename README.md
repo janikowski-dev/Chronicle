@@ -1,4 +1,6 @@
-![Logo](Assets/Logo.png)
+<p align="center">
+  ![Logo](Assets/Logo.png)
+</p>
 
 **Chronicle** is an Unreal Engine plugin for building narrative-driven games. It gives developers a visual way to create branching dialogues, hook up game logic through a rule system, and eventually manage characters, quests, and cinematic timelines - all from within the editor.
 
