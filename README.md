@@ -32,8 +32,12 @@ Chronicle is divided into separate modules for clarity and easier maintenance. E
 
 Future planned modules and features for Chronicle:
 
-1.  **Cinematic Timeline** – in-editor cutscenes and timeline management
-2. **Quest Editor** – asset-based quests and branching objectives
+1. **Dialogue System Extension:**
+- Add full JSON export/import support (to make localization easier)
+- Add parametrized rules (to make stat checks easier)
+
+2. **Cinematic Timeline** – in-editor cutscenes and timeline management
+3. **Quest Editor** – asset-based quests and branching objectives
 
 ## Installation
 
