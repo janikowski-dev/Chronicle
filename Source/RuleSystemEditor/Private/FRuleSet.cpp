@@ -1,7 +1,7 @@
 ﻿#include "FRuleSet.h"
 
-#include "URuleAsset.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "RuleSystem/URuleAsset.h"
 
 FRuleSet::FRuleSet(const FName& Directory) : Directory(Directory)
 {

@@ -1,32 +1,21 @@
 ﻿#include "UCharacterAssetFactory.h"
 
-#include "AssetToolsModule.h"
-#include "UCharacterAsset.h"
+#include "CharacterSystem/UCharacterAsset.h"
 
 UCharacterAssetFactory::UCharacterAssetFactory()
 {
 	SupportedClass = UCharacterAsset::StaticClass();
-	bEditAfterNew = true;
 	bCreateNew = true;
+	bEditAfterNew = true;
 }
 
-UObject* UCharacterAssetFactory::FactoryCreateNew(UClass* InClass,
+UObject* UCharacterAssetFactory::FactoryCreateNew(UClass* Class,
 	UObject* InParent,
-	FName InName,
+	FName Name,
 	EObjectFlags Flags,
 	UObject* Context,
 	FFeedbackContext* Warn
 )
 {
-	return NewObject<UCharacterAsset>(InParent, InClass, InName, Flags);
-}
-
-uint32 UCharacterAssetFactory::GetMenuCategories() const
-{
-	return FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get().FindAdvancedAssetCategory(FName("Chronicle"));
-}
-
-FText UCharacterAssetFactory::GetDisplayName() const
-{
-	return FText::FromString("Character Asset");
+	return NewObject<UCharacterAsset>(InParent, Class, Name, Flags);
 }

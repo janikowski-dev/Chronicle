@@ -3,7 +3,6 @@
 #include "Assets/UDialogueAsset.h"
 #include "Graphs/URuleGraph.h"
 #include "Nodes/Unreal/UDialogueNode.h"
-#include "Nodes/Unreal/UDialogueResponseNode.h"
 #include "Nodes/Unreal/URuleOutputNode.h"
 
 struct FLineSegment

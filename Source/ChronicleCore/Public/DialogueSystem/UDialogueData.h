@@ -4,7 +4,7 @@
 #include "UDialogueData.generated.h"
 
 UCLASS()
-class DIALOGUESYSTEMEDITOR_API UDialogueData : public UDataAsset
+class CHRONICLECORE_API UDialogueData : public UDataAsset
 {
 	GENERATED_BODY()
 

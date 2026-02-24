@@ -4,7 +4,7 @@
 #include "FDialogueNodeData.generated.h"
 
 USTRUCT()
-struct DIALOGUESYSTEMEDITOR_API FDialogueNodeData
+struct CHRONICLECORE_API FDialogueNodeData
 {
 	GENERATED_BODY()
 

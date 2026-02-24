@@ -14,7 +14,7 @@
 #include "Nodes/Unreal/URuleNotNode.h"
 #include "Nodes/Unreal/URuleOrNode.h"
 #include "Nodes/Unreal/URuleOutputNode.h"
-#include "Data/UDialogueData.h"
+#include "DialogueSystem/UDialogueData.h"
 #include "Windows/WindowsPlatformApplicationMisc.h"
 
 void FDialogueExporter::CopyToClipboard(const UDialogueAsset* Asset)

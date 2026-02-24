@@ -1,7 +1,7 @@
 ﻿#include "FCharacterSet.h"
 
-#include "UCharacterAsset.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "CharacterSystem/UCharacterAsset.h"
 
 FCharacterSet::FCharacterSet(const FName& Directory) : Directory(Directory)
 {

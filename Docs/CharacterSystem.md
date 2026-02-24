@@ -6,7 +6,7 @@
 
 ![Character System Overview](../Assets/Character_System_Overview.png)
 
-## How To Set Up
+## How To Use
 
 ### Add a character
 
@@ -19,20 +19,9 @@
 1. Each character has a **unique GUID** for identification
 2. Double-click a character to modify its **name**
 
-## How To Use In Code
+## Integration
 
-Access chraracters programmatically using the `FCharacterDirectory`:
-
-```cpp
-// Fetch all characters from directory
-FCharacterDirectory::Refresh();
-
-// Get all character IDs
-auto CharacterIds = FCharacterDirectory::GetConditions()->GetSharedIds(); 
- 
-// Get a character name by ID
-auto CharacterName = FCharacterDirectory::GetAll()->GetName(MyGuid);
-```
+To integrate with runtime systems, use **UCharacterAsset** instances. These assets provide a structured way to define and access rules at runtime, ensuring consistent behavior across your dialogue system.
 
 ## Planned Features
 

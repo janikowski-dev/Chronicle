@@ -4,9 +4,11 @@
 
 ## Example
 
-![Rule System Overview](../Assets/Rule_System_Overview.png)
+![Rule System Overview 1](../Assets/Rule_System_Overview_1.png)
 
-## How To Set Up
+![Rule System Overview 2](../Assets/Rule_System_Overview_2.png)
+
+## How To Use
 
 ### Add a callback
 
@@ -25,26 +27,9 @@
 1. Each rule has a **unique GUID** for identification
 2. Double-click a rule to modify its **name**
 
-## How To Use In Code
+## Integration
 
-Access rules programmatically using the `FRuleDirectory`:
-
-```cpp
-// Fetch all rules from directories
-FRuleDirectory::Refresh();
-
-// Get all condition IDs
-auto ConditionIds = FRuleDirectory::GetConditions()->GetSharedIds(); 
- 
-// Get a condition name by ID
-auto ConditionName = FRuleDirectory::GetConditions()->GetName(MyGuid);
-
-// Get all callback IDs
-auto CallbackIds = FRuleDirectory::GetCallbacks()->GetSharedIds(); 
- 
-// Get a callback name by ID
-auto CallbackName = FRuleDirectory::GetCallbacks()->GetName(MyGuid);
-```
+To integrate with runtime systems, use **URuleAsset** instances. These assets provide a structured way to define and access rules at runtime, ensuring consistent behavior across your dialogue system.
 
 ## Planned Features
 

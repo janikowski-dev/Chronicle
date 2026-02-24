@@ -8,19 +8,21 @@
 
 Chronicle is divided into separate modules for clarity and easier maintenance. Each module has its own detailed README in the `Docs/` folder.
 
-### [Dialogue System](Docs/DialogueSystem.md)
+### Dialogue System
 
 ![Dialogue System Overview](Assets/Dialogue_System_Overview.png)
 
 [See full Dialogue System documentation →](Docs/DialogueSystem.md)
 
-### [Rule System](Docs/RuleSystem.md)
+### Rule System
 
-![Rule System Overview](Assets/Rule_System_Overview.png)
+![Rule System Overview 1](Assets/Rule_System_Overview_1.png)
+
+![Rule System Overview 2](Assets/Rule_System_Overview_2.png)
 
 [See full Rule System documentation →](Docs/RuleSystem.md)
 
-### [Character System](Docs/CharacterSystem.md)
+### Character System
 
 ![Character System Overview](Assets/Character_System_Overview.png)
 
@@ -50,9 +52,9 @@ Future planned modules and features for Chronicle:
 
 Usage and integration instructions are included in each module’s README:
 
-- [Dialogue System](Docs/DialogueSystem.md)
-- [Rule System](Docs/RuleSystem.md)
-- [Character System](Docs/CharacterSystem.md)
+- [Dialogue System](Docs/DialogueSystem.md) – Create and manage branching conversations with visual nodes
+- [Rule System](Docs/RuleSystem.md) – Define game logic and conditions via reusable rule assets
+- [Character System](Docs/CharacterSystem.md) – Manage characters
 
 ## Contributing
 

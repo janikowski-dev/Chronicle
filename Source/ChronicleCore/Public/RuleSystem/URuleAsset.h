@@ -3,7 +3,7 @@
 #include "URuleAsset.generated.h"
 
 UCLASS()
-class RULESYSTEMEDITOR_API URuleAsset : public UDataAsset
+class CHRONICLECORE_API URuleAsset : public UDataAsset
 {
 	GENERATED_BODY()
 

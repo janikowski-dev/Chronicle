@@ -10,11 +10,16 @@
 	"DocsURL": "https://github.com/janikowski-dev/chronicle",
 	"MarketplaceURL": "",
 	"SupportURL": "https://github.com/janikowski-dev/chronicle/issues",
-	"CanContainContent": true,
-	"IsBetaVersion": false,
+	"CanContainContent": false,
+	"IsBetaVersion": true,
 	"IsExperimentalVersion": false,
 	"Installed": false,
 	"Modules": [
+		{
+			"Name": "ChronicleCore",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
 		{
 			"Name": "DialogueSystemEditor",
 			"Type": "Editor",

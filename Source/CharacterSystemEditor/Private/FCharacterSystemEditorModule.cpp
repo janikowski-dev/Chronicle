@@ -1,14 +1,18 @@
 ﻿#include "FCharacterSystemEditorModule.h"
 
 #include "AssetToolsModule.h"
+#include "FCharacterAsset_Actions.h"
 
-#define LOCTEXT_NAMESPACE "FDialogueSystemModule"
+#define LOCTEXT_NAMESPACE "FCharacterSystemModule"
 
 void FCharacterSystemEditorModule::StartupModule()
 {
 	FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get().RegisterAdvancedAssetCategory(
 		FName("Chronicle"),
 		FText::FromString("Chronicle")
+	);
+	FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get().RegisterAssetTypeActions(
+		MakeShared<FCharacterAsset_Actions>()
 	);
 }
 

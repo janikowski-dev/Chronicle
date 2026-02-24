@@ -2,23 +2,19 @@
 
 #include "URuleAssetFactory.generated.h"
 
-class URuleAsset;
-
 UCLASS()
 class URuleAssetFactory : public UFactory
 {
 	GENERATED_BODY()
+	
 public:
 	URuleAssetFactory();
 
-	virtual UObject* FactoryCreateNew(UClass* InClass,
+	virtual UObject* FactoryCreateNew(UClass* Class,
 		UObject* InParent,
-		FName InName,
+		FName Name,
 		EObjectFlags Flags,
 		UObject* Context,
 		FFeedbackContext* Warn
 	) override;
-
-	virtual uint32 GetMenuCategories() const override;
-	virtual FText GetDisplayName() const override;
 };

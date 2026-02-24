@@ -13,7 +13,9 @@ public class CharacterSystemEditor : ModuleRules
 		]);
 
 		PrivateDependencyModuleNames.AddRange([
+			"ChronicleCore",
 			"AssetRegistry",
+			"AssetTools",
 			"UnrealEd"
 		]);
 	}

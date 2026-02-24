@@ -5,7 +5,7 @@
 
 FText FDialogueAsset_Actions::GetName() const
 {
-	return NSLOCTEXT("Assets", "DialogueAsset", "Dialogue Asset");
+	return FText::FromString("Dialogue Asset");
 }
 
 FColor FDialogueAsset_Actions::GetTypeColor() const

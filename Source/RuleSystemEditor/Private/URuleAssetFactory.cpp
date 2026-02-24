@@ -1,32 +1,21 @@
 ﻿#include "URuleAssetFactory.h"
 
-#include "AssetToolsModule.h"
-#include "URuleAsset.h"
+#include "RuleSystem/URuleAsset.h"
 
 URuleAssetFactory::URuleAssetFactory()
 {
 	SupportedClass = URuleAsset::StaticClass();
-	bEditAfterNew = true;
 	bCreateNew = true;
+	bEditAfterNew = true;
 }
 
-UObject* URuleAssetFactory::FactoryCreateNew(UClass* InClass,
+UObject* URuleAssetFactory::FactoryCreateNew(UClass* Class,
 	UObject* InParent,
-	FName InName,
+	FName Name,
 	EObjectFlags Flags,
 	UObject* Context,
 	FFeedbackContext* Warn
 )
 {
-	return NewObject<URuleAsset>(InParent, InClass, InName, Flags);
-}
-
-uint32 URuleAssetFactory::GetMenuCategories() const
-{
-	return FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get().FindAdvancedAssetCategory(FName("Chronicle"));
-}
-
-FText URuleAssetFactory::GetDisplayName() const
-{
-	return FText::FromString("Rule Asset");
+	return NewObject<URuleAsset>(InParent, Class, Name, Flags);
 }

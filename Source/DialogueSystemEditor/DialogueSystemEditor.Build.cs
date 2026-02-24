@@ -13,6 +13,9 @@ public class DialogueSystemEditor : ModuleRules
 		]);
 		
 		PrivateDependencyModuleNames.AddRange([
+			"ChronicleCore",
+			"RuleSystemEditor",
+			"CharacterSystemEditor",
 			"Core",
 			"CoreUObject",
 			"Engine",
@@ -29,10 +32,8 @@ public class DialogueSystemEditor : ModuleRules
 			"GameplayTagsEditor",
 			"EditorStyle",
 			"Projects",
-			"RuleSystemEditor",
 			"JsonUtilities",
-			"ApplicationCore",
-			"CharacterSystemEditor"
+			"ApplicationCore"
 		]);
 	}
 }

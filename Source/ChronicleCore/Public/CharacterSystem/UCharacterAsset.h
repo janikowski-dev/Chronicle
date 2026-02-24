@@ -3,7 +3,7 @@
 #include "UCharacterAsset.generated.h"
 
 UCLASS()
-class CHARACTERSYSTEMEDITOR_API UCharacterAsset : public UDataAsset
+class CHRONICLECORE_API UCharacterAsset : public UDataAsset
 {
 	GENERATED_BODY()
 
