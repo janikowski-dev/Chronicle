@@ -18,8 +18,6 @@ Chronicle is divided into separate modules for clarity and easier maintenance. E
 
 [See full Rule System documentation →](Docs/RuleSystem.md)
 
-----------
-
 ### [Character System](Docs/CharacterSystem.md)
 
 ![Character System Overview](Assets/Character_System_Overview.png)
@@ -44,7 +42,7 @@ Future planned modules and features for Chronicle:
 ## Requirements
 
 -   Unreal Engine 5.x
--   Editor build (plugin is editor-only)
+-   Editor build
 
 ## How To Use
 
