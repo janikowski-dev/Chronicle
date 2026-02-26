@@ -1,11 +1,12 @@
 ﻿#pragma once
 
+enum class ERuleParameterType : uint8;
 class URuleAsset;
 
 class RULESYSTEMEDITOR_API FRuleSet
 {
 public:
-	explicit FRuleSet(const FName& Directory);
+	explicit FRuleSet(const FName& Directory, const ERuleParameterType& ParameterType);
 	
 public:
 	TArray<TSharedPtr<FGuid>> GetSharedIds() const;
@@ -15,6 +16,7 @@ public:
 	void Refresh();
 	
 private:
+	ERuleParameterType ParameterType;
 	TArray<TSharedPtr<FGuid>> Ids;
 	TMap<FGuid, FName> NamesById;
 	FName Directory;

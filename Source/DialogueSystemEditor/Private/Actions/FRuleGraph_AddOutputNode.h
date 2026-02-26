@@ -2,12 +2,12 @@
 
 enum class EOutputType : int8;
 
-struct FDialogueNodeGraph_AddOutputNode : FEdGraphSchemaAction
+struct FRuleGraph_AddOutputNode : FEdGraphSchemaAction
 {
 	TSubclassOf<UEdGraphNode> NodeClass;
 	EOutputType OutputType;
 
-	explicit FDialogueNodeGraph_AddOutputNode(
+	explicit FRuleGraph_AddOutputNode(
 		const TSubclassOf<UEdGraphNode> InNodeClass,
 		const EOutputType OutputType)
 	: NodeClass(InNodeClass), OutputType(OutputType)

@@ -3,7 +3,7 @@
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "RuleSystem/URuleAsset.h"
 
-FRuleSet::FRuleSet(const FName& Directory) : Directory(Directory)
+FRuleSet::FRuleSet(const FName& Directory, const ERuleParameterType& ParameterType) : ParameterType(ParameterType), Directory(Directory)
 {
 }
 
@@ -53,6 +53,11 @@ void FRuleSet::Refresh()
 	{
 		if (const URuleAsset* Asset = Cast<URuleAsset>(AssetData.GetAsset()))
 		{
+			if (Asset->ParameterType != ParameterType)
+			{
+				continue;
+			}
+			
 			TSharedPtr<FGuid> SharedRuleId = MakeShared<FGuid>(Asset->RuleId);
 			NamesById.Add(Asset->RuleId, Asset->RuleName);
 			Ids.Add(SharedRuleId);

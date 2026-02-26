@@ -1,6 +1,6 @@
 ﻿#include "SRuleDefaultNode.h"
 
-#include "Nodes/Unreal/URuleTagNode.h"
+#include "Nodes/Unreal/URuleInputNode.h"
 
 void SRuleDefaultNode::Construct(const FArguments&, URuleNode* InNode)
 {

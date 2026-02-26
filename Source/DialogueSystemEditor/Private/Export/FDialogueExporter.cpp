@@ -212,7 +212,7 @@ void FDialogueExporter::ReadCallbacks(const UDialogueNode* Node, FDialogueNodeDa
         {
             if (const URuleCallbackNode* Callback = Cast<URuleCallbackNode>(Rule))
             {
-                NodeData.Callbacks.Add(Callback->TagId);
+                NodeData.Callbacks.Add(Callback->RuleId);
             }
         }
     }

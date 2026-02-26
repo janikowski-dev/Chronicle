@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "EdialogueNodeType.h"
+#include "EDialogueNodeType.h"
 #include "FRuleData.h"
 #include "FDialogueNodeData.generated.h"
 

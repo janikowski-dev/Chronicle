@@ -2,10 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "EdGraph/EdGraphSchema.h"
-#include "UDialogueNodeGraphSchema.generated.h"
+#include "URuleGraphSchema.generated.h"
 
 UCLASS()
-class DIALOGUESYSTEMEDITOR_API UDialogueNodeGraphSchema : public UEdGraphSchema
+class DIALOGUESYSTEMEDITOR_API URuleGraphSchema : public UEdGraphSchema
 {
 	GENERATED_BODY()
 

@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "ERuleParameterType.h"
 
 #include "URuleAsset.generated.h"
 
@@ -14,7 +15,11 @@ public:
 	
 public:
 	UPROPERTY(EditAnywhere)
+	ERuleParameterType ParameterType;
+	
+	UPROPERTY(EditAnywhere)
 	FName RuleName;
+	
 	UPROPERTY(VisibleAnywhere)
 	FGuid RuleId;
 };

@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "URuleTagNode.h"
+#include "URuleInputNode.h"
 #include "URuleCallbackNode.generated.h"
 
 UCLASS()
-class DIALOGUESYSTEMEDITOR_API URuleCallbackNode : public URuleTagNode
+class DIALOGUESYSTEMEDITOR_API URuleCallbackNode : public URuleInputNode
 {
 	GENERATED_BODY()
 	

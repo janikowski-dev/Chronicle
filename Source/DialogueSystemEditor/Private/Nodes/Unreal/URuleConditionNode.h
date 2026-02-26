@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "URuleTagNode.h"
+#include "URuleInputNode.h"
 #include "URuleConditionNode.generated.h"
 
 UCLASS()
-class DIALOGUESYSTEMEDITOR_API URuleConditionNode : public URuleTagNode
+class DIALOGUESYSTEMEDITOR_API URuleConditionNode : public URuleInputNode
 {
 	GENERATED_BODY()
 	

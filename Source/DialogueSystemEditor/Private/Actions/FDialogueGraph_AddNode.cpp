@@ -9,7 +9,6 @@ UEdGraphNode* FDialogueGraph_AddNode::PerformAction(
 	const bool bSelectNewNode
 )
 {
-	const FScopedTransaction Transaction(NSLOCTEXT("DialogueGraph", "AddNode", "Add Node"));
 	UEdGraphNode* NewNode = CreateNewNode(ParentGraph);
 	TryAttachingPin(ParentGraph, NewNode, FromPin);
 	Cast<UDialogueGraph>(ParentGraph)->Refresh();

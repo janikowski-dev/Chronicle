@@ -1,20 +1,19 @@
-﻿#include "FDialogueNodeGraph_AddOutputNode.h"
+﻿#include "FRuleGraph_AddOutputNode.h"
 
 #include "EdGraph/EdGraph.h"
 #include "Nodes/Unreal/URuleOutputNode.h"
 
-UEdGraphNode* FDialogueNodeGraph_AddOutputNode::PerformAction(
+UEdGraphNode* FRuleGraph_AddOutputNode::PerformAction(
 	UEdGraph* ParentGraph,
 	UEdGraphPin*,
 	const FVector2f& Location,
 	const bool
 )
 {
-	const FScopedTransaction Transaction(NSLOCTEXT("NodeGraph", "AddNode", "Add Node"));
 	return CreateNewNode(ParentGraph, Location);
 }
 
-UEdGraphNode* FDialogueNodeGraph_AddOutputNode::CreateNewNode(UEdGraph* ParentGraph, const FVector2f& Location) const
+UEdGraphNode* FRuleGraph_AddOutputNode::CreateNewNode(UEdGraph* ParentGraph, const FVector2f& Location) const
 {
 	ParentGraph->Modify();
 

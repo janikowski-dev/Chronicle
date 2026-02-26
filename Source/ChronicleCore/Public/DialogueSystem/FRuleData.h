@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "RuleSystem/ERuleParameterType.h"
 #include "EConditionNodeType.h"
 #include "FRuleData.generated.h"
 
@@ -19,4 +20,13 @@ struct CHRONICLECORE_API FRuleData
 	
 	UPROPERTY(VisibleAnywhere)
 	FGuid Id;
+	
+	UPROPERTY(VisibleAnywhere)
+	ERuleParameterType ParameterType;
+	
+	UPROPERTY(VisibleAnywhere)
+	FGuid ParameterCharacterId;
+	
+	UPROPERTY(VisibleAnywhere)
+	int32 ParameterInteger;
 };

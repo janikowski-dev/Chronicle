@@ -1,22 +1,30 @@
 ﻿#pragma once
 
-struct FDialogueNodeGraph_AddNode : FEdGraphSchemaAction
+#include "RuleSystem/ERuleParameterType.h"
+
+struct FRuleGraph_AddNode : FEdGraphSchemaAction
 {
 	TSubclassOf<UEdGraphNode> NodeClass;
+	ERuleParameterType ParameterType;
 
-	explicit FDialogueNodeGraph_AddNode(const TSubclassOf<UEdGraphNode> InNodeClass) : NodeClass(InNodeClass)
+	explicit FRuleGraph_AddNode(const TSubclassOf<UEdGraphNode> InNodeClass)
+		: NodeClass(InNodeClass)
+		, ParameterType(ERuleParameterType::None)
 	{
 	}
 	
-	explicit FDialogueNodeGraph_AddNode(
+	explicit FRuleGraph_AddNode(
 		const FText& InCategory,
 		const FText& InMenuDesc,
 		const FText& InTooltip,
-		const TSubclassOf<UEdGraphNode> InNodeClass
+		const TSubclassOf<UEdGraphNode> InNodeClass,
+		const ERuleParameterType InParameterType
 	)
 		: FEdGraphSchemaAction(InCategory, InMenuDesc, InTooltip, 0)
 		, NodeClass(InNodeClass)
-	{}
+		, ParameterType(InParameterType)
+	{
+	}
 
 	virtual UEdGraphNode* PerformAction(
 		UEdGraph* ParentGraph,

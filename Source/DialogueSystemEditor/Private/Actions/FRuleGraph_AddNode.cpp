@@ -1,18 +1,18 @@
-﻿#include "FDialogueNodeGraph_AddNode.h"
+﻿#include "FRuleGraph_AddNode.h"
 #include "EdGraph/EdGraph.h"
+#include "Nodes/Unreal/URuleInputNode.h"
 
-UEdGraphNode* FDialogueNodeGraph_AddNode::PerformAction(
+UEdGraphNode* FRuleGraph_AddNode::PerformAction(
 	UEdGraph* ParentGraph,
 	UEdGraphPin*,
 	const FVector2f& Location,
 	const bool
 )
 {
-	const FScopedTransaction Transaction(NSLOCTEXT("NodeGraph", "AddNode", "Add Node"));
 	return CreateNewNode(ParentGraph, Location);
 }
 
-UEdGraphNode* FDialogueNodeGraph_AddNode::CreateNewNode(UEdGraph* ParentGraph, const FVector2f& Location) const
+UEdGraphNode* FRuleGraph_AddNode::CreateNewNode(UEdGraph* ParentGraph, const FVector2f& Location) const
 {
 	ParentGraph->Modify();
 
@@ -22,7 +22,12 @@ UEdGraphNode* FDialogueNodeGraph_AddNode::CreateNewNode(UEdGraph* ParentGraph, c
 		NAME_None,
 		RF_Transactional
 	);
-	
+
+	if (URuleInputNode* InputNode = Cast<URuleInputNode>(NewNode))
+	{
+		InputNode->ParameterType = ParameterType;
+	}
+
 	NewNode->NodePosX = Location.X;
 	NewNode->NodePosY = Location.Y;
 	

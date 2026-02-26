@@ -2,7 +2,7 @@
 
 #include "Assets/UDialogueAsset.h"
 #include "Graphs/URuleGraph.h"
-#include "Schemas/UDialogueNodeGraphSchema.h"
+#include "Schemas/URuleGraphSchema.h"
 
 void UDialogueNode::PostPlacedNewNode()
 {
@@ -36,7 +36,7 @@ URuleGraph* UDialogueNode::GetOrCreateInnerGraph()
 			RF_Transactional
 		);
 	
-		InnerGraph->Schema = UDialogueNodeGraphSchema::StaticClass();
+		InnerGraph->Schema = URuleGraphSchema::StaticClass();
 		InnerGraph->GetSchema()->CreateDefaultNodesForGraph(*InnerGraph);
 		Asset->InnerGraphsByNode.Add(this, InnerGraph);
 		return InnerGraph;
