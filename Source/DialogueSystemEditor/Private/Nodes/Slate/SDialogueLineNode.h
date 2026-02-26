@@ -25,10 +25,6 @@ private:
 	void SetListener(TSharedPtr<FGuid> Id, ESelectInfo::Type) const;
 	FText GetSpeakerName() const;
 	void SetSpeaker(TSharedPtr<FGuid> Id, ESelectInfo::Type) const;
-	void RefreshParticipantIds();
-	void FixAssignedIds();
+	void FixAssignedIds() const;
 	void OpenNodeEditor() const;
-
-private:
-	TArray<TSharedPtr<FGuid>> ParticipantIds;
 };

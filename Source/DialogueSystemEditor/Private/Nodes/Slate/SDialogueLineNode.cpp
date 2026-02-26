@@ -23,7 +23,6 @@ FSlateColor SDialogueLineNode::GetHeaderColor() const
 void SDialogueLineNode::UpdateGraphNode()
 {
 	SDialogueNode::UpdateGraphNode();
-	RefreshParticipantIds();
 	FixAssignedIds();
 }
 
@@ -43,7 +42,7 @@ void SDialogueLineNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 			FDialogueGraphEditorStyle::Get().GetBrush("Icons.Speaker"),
 			TAttribute<FText>(this, &SDialogueLineNode::GetSpeakerName),
 			SComboBox<TSharedPtr<FGuid>>::FOnSelectionChanged::CreateSP(this, &SDialogueLineNode::SetSpeaker),
-			&ParticipantIds
+			&TypedGraph->SharedParticipantIds
 		)
 	];
 	
@@ -55,7 +54,7 @@ void SDialogueLineNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 			FDialogueGraphEditorStyle::Get().GetBrush("Icons.Listener"),
 			TAttribute<FText>(this, &SDialogueLineNode::GetListenerName),
 			SComboBox<TSharedPtr<FGuid>>::FOnSelectionChanged::CreateSP(this, &SDialogueLineNode::SetListener),
-			&ParticipantIds
+			&TypedGraph->SharedParticipantIds
 		)
 	];
 	
@@ -110,58 +109,22 @@ void SDialogueLineNode::SetSpeaker(TSharedPtr<FGuid> Id, ESelectInfo::Type) cons
 	TypedNode->SpeakerId = *Id;
 }
 
-void SDialogueLineNode::RefreshParticipantIds()
+void SDialogueLineNode::FixAssignedIds() const
 {
-	ParticipantIds.Empty();
-
-	const UDialogueRootNode* Root = Cast<UDialogueRootNode>(Cast<UDialogueGraph>(GraphNode->GetGraph())->GetRootNode());
-	
-	if (!Root)
-	{
-		return;
-	}
-
-	for (const TSharedPtr<FGuid>& Id : FCharacterDirectory::GetAll().GetSharedIds())
-	{
-		if (Root->ParticipantIds.Contains(*Id))
-		{
-			ParticipantIds.Add(Id);
-		}
-	}
-	
-	ParticipantIds.Sort([](const TSharedPtr<FGuid>& A, const TSharedPtr<FGuid>& B)
-	{
-		const FName NameA = FCharacterDirectory::GetAll().GetName(*A);
-		const FName NameB = FCharacterDirectory::GetAll().GetName(*B);
-
-		const bool bAIsPlayer = NameA == "Player";
-		const bool bBIsPlayer = NameB == "Player";
-
-		if (bAIsPlayer != bBIsPlayer)
-		{
-			return bAIsPlayer;
-		}
-
-		return NameA.LexicalLess(NameB);
-	});
-}
-
-void SDialogueLineNode::FixAssignedIds()
-{
-	const bool bContainsListener = ParticipantIds.ContainsByPredicate([&](const TSharedPtr<FGuid>& Id)
+	const bool bContainsListener = TypedGraph->SharedParticipantIds.ContainsByPredicate([&](const TSharedPtr<FGuid>& Id)
 	{
 		return Id && *Id == TypedNode->ListenerId;
 	});
 
-	const bool bContainsSpeaker = ParticipantIds.ContainsByPredicate([&](const TSharedPtr<FGuid>& Id)
+	const bool bContainsSpeaker = TypedGraph->SharedParticipantIds.ContainsByPredicate([&](const TSharedPtr<FGuid>& Id)
 	{
 		return Id && *Id == TypedNode->SpeakerId;
 	});
 	
-	if (!bContainsListener && !bContainsSpeaker && ParticipantIds.Num() > 1)
+	if (!bContainsListener && !bContainsSpeaker && TypedGraph->SharedParticipantIds.Num() > 1)
 	{
-		TypedNode->ListenerId = *ParticipantIds[0];
-		TypedNode->SpeakerId = *ParticipantIds[1];
+		TypedNode->ListenerId = *TypedGraph->SharedParticipantIds[0];
+		TypedNode->SpeakerId = *TypedGraph->SharedParticipantIds[1];
 		return;
 	}
 	

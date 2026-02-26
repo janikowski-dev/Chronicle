@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "SGraphNode.h"
+#include "Graphs/UDialogueGraph.h"
 
 class UDialogueNode;
 class UDialogueResponseNode;
@@ -44,6 +45,7 @@ private:
 	int GetBodyIndex() const;
 	
 protected:
+	TWeakObjectPtr<UDialogueGraph> TypedGraph;
 	TWeakObjectPtr<TNodeType> TypedNode;
 
 private:

@@ -79,7 +79,7 @@ void FDialogueExporter::TryReadRootData(UDialogueData* Data, UEdGraphNode* Node)
 {
     if (const UDialogueRootNode* RootNode = Cast<UDialogueRootNode>(Node))
     {
-        Data->ParticipantIds = RootNode->ParticipantIds;
+        Data->ParticipantIds = RootNode->GetTypedOuter<UDialogueGraph>()->ParticipantIds;
     }
 }
 

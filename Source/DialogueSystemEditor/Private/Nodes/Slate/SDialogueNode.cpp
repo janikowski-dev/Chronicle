@@ -133,7 +133,7 @@ void SDialogueNode<TNodeType>::AddHeader(const TSharedRef<SVerticalBox>& Box)
 			.OnClicked(this, &SDialogueNode::ToggleCollapse)
 			[
 				SNew(SImage)
-				.Image_Lambda([this]()
+				.Image_Lambda([this]
 				{
 					return TypedNode->bIsCollapsed
 						? FAppStyle::Get().GetBrush("Icons.ChevronRight")
@@ -202,7 +202,6 @@ void SDialogueNode<TNodeType>::ToggleCollapsedState() const
 template<typename TNodeType>
 void SDialogueNode<TNodeType>::RefreshGraph() const
 {
-	const UDialogueGraph* TypedGraph = Cast<UDialogueGraph>(GraphNode->GetGraph());
 	TypedGraph->Refresh();
 }
 
@@ -225,6 +224,7 @@ int SDialogueNode<TNodeType>::GetBodyIndex() const
 template<typename TNodeType>
 void SDialogueNode<TNodeType>::Cache(UEdGraphNode* Node)
 {
+	TypedGraph = Cast<UDialogueGraph>(Node->GetGraph());
 	TypedNode = Cast<TNodeType>(Node);
 	GraphNode = Node;
 }

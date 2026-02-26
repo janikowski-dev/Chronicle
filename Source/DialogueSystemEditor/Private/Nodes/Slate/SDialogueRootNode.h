@@ -21,7 +21,7 @@ private:
 	void AddCurrentParticipantList(const TSharedRef<SVerticalBox>& Box) const;
 	void AddNewParticipantButton(const TSharedRef<SVerticalBox>& Box) const;
 	
-	bool HasParticipant(const FGuid Id) const;
-	void AddParticipant(const FGuid Id) const;
-	void RemoveParticipant(const FGuid Id) const;
+	bool HasParticipant(const TSharedPtr<FGuid>& Id) const;
+	void AddParticipant(const TSharedPtr<FGuid>& Id) const;
+	void RemoveParticipant(const TSharedPtr<FGuid>& Id) const;
 };

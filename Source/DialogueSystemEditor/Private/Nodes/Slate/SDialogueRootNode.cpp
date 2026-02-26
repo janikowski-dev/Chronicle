@@ -23,7 +23,7 @@ void SDialogueRootNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 
 void SDialogueRootNode::AddCurrentParticipantList(const TSharedRef<SVerticalBox>& Box) const
 {
-	for (const FGuid& ParticipantId : TypedNode->ParticipantIds)
+	for (TSharedPtr ParticipantId : TypedGraph->SharedParticipantIds)
 	{
 		Box->AddSlot()
 		.AutoHeight()
@@ -46,7 +46,7 @@ void SDialogueRootNode::AddCurrentParticipantList(const TSharedRef<SVerticalBox>
 			.VAlign(VAlign_Center)
 			[
 				SNew(STextBlock)
-				.Text(FText::FromName(FCharacterDirectory::GetAll().GetName(ParticipantId)))
+				.Text(FText::FromName(FCharacterDirectory::GetAll().GetName(*ParticipantId)))
 			]
 
 			+ SHorizontalBox::Slot()
@@ -116,7 +116,7 @@ FReply SDialogueRootNode::OpenAddParticipantWindow() const
     
     for (const TSharedPtr<FGuid>& CharacterId : FCharacterDirectory::GetAll().GetSharedIds())
     {
-        if (HasParticipant(*CharacterId))
+        if (HasParticipant(CharacterId))
         {
             continue;
         }
@@ -132,7 +132,7 @@ FReply SDialogueRootNode::OpenAddParticipantWindow() const
             .HAlign(HAlign_Left)
             .OnClicked_Lambda([this, CharacterId]
             {
-                AddParticipant(*CharacterId);
+                AddParticipant(CharacterId);
                 FSlateApplication::Get().DismissAllMenus();
                 return FReply::Handled();
             })
@@ -201,19 +201,55 @@ FReply SDialogueRootNode::OpenAddParticipantWindow() const
 	return FReply::Handled();
 }
 
-bool SDialogueRootNode::HasParticipant(const FGuid Id) const
+bool SDialogueRootNode::HasParticipant(const TSharedPtr<FGuid>& Id) const
 {
-	return TypedNode->ParticipantIds.Contains(Id);
+	return TypedGraph->SharedParticipantIds.Contains(Id);
 }
 
-void SDialogueRootNode::AddParticipant(const FGuid Id) const
+void SDialogueRootNode::AddParticipant(const TSharedPtr<FGuid>& Id) const
 {
-	TypedNode->ParticipantIds.Add(Id);
+	TypedGraph->SharedParticipantIds.Add(Id);
+	TypedGraph->ParticipantIds.Add(*Id);
+	
+	TypedGraph->SharedParticipantIds.Sort([](const TSharedPtr<FGuid>& A, const TSharedPtr<FGuid>& B)
+	{
+		const FName NameA = FCharacterDirectory::GetAll().GetName(*A);
+		const FName NameB = FCharacterDirectory::GetAll().GetName(*B);
+
+		const bool bAIsPlayer = NameA == "Player";
+		const bool bBIsPlayer = NameB == "Player";
+
+		if (bAIsPlayer != bBIsPlayer)
+		{
+			return bAIsPlayer;
+		}
+
+		return NameA.LexicalLess(NameB);
+	});
+	
 	TypedNode->GetGraph()->NotifyGraphChanged();
 }
 
-void SDialogueRootNode::RemoveParticipant(const FGuid Id) const
+void SDialogueRootNode::RemoveParticipant(const TSharedPtr<FGuid>& Id) const
 {
-	TypedNode->ParticipantIds.Remove(Id);
+	TypedGraph->SharedParticipantIds.Remove(Id);
+	TypedGraph->ParticipantIds.Remove(*Id);
+	
+	TypedGraph->SharedParticipantIds.Sort([](const TSharedPtr<FGuid>& A, const TSharedPtr<FGuid>& B)
+	{
+		const FName NameA = FCharacterDirectory::GetAll().GetName(*A);
+		const FName NameB = FCharacterDirectory::GetAll().GetName(*B);
+
+		const bool bAIsPlayer = NameA == "Player";
+		const bool bBIsPlayer = NameB == "Player";
+
+		if (bAIsPlayer != bBIsPlayer)
+		{
+			return bAIsPlayer;
+		}
+
+		return NameA.LexicalLess(NameB);
+	});
+	
 	TypedNode->GetGraph()->NotifyGraphChanged();
 }

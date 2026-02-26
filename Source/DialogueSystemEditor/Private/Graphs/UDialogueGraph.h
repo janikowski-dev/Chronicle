@@ -45,4 +45,10 @@ private:
 	) const;
 
 	void ApplyResponseIndexes() const;
+
+public:
+	TArray<TSharedPtr<FGuid>> SharedParticipantIds;
+	
+	UPROPERTY()
+	TArray<FGuid> ParticipantIds;
 };
