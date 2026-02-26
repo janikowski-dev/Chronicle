@@ -2,6 +2,7 @@
 
 #include "Editors/FDialogueNodeEditor.h"
 #include "Nodes/Unreal/UDialogueResponseNode.h"
+#include "Utils/FDialogueGraphEditorStyle.h"
 #include "Utils/FSlateHelper.h"
 
 void SDialogueResponseNode::Construct(const FArguments&, UDialogueResponseNode* InNode)
@@ -23,6 +24,16 @@ FReply SDialogueResponseNode::OnMouseButtonDoubleClick(const FGeometry&, const F
 
 void SDialogueResponseNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 {
+	Box->AddSlot()
+	.AutoHeight()
+	.Padding(4)
+	[
+		MakeCharacterDisplay(
+			FDialogueGraphEditorStyle::Get().GetBrush("Icons.Speaker"),
+			FText::FromString("Player")
+		)
+	];
+	
 	Box->AddSlot()
 	.AutoHeight()
 	[

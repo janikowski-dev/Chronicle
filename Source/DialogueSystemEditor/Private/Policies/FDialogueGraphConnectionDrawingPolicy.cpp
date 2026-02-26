@@ -3,6 +3,7 @@
 #include "Assets/UDialogueAsset.h"
 #include "Graphs/URuleGraph.h"
 #include "Nodes/Unreal/UDialogueNode.h"
+#include "Nodes/Unreal/UDialogueResponseNode.h"
 #include "Nodes/Unreal/URuleOutputNode.h"
 
 struct FLineSegment
@@ -88,14 +89,19 @@ void FDialogueGraphConnectionDrawingPolicy::DrawStraightConnection(
 	
 	Points.Add(StartPoint);
 	Points.Add(EndPoint);
+
+	FLinearColor Color = Params.AssociatedPin2 && Params.AssociatedPin2->GetOwningNode() && Cast<UDialogueResponseNode>(Params.AssociatedPin2->GetOwningNode()) ?
+	FLinearColor(0.0f, 0.5f, 0.5f, 1.0f) : FLinearColor::White;
+	int32 ID = Params.AssociatedPin2 && Params.AssociatedPin2->GetOwningNode() && Cast<UDialogueResponseNode>(Params.AssociatedPin2->GetOwningNode()) ?
+	WireLayerID + 1 : WireLayerID;
 	
 	FSlateDrawElement::MakeLines(
 		DrawElementsList,
-		WireLayerID,
+		ID,
 		FPaintGeometry(),
 		Points,
 		ESlateDrawEffect::NoBlending,
-		Params.WireColor,
+		Color,
 		true,
 		Params.WireThickness
 	);
@@ -108,6 +114,8 @@ void FDialogueGraphConnectionDrawingPolicy::DrawArrow(
 ) const
 {
 	const FVector2f ArrowPoint = EndPoint - ArrowRadius - PinOffset;
+	FLinearColor Color = Params.AssociatedPin2 && Params.AssociatedPin2->GetOwningNode() && Cast<UDialogueResponseNode>(Params.AssociatedPin2->GetOwningNode()) ?
+	FLinearColor(0.0f, 0.5f, 0.5f, 1.0f) : FLinearColor::White;
 	
 	FSlateDrawElement::MakeBox(
 		DrawElementsList,
@@ -115,7 +123,7 @@ void FDialogueGraphConnectionDrawingPolicy::DrawArrow(
 		FPaintGeometry(ArrowPoint, ArrowImage->ImageSize * ZoomFactor, ZoomFactor),
 		ArrowImage,
 		ESlateDrawEffect::None,
-		Params.WireColor
+		Color
 	);
 }
 
