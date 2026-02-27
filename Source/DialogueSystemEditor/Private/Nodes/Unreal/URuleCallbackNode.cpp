@@ -14,5 +14,5 @@ FText URuleCallbackNode::GetTitle() const
 
 FSlateColor URuleCallbackNode::GetBackgroundColor() const
 {
-	return FColors::Purple;
+	return FColors::Callback;
 }

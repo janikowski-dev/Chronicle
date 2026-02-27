@@ -16,5 +16,5 @@ FText URuleAndNode::GetTitle() const
 
 FSlateColor URuleAndNode::GetBackgroundColor() const
 {
-	return FColors::Turquoise;
+	return FColors::Condition;
 }

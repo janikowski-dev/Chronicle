@@ -33,10 +33,10 @@ FSlateColor URuleOutputNode::GetBackgroundColor() const
 {
 	if (Type == EOutputType::Requirements)
 	{
-		return FColors::Turquoise;
+		return FColors::Condition;
 	}
 	
-	return FColors::Purple;
+	return FColors::Callback;
 }
 
 bool URuleOutputNode::CanUserDeleteNode() const

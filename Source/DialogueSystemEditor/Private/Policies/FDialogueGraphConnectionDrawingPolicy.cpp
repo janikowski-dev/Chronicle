@@ -5,6 +5,7 @@
 #include "Nodes/Unreal/UDialogueNode.h"
 #include "Nodes/Unreal/UDialogueResponseNode.h"
 #include "Nodes/Unreal/URuleOutputNode.h"
+#include "Utils/FColors.h"
 
 struct FLineSegment
 {
@@ -27,6 +28,8 @@ FDialogueGraphConnectionDrawingPolicy::FDialogueGraphConnectionDrawingPolicy(
 		InDrawElements
 	)
 {
+	LinkBrush = FSlateIcon("FDialogueGraphEditorStyle", "Icons.Link").GetIcon();
+	KeyBrush = FSlateIcon("FDialogueGraphEditorStyle", "Icons.Key").GetIcon();
 }
 
 void FDialogueGraphConnectionDrawingPolicy::DrawSplineWithArrow(
@@ -71,7 +74,7 @@ void FDialogueGraphConnectionDrawingPolicy::DrawAngledConnection(
 	const FConnectionParams& Params
 ) const
 {
-	const TArray<FLineSegment> Segments = BuildOrthogonalWire(StartPoint, EndPoint, PinOffset, Params);
+	const TArray<FLineSegment, TInlineAllocator<3>> Segments = BuildOrthogonalWire(StartPoint, EndPoint, PinOffset, Params);
 
 	for (const auto& [A, B] : Segments)
 	{
@@ -90,18 +93,20 @@ void FDialogueGraphConnectionDrawingPolicy::DrawStraightConnection(
 	Points.Add(StartPoint);
 	Points.Add(EndPoint);
 
-	FLinearColor Color = Params.AssociatedPin2 && Params.AssociatedPin2->GetOwningNode() && Cast<UDialogueResponseNode>(Params.AssociatedPin2->GetOwningNode()) ?
-	FLinearColor(0.0f, 0.5f, 0.5f, 1.0f) : FLinearColor::White;
-	int32 ID = Params.AssociatedPin2 && Params.AssociatedPin2->GetOwningNode() && Cast<UDialogueResponseNode>(Params.AssociatedPin2->GetOwningNode()) ?
-	WireLayerID + 1 : WireLayerID;
+	const bool bIsResponseNode = Params.AssociatedPin2
+		&& Params.AssociatedPin2->GetOwningNodeUnchecked()
+		&& Params.AssociatedPin2->GetOwningNodeUnchecked()->IsA<UDialogueResponseNode>();
+
+	const FLinearColor WireColor = bIsResponseNode ? FColors::ResponseConnection : FColors::DefaultConnection;
+	int32 LayerId = bIsResponseNode ? WireLayerID + 1 : WireLayerID;
 	
 	FSlateDrawElement::MakeLines(
 		DrawElementsList,
-		ID,
+		LayerId,
 		FPaintGeometry(),
 		Points,
 		ESlateDrawEffect::NoBlending,
-		Color,
+		WireColor,
 		true,
 		Params.WireThickness
 	);
@@ -114,8 +119,12 @@ void FDialogueGraphConnectionDrawingPolicy::DrawArrow(
 ) const
 {
 	const FVector2f ArrowPoint = EndPoint - ArrowRadius - PinOffset;
-	FLinearColor Color = Params.AssociatedPin2 && Params.AssociatedPin2->GetOwningNode() && Cast<UDialogueResponseNode>(Params.AssociatedPin2->GetOwningNode()) ?
-	FLinearColor(0.0f, 0.5f, 0.5f, 1.0f) : FLinearColor::White;
+
+	const bool bIsResponseNode = Params.AssociatedPin2
+		&& Params.AssociatedPin2->GetOwningNodeUnchecked()
+		&& Params.AssociatedPin2->GetOwningNodeUnchecked()->IsA<UDialogueResponseNode>();
+
+	const FLinearColor ArrowColor = bIsResponseNode ? FColors::ResponseConnection : FColors::DefaultConnection;
 	
 	FSlateDrawElement::MakeBox(
 		DrawElementsList,
@@ -123,7 +132,7 @@ void FDialogueGraphConnectionDrawingPolicy::DrawArrow(
 		FPaintGeometry(ArrowPoint, ArrowImage->ImageSize * ZoomFactor, ZoomFactor),
 		ArrowImage,
 		ESlateDrawEffect::None,
-		Color
+		ArrowColor
 	);
 }
 
@@ -133,7 +142,6 @@ void FDialogueGraphConnectionDrawingPolicy::DrawLinkIcon(
 		const FConnectionParams& Params
 ) const
 {
-	const FSlateBrush* LinkBrush = FSlateIcon("FDialogueGraphEditorStyle", "Icons.Link").GetIcon();
 	const FVector2f LinkPoint = FVector2f(
 		StartPoint.X + (EndPoint.X - StartPoint.X) * 0.25f - LinkBrush->ImageSize.X * ZoomFactor * 0.25f,
 		StartPoint.Y - LinkBrush->ImageSize.X * ZoomFactor * 0.5f
@@ -155,7 +163,6 @@ void FDialogueGraphConnectionDrawingPolicy::DrawKeyIcon(
 		const FConnectionParams& Params
 ) const
 {
-	const FSlateBrush* KeyBrush = FSlateIcon("FDialogueGraphEditorStyle", "Icons.Key").GetIcon();
 	const FVector2f KeyPoint = FVector2f(
 		StartPoint.X + (EndPoint.X - StartPoint.X) * 0.75f - KeyBrush->ImageSize.X * ZoomFactor * 0.75f,
 		EndPoint.Y - KeyBrush->ImageSize.X * ZoomFactor * 0.5f
@@ -171,14 +178,14 @@ void FDialogueGraphConnectionDrawingPolicy::DrawKeyIcon(
 	);
 }
 
-TArray<FLineSegment> FDialogueGraphConnectionDrawingPolicy::BuildOrthogonalWire(
+TArray<FLineSegment, TInlineAllocator<3>> FDialogueGraphConnectionDrawingPolicy::BuildOrthogonalWire(
 	const FVector2f& StartPoint,
 	const FVector2f& EndPoint,
 	const FVector2f& PinOffset,
 	const FConnectionParams& Params
 ) const
 {
-	TArray<FLineSegment> Segments;
+	TArray<FLineSegment, TInlineAllocator<3>> Segments;
 
 	const FVector2f HorizontalAnchorOffset(
 		Params.WireThickness * 0.5f,
@@ -224,7 +231,7 @@ TArray<FLineSegment> FDialogueGraphConnectionDrawingPolicy::BuildOrthogonalWire(
 FVector2f FDialogueGraphConnectionDrawingPolicy::GetPinOffset() const
 {
 	const FVector2f PinOffset(
-		17.5f,
+		16.0f,
 		0.0f
 	);
 

@@ -2,6 +2,7 @@
 
 #include "FCharacterDirectory.h"
 #include "Nodes/Unreal/UDialogueRootNode.h"
+#include "Utils/FColors.h"
 #include "Utils/FDialogueGraphEditorStyle.h"
 
 void SDialogueRootNode::Construct(const FArguments&, UDialogueRootNode* InNode)
@@ -12,7 +13,7 @@ void SDialogueRootNode::Construct(const FArguments&, UDialogueRootNode* InNode)
 
 FSlateColor SDialogueRootNode::GetHeaderColor() const
 {
-	return FSlateColor(FLinearColor::Black);
+	return FColors::Root;
 }
 
 void SDialogueRootNode::AddBody(const TSharedRef<SVerticalBox>& Box)
@@ -57,7 +58,7 @@ void SDialogueRootNode::AddCurrentParticipantList(const TSharedRef<SVerticalBox>
 				.ButtonStyle(FAppStyle::Get(), "HoverHintOnly")
 				.OnClicked_Lambda([this, ParticipantId]
 				{
-					RemoveParticipant(ParticipantId);
+					TypedGraph->RemoveParticipant(ParticipantId);
 					return FReply::Handled();
 				})
 				[
@@ -116,7 +117,7 @@ FReply SDialogueRootNode::OpenAddParticipantWindow() const
     
     for (const TSharedPtr<FGuid>& CharacterId : FCharacterDirectory::GetAll().GetSharedIds())
     {
-        if (HasParticipant(CharacterId))
+        if (TypedGraph->HasParticipant(CharacterId))
         {
             continue;
         }
@@ -132,7 +133,7 @@ FReply SDialogueRootNode::OpenAddParticipantWindow() const
             .HAlign(HAlign_Left)
             .OnClicked_Lambda([this, CharacterId]
             {
-                AddParticipant(CharacterId);
+                TypedGraph->AddParticipant(CharacterId);
                 FSlateApplication::Get().DismissAllMenus();
                 return FReply::Handled();
             })
@@ -175,7 +176,13 @@ FReply SDialogueRootNode::OpenAddParticipantWindow() const
 			.MaxDesiredHeight(200.0f)
 			[
 				MissingParticipants->GetChildren()->Num() > 0
-				? StaticCastSharedRef<SWidget>(MissingParticipants)
+				? StaticCastSharedRef<SWidget>(
+					SNew(SScrollBox)
+					+ SScrollBox::Slot()
+					[
+						MissingParticipants
+					]
+				)
 				: StaticCastSharedRef<SWidget>(
 					SNew(SBox)
 					.Padding(12.0f, 8.0f)
@@ -199,57 +206,4 @@ FReply SDialogueRootNode::OpenAddParticipantWindow() const
 	);
 
 	return FReply::Handled();
-}
-
-bool SDialogueRootNode::HasParticipant(const TSharedPtr<FGuid>& Id) const
-{
-	return TypedGraph->SharedParticipantIds.Contains(Id);
-}
-
-void SDialogueRootNode::AddParticipant(const TSharedPtr<FGuid>& Id) const
-{
-	TypedGraph->SharedParticipantIds.Add(Id);
-	TypedGraph->ParticipantIds.Add(*Id);
-	
-	TypedGraph->SharedParticipantIds.Sort([](const TSharedPtr<FGuid>& A, const TSharedPtr<FGuid>& B)
-	{
-		const FName NameA = FCharacterDirectory::GetAll().GetName(*A);
-		const FName NameB = FCharacterDirectory::GetAll().GetName(*B);
-
-		const bool bAIsPlayer = NameA == "Player";
-		const bool bBIsPlayer = NameB == "Player";
-
-		if (bAIsPlayer != bBIsPlayer)
-		{
-			return bAIsPlayer;
-		}
-
-		return NameA.LexicalLess(NameB);
-	});
-	
-	TypedNode->GetGraph()->NotifyGraphChanged();
-}
-
-void SDialogueRootNode::RemoveParticipant(const TSharedPtr<FGuid>& Id) const
-{
-	TypedGraph->SharedParticipantIds.Remove(Id);
-	TypedGraph->ParticipantIds.Remove(*Id);
-	
-	TypedGraph->SharedParticipantIds.Sort([](const TSharedPtr<FGuid>& A, const TSharedPtr<FGuid>& B)
-	{
-		const FName NameA = FCharacterDirectory::GetAll().GetName(*A);
-		const FName NameB = FCharacterDirectory::GetAll().GetName(*B);
-
-		const bool bAIsPlayer = NameA == "Player";
-		const bool bBIsPlayer = NameB == "Player";
-
-		if (bAIsPlayer != bBIsPlayer)
-		{
-			return bAIsPlayer;
-		}
-
-		return NameA.LexicalLess(NameB);
-	});
-	
-	TypedNode->GetGraph()->NotifyGraphChanged();
 }

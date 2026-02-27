@@ -1,8 +1,10 @@
 ﻿#include "SDialogueLinkNode.h"
 
+#include "FCharacterDirectory.h"
 #include "Graphs/UDialogueGraph.h"
 #include "Nodes/Unreal/UDialogueLineNode.h"
 #include "Nodes/Unreal/UDialogueLinkNode.h"
+#include "Utils/FColors.h"
 #include "Utils/FDialogueGraphEditorStyle.h"
 #include "Utils/FSlateHelper.h"
 
@@ -12,24 +14,27 @@ void SDialogueLinkNode::Construct(const FArguments&, UDialogueLinkNode* InNode)
     UpdateGraphNode();
 }
 
-void SDialogueLinkNode::UpdateGraphNode()
+FSlateColor SDialogueLinkNode::GetHeaderColor() const
 {
-    SDialogueNode::UpdateGraphNode();
-    RefreshAvailableNodes();
+    return FColors::Link;
 }
 
 void SDialogueLinkNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 {
     Box->AddSlot()
     .AutoHeight()
-    .Padding(0, 0, 0, 4)
+    .Padding(4)
     [
         SNew(SComboButton)
         .OnGetMenuContent(this, &SDialogueLinkNode::GetLineNodesMenu)
         .ButtonContent()
         [
-            SNew(STextBlock)
-            .Text(this, &SDialogueLinkNode::GetSelectedNodeTitle)
+            SNew(SBox)
+            .Padding(FMargin(0.0f, 4.0f))
+            [
+                SNew(STextBlock)
+                .Text(this, &SDialogueLinkNode::GetSelectedNodeTitle)
+            ]
         ]
     ];
 
@@ -42,7 +47,7 @@ void SDialogueLinkNode::AddBody(const TSharedRef<SVerticalBox>& Box)
     .AutoHeight()
     .Padding(4)
     [
-        MakeCharacterDisplay(
+        FSlateHelper::MakeCharacterDisplay(
             FDialogueGraphEditorStyle::Get().GetBrush("Icons.Speaker"),
             TAttribute<FText>(this, &SDialogueLinkNode::GetSpeakerName)
         )
@@ -52,7 +57,7 @@ void SDialogueLinkNode::AddBody(const TSharedRef<SVerticalBox>& Box)
     .AutoHeight()
     .Padding(4)
     [
-        MakeCharacterDisplay(
+        FSlateHelper::MakeCharacterDisplay(
             FDialogueGraphEditorStyle::Get().GetBrush("Icons.Listener"),
             TAttribute<FText>(this, &SDialogueLinkNode::GetListenerName)
         )
@@ -61,20 +66,15 @@ void SDialogueLinkNode::AddBody(const TSharedRef<SVerticalBox>& Box)
     Box->AddSlot()
     .AutoHeight()
     [
-        MakeTextField(TAttribute<FText>(this, &SDialogueLinkNode::GetSelectedNodeText))
+        FSlateHelper::MakeTextField(TAttribute<FText>(this, &SDialogueLinkNode::GetSelectedNodeText))
     ];
-}
-
-FSlateColor SDialogueLinkNode::GetHeaderColor() const
-{
-    return FSlateColor(FLinearColor(0.8f, 0.0f, 0.0f));
 }
 
 TSharedRef<SWidget> SDialogueLinkNode::GetLineNodesMenu()
 {
     FMenuBuilder MenuBuilder(true, nullptr);
 
-    for (TWeakObjectPtr Node : AvailableNodes)
+    for (TWeakObjectPtr Node : TypedGraph->LineNodes)
     {
         if (!Node.IsValid())
         {
@@ -143,22 +143,4 @@ void SDialogueLinkNode::SelectNode(UDialogueLineNode* Node) const
     {
         Graph->NotifyGraphChanged();
     }
-}
-
-void SDialogueLinkNode::RefreshAvailableNodes()
-{
-    AvailableNodes.Empty();
-
-    for (UEdGraphNode* Node : GraphNode->GetGraph()->Nodes)
-    {
-        if (UDialogueLineNode* LineNode = Cast<UDialogueLineNode>(Node))
-        {
-            AvailableNodes.Add(LineNode);
-        }
-    }
-    
-    AvailableNodes.Sort([](const TWeakObjectPtr<UDialogueLineNode>& A, const TWeakObjectPtr<UDialogueLineNode>& B)
-    {
-        return A->GetTitle().ToString() < B->GetTitle().ToString();
-    });
 }

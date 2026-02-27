@@ -13,6 +13,7 @@ void FDialogueGraphEditorStyle::Initialize()
 
 	InitializeContentDirectory();
 	InitializeIcons();
+	InitializeBoxes();
 	FSlateStyleRegistry::RegisterSlateStyle(*StyleInstance);
 }
 
@@ -89,6 +90,17 @@ void FDialogueGraphEditorStyle::InitializeIcons()
 		new FSlateImageBrush(
 			StyleInstance->RootToContentDir(TEXT("Participant.png")),
 			FVector2D(24.0f, 24.0f)
+		)
+	);
+}
+
+void FDialogueGraphEditorStyle::InitializeBoxes()
+{
+	StyleInstance->Set("Node.Highlight",
+		new FSlateBoxBrush(
+			StyleInstance->RootToContentDir(TEXT("Highlight.png")),
+			FMargin(0.28125f),
+			FLinearColor(1.0f, 1.0f, 1.0f, 1.0f)
 		)
 	);
 }

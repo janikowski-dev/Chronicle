@@ -2,6 +2,7 @@
 
 #include "Editors/FDialogueNodeEditor.h"
 #include "Nodes/Unreal/UDialogueResponseNode.h"
+#include "Utils/FColors.h"
 #include "Utils/FDialogueGraphEditorStyle.h"
 #include "Utils/FSlateHelper.h"
 
@@ -13,7 +14,7 @@ void SDialogueResponseNode::Construct(const FArguments&, UDialogueResponseNode* 
 
 FSlateColor SDialogueResponseNode::GetHeaderColor() const
 {
-	return FSlateColor(FLinearColor::Blue);
+	return FColors::Response;
 }
 
 FReply SDialogueResponseNode::OnMouseButtonDoubleClick(const FGeometry&, const FPointerEvent&)
@@ -28,7 +29,7 @@ void SDialogueResponseNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 	.AutoHeight()
 	.Padding(4)
 	[
-		MakeCharacterDisplay(
+		FSlateHelper::MakeCharacterDisplay(
 			FDialogueGraphEditorStyle::Get().GetBrush("Icons.Speaker"),
 			FText::FromString("Player")
 		)
@@ -37,7 +38,7 @@ void SDialogueResponseNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 	Box->AddSlot()
 	.AutoHeight()
 	[
-		MakeTextField(
+		FSlateHelper::MakeTextField(
 			TAttribute<FText>(this, &SDialogueResponseNode::GetText),
 			FOnTextCommitted::CreateSP(this, &SDialogueResponseNode::SetText)
 		)

@@ -56,7 +56,7 @@ private:
 		const FConnectionParams& Params
 	) const;
 
-	TArray<FLineSegment> BuildOrthogonalWire(
+	TArray<FLineSegment, TInlineAllocator<3>> BuildOrthogonalWire(
 		const FVector2f& StartPoint,
 		const FVector2f& EndPoint,
 		const FVector2f& PinOffset,
@@ -72,4 +72,8 @@ private:
 
 	bool IsTargetNodeEnabled(const FConnectionParams& Params) const;
 	bool HasRules(const UEdGraphPin* Pin, const EOutputType Type) const;
+
+private:
+	const FSlateBrush* LinkBrush = nullptr;
+	const FSlateBrush* KeyBrush = nullptr;
 };

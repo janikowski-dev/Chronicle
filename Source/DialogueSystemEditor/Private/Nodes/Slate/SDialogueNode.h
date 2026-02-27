@@ -23,6 +23,7 @@ public:
 	virtual void MoveTo(const FVector2f& NewPosition, FNodeSet& NodeFilter, bool bMarkDirty = true) override;
 	virtual TSharedPtr<SGraphPin> CreatePinWidget(UEdGraphPin* Pin) const override;
 	virtual TSharedPtr<SGraphPin> GetHoveredPin(const FGeometry&, const FPointerEvent&) const override;
+	virtual const FSlateBrush* GetShadowBrush(bool bSelected) const override;
 	virtual void UpdateGraphNode() override;
 
 protected:

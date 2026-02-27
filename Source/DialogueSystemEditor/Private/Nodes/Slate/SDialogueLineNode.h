@@ -21,10 +21,13 @@ protected:
 private:
 	FText GetText() const;
 	void SetText(const FText& NewText, ETextCommit::Type) const;
+	
 	FText GetListenerName() const;
 	void SetListener(TSharedPtr<FGuid> Id, ESelectInfo::Type) const;
+	
 	FText GetSpeakerName() const;
 	void SetSpeaker(TSharedPtr<FGuid> Id, ESelectInfo::Type) const;
+	
 	void FixAssignedIds() const;
 	void OpenNodeEditor() const;
 };

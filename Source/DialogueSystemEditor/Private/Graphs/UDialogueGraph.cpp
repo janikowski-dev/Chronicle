@@ -1,5 +1,6 @@
 ﻿#include "UDialogueGraph.h"
 
+#include "FCharacterDirectory.h"
 #include "Nodes/Unreal/UDialogueLineNode.h"
 #include "Nodes/Unreal/UDialogueResponseNode.h"
 #include "Nodes/Unreal/UDialogueRootNode.h"
@@ -17,17 +18,61 @@ void UDialogueGraph::PostLoad()
 	Refresh();
 }
 
-void UDialogueGraph::Refresh() const
+void UDialogueGraph::Refresh()
 {
 	ApplyLayout();
-	ApplyLineIndexes();
-	ApplyResponseIndexes();
+	IndexLines();
+	IndexResponses();
+	CacheLines();
 }
+
+void UDialogueGraph::Serialize(FStructuredArchive::FRecord Record)
+{
+	TrySave(Record);
+	
+	Super::Serialize(Record);
+    
+	if (TryLoad(Record))
+	{
+		SortParticipants();
+	}
+}
+
+bool UDialogueGraph::HasParticipant(const TSharedPtr<FGuid>& Id) const
+{
+	return HasParticipantInternal(Id);
+}
+
+void UDialogueGraph::AddParticipant(const TSharedPtr<FGuid>& Id)
+{
+	Modify();
+	AddParticipantInternal(Id);
+	SortParticipants();
+
+	if (MarkPackageDirty())
+	{
+		NotifyGraphChanged();
+	}
+}
+
+void UDialogueGraph::RemoveParticipant(const TSharedPtr<FGuid>& Id)
+{
+	Modify();
+	RemoveParticipantInternal(Id);
+	SortParticipants();
+
+	if (MarkPackageDirty())
+	{
+		NotifyGraphChanged();
+	}
+}
+
+#pragma region Layout
 
 void UDialogueGraph::ApplyLayout() const
 {
 	constexpr float CellWidth  = 350.0f;
-	constexpr float CellHeight = 265.0f;
+	constexpr float CellHeight = 300.0f;
 	float CursorY = 0.0f;
 
 	TMap<UDialogueNode*, FDialogueLayoutNode*> LayoutMap;
@@ -41,11 +86,11 @@ void UDialogueGraph::ApplyLayout() const
 	}
 }
 
-void UDialogueGraph::ApplyLineIndexes() const
+void UDialogueGraph::IndexLines() const
 {
 	int32 NodeIndex = 0;
 	TSet<UDialogueNode*> Visited;
-	ApplyLineIndexes(GetRootNode(), NodeIndex, Visited);
+	IndexLines(GetRootNode(), NodeIndex, Visited);
 }
 
 UDialogueNode* UDialogueGraph::GetRootNode() const
@@ -155,7 +200,7 @@ void UDialogueGraph::ApplyLayout(
 	}
 }
 
-void UDialogueGraph::ApplyLineIndexes(
+void UDialogueGraph::IndexLines(
 	UDialogueNode* Node,
 	int32& NodeIndex,
 	TSet<UDialogueNode*>& Visited
@@ -184,13 +229,13 @@ void UDialogueGraph::ApplyLineIndexes(
 		{
 			if (UDialogueNode* Child = Cast<UDialogueNode>(Linked->GetOwningNode()))
 			{
-				ApplyLineIndexes(Child, NodeIndex, Visited);
+				IndexLines(Child, NodeIndex, Visited);
 			}
 		}
 	}
 }
 
-void UDialogueGraph::ApplyResponseIndexes() const
+void UDialogueGraph::IndexResponses() const
 {
 	for (UEdGraphNode* GraphNode : Nodes)
 	{
@@ -221,3 +266,105 @@ void UDialogueGraph::ApplyResponseIndexes() const
 		}
 	}
 }
+
+#pragma endregion
+
+#pragma region Participants
+
+bool UDialogueGraph::TryLoad(FStructuredArchive::FRecord Record)
+{
+	if (!Record.GetUnderlyingArchive().IsLoading())
+	{
+		return false;
+	}
+
+	FCharacterDirectory::Refresh();
+	SharedParticipantIds.Reset();
+	
+	for (const TSharedPtr<FGuid>& Id : FCharacterDirectory::GetAll().GetSharedIds())
+	{
+		if (ParticipantIds.Contains(*Id))
+		{
+			SharedParticipantIds.Add(Id);
+		}
+	}
+
+	return true;
+}
+
+bool UDialogueGraph::TrySave(FStructuredArchive::FRecord Record)
+{
+	if (!Record.GetUnderlyingArchive().IsSaving())
+	{
+		return false;
+	}
+
+	ParticipantIds.Reset();
+    
+	for (const TSharedPtr<FGuid>& Id : SharedParticipantIds)
+	{
+		if (Id)
+		{
+			ParticipantIds.Add(*Id);
+		}
+	}
+
+	return true;
+}
+
+bool UDialogueGraph::HasParticipantInternal(const TSharedPtr<FGuid>& Id) const
+{
+	return SharedParticipantIds.Contains(Id);
+}
+
+void UDialogueGraph::AddParticipantInternal(const TSharedPtr<FGuid>& Id)
+{
+	SharedParticipantIds.Add(Id);
+	ParticipantIds.Add(*Id);
+}
+
+void UDialogueGraph::RemoveParticipantInternal(const TSharedPtr<FGuid>& Id)
+{
+	SharedParticipantIds.Remove(Id);
+	ParticipantIds.Remove(*Id);
+}
+
+void UDialogueGraph::SortParticipants()
+{
+	SharedParticipantIds.Sort([](const TSharedPtr<FGuid>& A, const TSharedPtr<FGuid>& B)
+	{
+		const FName NameA = FCharacterDirectory::GetAll().GetName(*A);
+		const FName NameB = FCharacterDirectory::GetAll().GetName(*B);
+
+		const bool bAIsPlayer = NameA == "Player";
+		const bool bBIsPlayer = NameB == "Player";
+
+		if (bAIsPlayer != bBIsPlayer)
+		{
+			return bAIsPlayer;
+		}
+
+		return NameA.LexicalLess(NameB);
+	});
+}
+
+
+void UDialogueGraph::CacheLines()
+{
+	LineNodes.Empty();
+
+	for (UEdGraphNode* Node : Nodes)
+	{
+		if (UDialogueLineNode* LineNode = Cast<UDialogueLineNode>(Node))
+		{
+			LineNodes.Add(LineNode);
+		}
+	}
+    
+	LineNodes.Sort([](const TWeakObjectPtr<UDialogueLineNode>& A, const TWeakObjectPtr<UDialogueLineNode>& B)
+	{
+		return A->GetTitle().ToString() < B->GetTitle().ToString();
+	});
+}
+
+#pragma endregion

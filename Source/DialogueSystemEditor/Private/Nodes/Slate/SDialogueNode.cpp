@@ -10,6 +10,7 @@
 #include "Widgets/Layout/SWidgetSwitcher.h"
 #include "SGraphPanel.h"
 #include "Graphs/UDialogueGraph.h"
+#include "Utils/FDialogueGraphEditorStyle.h"
 
 template<typename TNodeType>
 void SDialogueNode<TNodeType>::MoveTo(const FVector2f& NewPosition, FNodeSet& NodeFilter, bool bMarkDirty)
@@ -26,6 +27,17 @@ template<typename TNodeType>
 TSharedPtr<SGraphPin> SDialogueNode<TNodeType>::GetHoveredPin(const FGeometry&, const FPointerEvent&) const
 {
 	return nullptr;
+}
+
+template <typename TNodeType>
+const FSlateBrush* SDialogueNode<TNodeType>::GetShadowBrush(bool bSelected) const
+{
+	if (!bSelected)
+	{
+		return SGraphNode::GetShadowBrush(bSelected);
+	}
+	
+	return FDialogueGraphEditorStyle::Get().GetBrush("Node.Highlight");
 }
 
 template<typename TNodeType>
@@ -91,10 +103,11 @@ void SDialogueNode<TNodeType>::AddHeader(const TSharedRef<SVerticalBox>& Box)
 		[
 			SNew(SBox)
 			.WidthOverride(225.0f)
-			.Padding(4)
+			.Padding(6)
 			[
 				SNew(STextBlock)
 				.Text(Title)
+				.Font(FCoreStyle::GetDefaultFontStyle("Bold", 12))
 			]
 		]
 
@@ -126,19 +139,23 @@ void SDialogueNode<TNodeType>::AddHeader(const TSharedRef<SVerticalBox>& Box)
 		+ SOverlay::Slot()
 		.HAlign(HAlign_Right)
 		[
-			SNew(SButton)
-			.ButtonStyle(FAppStyle::Get(), "HoverHintOnly")
-			.ContentPadding(FMargin(4))
-			.ClickMethod(EButtonClickMethod::MouseDown)
-			.OnClicked(this, &SDialogueNode::ToggleCollapse)
+			SNew(SBox)
+			.WidthOverride(30.0f)
 			[
-				SNew(SImage)
-				.Image_Lambda([this]
-				{
-					return TypedNode->bIsCollapsed
-						? FAppStyle::Get().GetBrush("Icons.ChevronRight")
-						: FAppStyle::Get().GetBrush("Icons.ChevronDown");
-				})
+				SNew(SButton)
+				.ButtonStyle(FAppStyle::Get(), "HoverHintOnly")
+				.ContentPadding(FMargin(4))
+				.ClickMethod(EButtonClickMethod::MouseDown)
+				.OnClicked(this, &SDialogueNode::ToggleCollapse)
+				[
+					SNew(SImage)
+					.Image_Lambda([this]
+					{
+						return TypedNode->bIsCollapsed
+							? FAppStyle::Get().GetBrush("Icons.ChevronRight")
+							: FAppStyle::Get().GetBrush("Icons.ChevronDown");
+					})
+				]
 			]
 		]
 	];

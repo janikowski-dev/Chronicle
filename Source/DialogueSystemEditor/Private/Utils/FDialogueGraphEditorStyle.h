@@ -14,6 +14,7 @@ private:
 	static bool TryInitializing();
 	static void InitializeContentDirectory();
 	static void InitializeIcons();
+	static void InitializeBoxes();
 	
 private:
 	static TSharedPtr<FSlateStyleSet> StyleInstance;

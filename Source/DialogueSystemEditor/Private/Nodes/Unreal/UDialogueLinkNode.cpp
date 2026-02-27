@@ -16,3 +16,13 @@ FText UDialogueLinkNode::GetTitle() const
 	
 	return FText::FromString("Empty Link");
 }
+
+UDialogueLineNode* UDialogueLinkNode::GetLinkedNode() const
+{
+	return LinkedNode;
+}
+
+void UDialogueLinkNode::SetLinkedNode(UDialogueLineNode* InNode)
+{
+	LinkedNode = InNode;
+}

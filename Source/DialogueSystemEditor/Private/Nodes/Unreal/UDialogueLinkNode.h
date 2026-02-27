@@ -15,8 +15,8 @@ public:
 	virtual void AllocateDefaultPins() override;
 	virtual FText GetTitle() const override;
 
-	UDialogueLineNode* GetLinkedNode() const { return LinkedNode; }
-	void SetLinkedNode(UDialogueLineNode* InNode) { LinkedNode = InNode; }
+	UDialogueLineNode* GetLinkedNode() const;
+	void SetLinkedNode(UDialogueLineNode* InNode);
 
 public:
 	UPROPERTY()

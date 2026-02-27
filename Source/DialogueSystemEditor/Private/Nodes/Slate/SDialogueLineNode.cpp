@@ -6,6 +6,7 @@
 #include "Graphs/UDialogueGraph.h"
 #include "Nodes/Unreal/UDialogueLineNode.h"
 #include "Nodes/Unreal/UDialogueRootNode.h"
+#include "Utils/FColors.h"
 #include "Utils/FDialogueGraphEditorStyle.h"
 #include "Utils/FSlateHelper.h"
 
@@ -17,7 +18,7 @@ void SDialogueLineNode::Construct(const FArguments&, UDialogueLineNode* InNode)
 
 FSlateColor SDialogueLineNode::GetHeaderColor() const
 {
-	return FSlateColor(FLinearColor::Red);
+	return FColors::Line;
 }
 
 void SDialogueLineNode::UpdateGraphNode()
@@ -38,7 +39,7 @@ void SDialogueLineNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 	.AutoHeight()
 	.Padding(4)
 	[
-		MakeCharacterSelector(
+		FSlateHelper::MakeCharacterSelector(
 			FDialogueGraphEditorStyle::Get().GetBrush("Icons.Speaker"),
 			TAttribute<FText>(this, &SDialogueLineNode::GetSpeakerName),
 			SComboBox<TSharedPtr<FGuid>>::FOnSelectionChanged::CreateSP(this, &SDialogueLineNode::SetSpeaker),
@@ -50,7 +51,7 @@ void SDialogueLineNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 	.AutoHeight()
 	.Padding(4)
 	[
-		MakeCharacterSelector(
+		FSlateHelper::MakeCharacterSelector(
 			FDialogueGraphEditorStyle::Get().GetBrush("Icons.Listener"),
 			TAttribute<FText>(this, &SDialogueLineNode::GetListenerName),
 			SComboBox<TSharedPtr<FGuid>>::FOnSelectionChanged::CreateSP(this, &SDialogueLineNode::SetListener),
@@ -61,7 +62,7 @@ void SDialogueLineNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 	Box->AddSlot()
 	.AutoHeight()
 	[
-		MakeTextField(
+		FSlateHelper::MakeTextField(
 			TAttribute<FText>(this, &SDialogueLineNode::GetText),
 			FOnTextCommitted::CreateSP(this, &SDialogueLineNode::SetText)
 		)
@@ -121,13 +122,6 @@ void SDialogueLineNode::FixAssignedIds() const
 		return Id && *Id == TypedNode->SpeakerId;
 	});
 	
-	if (!bContainsListener && !bContainsSpeaker && TypedGraph->SharedParticipantIds.Num() > 1)
-	{
-		TypedNode->ListenerId = *TypedGraph->SharedParticipantIds[0];
-		TypedNode->SpeakerId = *TypedGraph->SharedParticipantIds[1];
-		return;
-	}
-	
 	if (!bContainsListener)
 	{
 		TypedNode->ListenerId = FGuid();
@@ -136,6 +130,12 @@ void SDialogueLineNode::FixAssignedIds() const
 	if (!bContainsSpeaker)
 	{
 		TypedNode->SpeakerId = FGuid();
+	}
+
+	if (!bContainsListener && !bContainsSpeaker && TypedGraph->SharedParticipantIds.Num() > 1)
+	{
+		TypedNode->ListenerId = *TypedGraph->SharedParticipantIds[0];
+		TypedNode->SpeakerId = *TypedGraph->SharedParticipantIds[1];
 	}
 }
 
