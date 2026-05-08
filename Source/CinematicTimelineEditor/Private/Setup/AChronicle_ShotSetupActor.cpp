@@ -129,7 +129,7 @@ void AChronicle_ShotSetupActor::AddDebugMesh()
 void AChronicle_ShotSetupActor::AssignDebugMesh() const
 {
     const TSharedPtr<IPlugin> Plugin = IPluginManager::Get().FindPlugin(TEXT("Chronicle"));
-    const FString PackagePath = FString::Printf(TEXT("/%s/Gizmos/SM_Center.SM_Center"), *Plugin->GetName());
+    const FString PackagePath = FString::Printf(TEXT("/%s/Tools/Gizmos/SM_Center.SM_Center"), *Plugin->GetName());
     
     if (UStaticMesh* Mesh = LoadObject<UStaticMesh>(nullptr,PackagePath))
     {

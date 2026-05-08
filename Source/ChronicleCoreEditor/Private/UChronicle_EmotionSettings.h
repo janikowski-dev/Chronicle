@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Data/FChronicle_EmotionData.h"
+#include "FChronicle_EmotionData.h"
 #include "UChronicle_EmotionSettings.generated.h"
 
 UCLASS(Config=ChronicleCoreEditor, DefaultConfig, meta=(DisplayName="Emotions"))

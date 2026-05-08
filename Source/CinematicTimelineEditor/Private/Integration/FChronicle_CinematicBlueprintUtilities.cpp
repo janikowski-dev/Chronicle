@@ -331,6 +331,7 @@ FChronicle_SequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToRuntime
 	
 	return RuntimeInfo;
 }
+
 FSequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToInfo(
 	UMovieScene* MovieScene,
 	const UChronicle_CinematicData* CinematicData,
@@ -342,6 +343,11 @@ FSequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToInfo(
 
 	for (const FChronicle_DialogueNodeData& Node : SequenceData.Nodes)
 	{
+		if (Node.Type == EChronicle_DialogueNodeType::Response)
+		{
+			continue;
+		}
+		
 		FTrackInfo TrackInfo;
 		
 		const USoundBase* Sound = CinematicData->SoundsByLine[Node.Id].LoadSynchronous();
@@ -351,11 +357,11 @@ FSequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToInfo(
 
 		TrackInfo.Animation = CinematicData->AnimationsByLine[Node.Id];
 		TrackInfo.Sound = CinematicData->SoundsByLine[Node.Id];
-		TrackInfo.StartFrame = FrameCounter;
+		TrackInfo.Subtitle = FText::FromString(Node.Subtitle);
 		TrackInfo.EndFrame = FrameDuration + FrameCounter;
 		TrackInfo.ParticipantId = Node.SpeakerId;
 		TrackInfo.EmotionId = Node.EmotionId;
-		TrackInfo.Subtitle = FText::FromString(Node.Subtitle);
+		TrackInfo.StartFrame = FrameCounter;
 		TrackInfo.Id = Node.Id;
 
 		SequenceInfo.Tracks.Add(TrackInfo);
@@ -474,7 +480,7 @@ void FChronicle_CinematicBlueprintUtilities::PopulateAnimationTrack(
 			}
 
 			UChronicle_AnimationSection* Section = Cast<UChronicle_AnimationSection>(AnimationTrack->CreateNewSection());
-			Section->SetRange(TRange<FFrameNumber>(TrackInfo.StartFrame, TrackInfo.EndFrame));
+			Section->SetRange(TRange<FFrameNumber>(TrackInfo.StartFrame - 5, TrackInfo.EndFrame));
 			Section->AnimationData = TrackInfo.Animation;
 			AnimationTrack->AddSection(*Section);
 		}

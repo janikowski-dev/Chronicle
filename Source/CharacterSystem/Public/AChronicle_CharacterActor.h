@@ -11,5 +11,13 @@ class CHARACTERSYSTEM_API AChronicle_CharacterActor : public ACharacter
 	GENERATED_BODY()
 
 public:
-	void PlayAnimation(const FChronicle_AnimationData& Data);
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FChronicle_AnimationData IdleAnimationData;
+
+public:
+	AChronicle_CharacterActor();
+	void PlayAnimation(const FChronicle_AnimationData& Data) const;
+	
+private:
+	UAnimSequence* GetAnimation(const FChronicle_AnimationData& Data) const;
 };

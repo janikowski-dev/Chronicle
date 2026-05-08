@@ -32,7 +32,7 @@ void AChronicle_ParticipantPoint::AddDebugMesh()
 void AChronicle_ParticipantPoint::AssignDebugMesh() const
 {
 	const TSharedPtr<IPlugin> Plugin = IPluginManager::Get().FindPlugin(TEXT("Chronicle"));
-	const FString PackagePath = FString::Printf(TEXT("/%s/Gizmos/SM_Participant.SM_Participant"), *Plugin->GetName());
+	const FString PackagePath = FString::Printf(TEXT("/%s/Tools/Gizmos/SM_Participant.SM_Participant"), *Plugin->GetName());
     
 	if (UStaticMesh* Mesh = LoadObject<UStaticMesh>(nullptr,PackagePath))
 	{

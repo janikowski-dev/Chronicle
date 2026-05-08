@@ -20,10 +20,10 @@ struct CHRONICLECORE_API FChronicle_DialogueNodeData
 	FGuid EmotionId;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	FString Subtitle;
+	FString Text;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	FString Text;
+	FString Subtitle;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	FGuid SpeakerId;

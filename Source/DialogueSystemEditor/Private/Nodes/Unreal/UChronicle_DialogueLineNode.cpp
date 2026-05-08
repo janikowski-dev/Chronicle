@@ -16,11 +16,6 @@ FText UChronicle_DialogueLineNode::GetText() const
 	return Text;
 }
 
-FText UChronicle_DialogueLineNode::GetSubtitle() const
-{
-	return Text;
-}
-
 bool UChronicle_DialogueLineNode::QualifiesForInnerGraph() const
 {
 	for (const UEdGraphPin* Pin : Pins)

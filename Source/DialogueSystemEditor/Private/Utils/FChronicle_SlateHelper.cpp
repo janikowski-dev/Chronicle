@@ -29,22 +29,6 @@ TSharedRef<SWidget> FChronicle_SlateHelper::MakeTextField(
 	];
 }
 
-TSharedRef<SWidget> FChronicle_SlateHelper::MakeSingleLineTextField(
-	const TAttribute<FText>& Getter,
-	const FOnTextCommitted& Setter
-)
-{
-	return SNew(SBox)
-	.HeightOverride(40.0f)
-	.WidthOverride(225.0f)
-	.Padding(4)
-	[
-		SNew(SEditableTextBox)
-		.Text(Getter)
-		.OnTextCommitted(Setter)
-	];
-}
-
 TSharedRef<SWidget> FChronicle_SlateHelper::MakeTextField(
 	const TAttribute<FText>& Getter
 )

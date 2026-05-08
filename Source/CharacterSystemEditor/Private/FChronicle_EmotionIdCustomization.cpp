@@ -32,13 +32,13 @@ void FChronicle_EmotionIdCustomization::CustomizeHeader(
 
     auto GetCurrentLabel = [this, IdHandle]() -> FText
     {
-        FString GuidStr;
+        FString GuidString;
         
-        if (IdHandle.IsValid() && IdHandle->GetValueAsFormattedString(GuidStr) == FPropertyAccess::Success)
+        if (IdHandle.IsValid() && IdHandle->GetValueAsFormattedString(GuidString) == FPropertyAccess::Success)
         {
             FGuid CurrentGuid;
             
-            if (FGuid::Parse(GuidStr, CurrentGuid) && CurrentGuid.IsValid())
+            if (FGuid::Parse(GuidString, CurrentGuid) && CurrentGuid.IsValid())
             {
                 const FString Name = FChronicle_EmotionDirectory::GetAll().GetName(CurrentGuid);
                 

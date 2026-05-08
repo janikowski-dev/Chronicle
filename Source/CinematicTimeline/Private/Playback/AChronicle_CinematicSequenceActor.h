@@ -26,6 +26,9 @@ public:
 	void UpdateCamerasPreview(UInstancedStaticMeshComponent* MeshComponent);
 	
 	UFUNCTION(BlueprintCallable, Category="Chronicle|Runtime")
+	static void PlayDefaultIdleAnimations(ALevelSequenceActor* LevelSequenceActor);
+	
+	UFUNCTION(BlueprintCallable, Category="Chronicle|Runtime")
 	static void OffsetSpawnableTransforms(
 		ALevelSequenceActor* LevelSequenceActor,
 		const FVector& LocationOffset,

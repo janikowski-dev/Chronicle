@@ -1,5 +1,6 @@
 ﻿#include "AChronicle_CinematicSequenceActor.h"
 
+#include "AChronicle_CharacterActor.h"
 #include "CineCameraActor.h"
 #include "LevelSequencePlayer.h"
 #include "Components/InstancedStaticMeshComponent.h"
@@ -40,6 +41,48 @@ void AChronicle_CinematicSequenceActor::UpdateCamerasPreview(UInstancedStaticMes
     }
 #endif
 }
+void AChronicle_CinematicSequenceActor::PlayDefaultIdleAnimations(ALevelSequenceActor* LevelSequenceActor)
+{
+    const ULevelSequence* LevelSequence = Cast<ULevelSequence>(LevelSequenceActor->GetSequence());
+
+    if (!LevelSequence)
+    {
+        return;
+    }
+
+    UMovieScene* MovieScene = LevelSequence->GetMovieScene();
+
+    if (!MovieScene)
+    {
+        return;
+    }
+
+    ULevelSequencePlayer* Player = LevelSequenceActor->GetSequencePlayer();
+
+    if (!Player)
+    {
+        return;
+    }
+
+    const int32 SpawnableCount = MovieScene->GetSpawnableCount();
+
+    for (int i = 0; i < SpawnableCount; i++)
+    {
+        TArray<UObject*> BoundObjects = Player->GetBoundObjects(FMovieSceneObjectBindingID(MovieScene->GetSpawnable(i).GetGuid()));
+
+        for (UObject* BoundObject : BoundObjects)
+        {
+            AChronicle_CharacterActor* Actor = Cast<AChronicle_CharacterActor>(BoundObject);
+
+            if (!Actor)
+            {
+                continue;
+            }
+
+            Actor->PlayAnimation(Actor->IdleAnimationData);
+        }
+    }
+}
 
 void AChronicle_CinematicSequenceActor::OffsetSpawnableTransforms(
     ALevelSequenceActor* LevelSequenceActor,
@@ -67,8 +110,7 @@ void AChronicle_CinematicSequenceActor::OffsetSpawnableTransforms(
 
     for (int i = 0; i < MovieScene->GetSpawnableCount(); i++)
     {
-        const FMovieSceneSpawnable& Spawnable = MovieScene->GetSpawnable(i);
-        TArray<UObject*> BoundObjects = Player->GetBoundObjects(FMovieSceneObjectBindingID(Spawnable.GetGuid()));
+        TArray<UObject*> BoundObjects = Player->GetBoundObjects(FMovieSceneObjectBindingID(MovieScene->GetSpawnable(i).GetGuid()));
 
         for (UObject* BoundObject : BoundObjects)
         {

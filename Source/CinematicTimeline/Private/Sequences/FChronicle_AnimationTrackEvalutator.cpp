@@ -19,12 +19,5 @@ void FChronicle_AnimationTrackEvaluator::Evaluate(
 	FMovieSceneExecutionTokens& ExecutionTokens
 ) const
 {
-	const FFrameNumber SectionStartFrame = Context.GetFrameNumberRange().GetLowerBoundValue();
-
-	const FFrameNumber CurrentFrame = Context.GetTime().FrameNumber;
-
-	if (CurrentFrame == SectionStartFrame)
-	{
-		ExecutionTokens.Add(FChronicle_AnimationExecutionToken(AnimationData));
-	}
+	ExecutionTokens.Add(FChronicle_AnimationExecutionToken(AnimationData));
 }

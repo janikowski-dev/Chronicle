@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Data/FChronicle_EmotionData.h"
+#include "FChronicle_EmotionData.h"
 
 class CHRONICLECOREEDITOR_API FChronicle_EmotionSet
 {

@@ -15,7 +15,6 @@ public:
 	
 	virtual FText GetTitle() const;
 	virtual FText GetText() const;
-	virtual FText GetSubtitle() const;
 	virtual bool QualifiesForInnerGraph() const;
 	
 	UChronicle_RuleGraph* GetOrCreateInnerGraph();

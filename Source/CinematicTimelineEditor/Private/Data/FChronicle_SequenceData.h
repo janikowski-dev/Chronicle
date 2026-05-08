@@ -13,6 +13,9 @@ struct CINEMATICTIMELINEEDITOR_API FChronicle_SequenceData
 	FGuid Id;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TArray<FChronicle_DialogueNodeData> AudibleNodes;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<FChronicle_DialogueNodeData> Nodes;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

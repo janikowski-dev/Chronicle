@@ -287,6 +287,19 @@ void FChronicle_CinematicExporter::PopulateOutput(const UChronicle_DialogueData*
     {
         Sequence.bIsEntrySequence = Sequence.Nodes.Num() > 0 && FirstRootChildId == Sequence.Nodes[0].Id;
     }
+    
+    for (FChronicle_SequenceData& Sequence : Output->SequencesData)
+    {
+        for (const FChronicle_DialogueNodeData& Node : Sequence.Nodes)
+        {
+            if (Node.Type == EChronicle_DialogueNodeType::Response)
+            {
+                continue;
+            }
+
+            Sequence.AudibleNodes.Add(Node);
+        }
+    }
 }
 
 FSavePackageArgs FChronicle_CinematicExporter::GetSaveArgs()

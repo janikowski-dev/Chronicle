@@ -20,11 +20,6 @@ FText UChronicle_DialogueNode::GetText() const
 	return FText::GetEmpty();
 }
 
-FText UChronicle_DialogueNode::GetSubtitle() const
-{
-	return FText::GetEmpty();
-}
-
 bool UChronicle_DialogueNode::QualifiesForInnerGraph() const
 {
 	return false;

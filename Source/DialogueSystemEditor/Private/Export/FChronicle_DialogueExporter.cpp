@@ -116,9 +116,9 @@ void FChronicle_DialogueExporter::ReadNodeData(UChronicle_DialogueData* Data, co
 
 void FChronicle_DialogueExporter::ReadSharedData(const UChronicle_DialogueNode* Node, FChronicle_DialogueNodeData& NodeData)
 {
-    NodeData.Id = Node->Id;
-    NodeData.EmotionId = Node->EmotionId;
     NodeData.Text = Node->GetText().ToString();
+    NodeData.EmotionId = Node->EmotionId;
+    NodeData.Id = Node->Id;
 }
 
 void FChronicle_DialogueExporter::ReadType(const UChronicle_DialogueNode* Node, FChronicle_DialogueNodeData& NodeData)
@@ -146,15 +146,13 @@ void FChronicle_DialogueExporter::ReadRoles(UChronicle_DialogueNode* Node, FChro
     if (const UChronicle_DialogueLineNode* LineNode = Cast<UChronicle_DialogueLineNode>(Node))
     {
         const FName SpeakerName = FChronicle_CharacterDirectory::GetAll().GetName(LineNode->SpeakerId);
-        NodeData.Subtitle = SpeakerName.ToString() + TEXT(": ") + Node->GetSubtitle().ToString();
+        NodeData.Subtitle = SpeakerName.ToString() + TEXT(": ") + Node->GetText().ToString();
         NodeData.ListenerId = LineNode->ListenerId;
         NodeData.SpeakerId = LineNode->SpeakerId;
     }
     
     if (const UChronicle_DialogueResponseNode* ResponseNode = Cast<UChronicle_DialogueResponseNode>(Node))
     {
-        const FName SpeakerName = FChronicle_CharacterDirectory::GetAll().GetName(ResponseNode->SpeakerId);
-        NodeData.Subtitle = SpeakerName.ToString() + TEXT(": ") + Node->GetSubtitle().ToString();
         NodeData.SpeakerId = ResponseNode->SpeakerId;
     }
 }
