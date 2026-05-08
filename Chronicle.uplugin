@@ -26,6 +26,11 @@
 			"LoadingPhase": "PreDefault"
 		},
         {
+            "Name": "SubtitleSystem",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
             "Name": "DialogueSystemEditor",
             "Type": "Editor",
             "LoadingPhase": "Default"

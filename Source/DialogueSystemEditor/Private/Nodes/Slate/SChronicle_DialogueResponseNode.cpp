@@ -63,8 +63,8 @@ void SChronicle_DialogueResponseNode::AddBody(const TSharedRef<SVerticalBox>& Bo
 	.AutoHeight()
 	[
 		FChronicle_SlateHelper::MakeSingleLineTextField(
-			TAttribute<FText>(this, &SChronicle_DialogueResponseNode::GetSubtitle),
-			FOnTextCommitted::CreateSP(this, &SChronicle_DialogueResponseNode::SetSubtitle)
+			TAttribute<FText>(this, &SChronicle_DialogueResponseNode::GetText),
+			FOnTextCommitted::CreateSP(this, &SChronicle_DialogueResponseNode::SetText)
 		)
 	];
 	
@@ -72,8 +72,8 @@ void SChronicle_DialogueResponseNode::AddBody(const TSharedRef<SVerticalBox>& Bo
 	.AutoHeight()
 	[
 		FChronicle_SlateHelper::MakeTextField(
-			TAttribute<FText>(this, &SChronicle_DialogueResponseNode::GetText),
-			FOnTextCommitted::CreateSP(this, &SChronicle_DialogueResponseNode::SetText)
+			TAttribute<FText>(this, &SChronicle_DialogueResponseNode::GetSubtitle),
+			FOnTextCommitted::CreateSP(this, &SChronicle_DialogueResponseNode::SetSubtitle)
 		)
 	];
 

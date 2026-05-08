@@ -66,6 +66,8 @@ UChronicle_DialogueData* FChronicle_DialogueExporter::ConvertToTemporaryData(con
 
 void FChronicle_DialogueExporter::ReadData(const UChronicle_DialogueAsset* Asset, UChronicle_DialogueData* Data)
 {
+    FChronicle_CharacterDirectory::Refresh();
+    
     for (UEdGraphNode* GraphNode : Asset->Graph->Nodes)
     {
         UChronicle_DialogueNode* Node = Cast<UChronicle_DialogueNode>(GraphNode);
@@ -143,7 +145,7 @@ void FChronicle_DialogueExporter::ReadRoles(UChronicle_DialogueNode* Node, FChro
 {
     if (const UChronicle_DialogueLineNode* LineNode = Cast<UChronicle_DialogueLineNode>(Node))
     {
-        const FName SpeakerName = FChronicle_CharacterDirectory::GetAll().GetName(NodeData.SpeakerId);
+        const FName SpeakerName = FChronicle_CharacterDirectory::GetAll().GetName(LineNode->SpeakerId);
         NodeData.Subtitle = SpeakerName.ToString() + TEXT(": ") + Node->GetSubtitle().ToString();
         NodeData.ListenerId = LineNode->ListenerId;
         NodeData.SpeakerId = LineNode->SpeakerId;
@@ -151,7 +153,7 @@ void FChronicle_DialogueExporter::ReadRoles(UChronicle_DialogueNode* Node, FChro
     
     if (const UChronicle_DialogueResponseNode* ResponseNode = Cast<UChronicle_DialogueResponseNode>(Node))
     {
-        const FName SpeakerName = FChronicle_CharacterDirectory::GetAll().GetName(NodeData.SpeakerId);
+        const FName SpeakerName = FChronicle_CharacterDirectory::GetAll().GetName(ResponseNode->SpeakerId);
         NodeData.Subtitle = SpeakerName.ToString() + TEXT(": ") + Node->GetSubtitle().ToString();
         NodeData.SpeakerId = ResponseNode->SpeakerId;
     }

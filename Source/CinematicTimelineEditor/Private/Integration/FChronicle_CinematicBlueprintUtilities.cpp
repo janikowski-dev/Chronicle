@@ -16,20 +16,8 @@
 #include "LevelSequence.h"
 #include "Sequences/UChronicle_AnimationSection.h"
 #include "Sequences/UChronicle_AnimationTrack.h"
-
-// Since we run this method each time before calling InitSequence(), we could technically extract AnimationsByLine from CinematicData.
-// But it's implemented this way, so it's open for potential randomization changes in the editors.
-void FChronicle_CinematicBlueprintUtilities::RandomizeAnimations(UChronicle_CinematicData* CinematicData)
-{
-	FChronicle_CharacterDirectory::Refresh();
-
-	for (TSharedPtr SharedId : FChronicle_CharacterDirectory::GetAll().GetSharedIds())
-	for (FChronicle_SequenceData SequencesData : CinematicData->SequencesData)
-	for (FChronicle_DialogueNodeData Node : SequencesData.Nodes)
-	{
-		RandomizeAnimation(CinematicData, Node, SharedId);
-	}
-}
+#include "Sequences/UChronicle_SubtitleSection.h"
+#include "Sequences/UChronicle_SubtitleTrack.h"
 
 FChronicle_SequenceInfo FChronicle_CinematicBlueprintUtilities::InitSequence(
 	ULevelSequence* LevelSequence,
@@ -46,12 +34,27 @@ FChronicle_SequenceInfo FChronicle_CinematicBlueprintUtilities::InitSequence(
 		PopulateCameraCutTrack(MovieScene, Info);
 		PopulateAudioTrack(MovieScene, Info);
 		PopulateAnimationTrack(MovieScene, Info);
+		PopulateSubtitleTrack(MovieScene, Info);
 		ApplyInfo(MovieScene, Info);
 		ApplyChanges(LevelSequence, CinematicData, SequenceData);
 		return ConvertToRuntimeInfo(LevelSequence, Info, CinematicData, SequenceData);
 	}
 
 	return {};
+}
+
+// Since we run this method each time before calling InitSequence(), we could technically extract AnimationsByLine from CinematicData.
+// But it's implemented this way, so it's open for potential randomization changes in the editors.
+void FChronicle_CinematicBlueprintUtilities::RandomizeAnimations(UChronicle_CinematicData* CinematicData)
+{
+	FChronicle_CharacterDirectory::Refresh();
+
+	for (TSharedPtr SharedId : FChronicle_CharacterDirectory::GetAll().GetSharedIds())
+	for (FChronicle_SequenceData SequencesData : CinematicData->SequencesData)
+	for (FChronicle_DialogueNodeData Node : SequencesData.Nodes)
+	{
+		RandomizeAnimation(CinematicData, Node, SharedId);
+	}
 }
 
 void FChronicle_CinematicBlueprintUtilities::RandomizeAnimation(
@@ -236,6 +239,7 @@ FChronicle_SequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToRuntime
 	}
 
 	RuntimeInfo.Sequence = TSoftObjectPtr<ULevelSequence>(FSoftObjectPath(LevelSequence));
+	RuntimeInfo.Text = FText::FromString(SequenceData.Nodes[0].Text);
 	RuntimeInfo.bIsEntrySequence = SequenceData.bIsEntrySequence;
 	RuntimeInfo.Id = SequenceInfo.Id;
 
@@ -351,6 +355,7 @@ FSequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToInfo(
 		TrackInfo.EndFrame = FrameDuration + FrameCounter;
 		TrackInfo.ParticipantId = Node.SpeakerId;
 		TrackInfo.EmotionId = Node.EmotionId;
+		TrackInfo.Subtitle = FText::FromString(Node.Subtitle);
 		TrackInfo.Id = Node.Id;
 
 		SequenceInfo.Tracks.Add(TrackInfo);
@@ -454,9 +459,9 @@ void FChronicle_CinematicBlueprintUtilities::PopulateAnimationTrack(
 		const FGuid& OwnerId = SequenceInfo.AnimationOwnerIds[I];
 		const FGuid* CharacterGuid = SequenceInfo.ModelIdByParticipantIds.Find(OwnerId);
 
-		UChronicle_AnimationTrack* Track = MovieScene->AddTrack<UChronicle_AnimationTrack>(*CharacterGuid);
+		UChronicle_AnimationTrack* AnimationTrack = MovieScene->AddTrack<UChronicle_AnimationTrack>(*CharacterGuid);
 
-		if (UMovieSceneNameableTrack* Nameable = Cast<UMovieSceneNameableTrack>(Track))
+		if (UMovieSceneNameableTrack* Nameable = Cast<UMovieSceneNameableTrack>(AnimationTrack))
 		{
 			Nameable->SetDisplayName(FText::FromString(SequenceInfo.AnimationTrackNames[I]));
 		}
@@ -468,11 +473,34 @@ void FChronicle_CinematicBlueprintUtilities::PopulateAnimationTrack(
 				continue;
 			}
 
-			UChronicle_AnimationSection* Section = Cast<UChronicle_AnimationSection>(Track->CreateNewSection());
+			UChronicle_AnimationSection* Section = Cast<UChronicle_AnimationSection>(AnimationTrack->CreateNewSection());
 			Section->SetRange(TRange<FFrameNumber>(TrackInfo.StartFrame, TrackInfo.EndFrame));
 			Section->AnimationData = TrackInfo.Animation;
-			Track->AddSection(*Section);
+			AnimationTrack->AddSection(*Section);
 		}
+	}
+}
+
+void FChronicle_CinematicBlueprintUtilities::PopulateSubtitleTrack(
+	UMovieScene* MovieScene,
+	const FSequenceInfo& SequenceInfo
+)
+{
+	UChronicle_SubtitleTrack* SubtitleTrack = MovieScene->AddTrack<UChronicle_SubtitleTrack>();
+	
+	if (UMovieSceneNameableTrack* Nameable = Cast<UMovieSceneNameableTrack>(SubtitleTrack))
+	{
+		Nameable->SetDisplayName(FText::FromString("Subtitle Track"));
+	}
+	
+	SubtitleTrack->SetSortingOrder(2);
+	
+	for (FTrackInfo TrackInfo : SequenceInfo.Tracks)
+	{
+		UChronicle_SubtitleSection* Section = Cast<UChronicle_SubtitleSection>(SubtitleTrack->CreateNewSection());
+		Section->SetRange(TRange<FFrameNumber>(TrackInfo.StartFrame, TrackInfo.EndFrame));
+		Section->Subtitle = TrackInfo.Subtitle;
+		SubtitleTrack->AddSection(*Section);
 	}
 }
 

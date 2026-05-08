@@ -13,6 +13,7 @@ struct CINEMATICTIMELINEEDITOR_API FTrackInfo
 	FFrameNumber EndFrame;
 	FGuid ParticipantId;
 	FGuid EmotionId;
+	FText Subtitle;
 	FGuid Id;
 };
 
@@ -83,6 +84,11 @@ private:
 	);
 	
 	static void PopulateAnimationTrack(
+		UMovieScene* MovieScene,
+		const FSequenceInfo& SequenceInfo
+	);
+	
+	static void PopulateSubtitleTrack(
 		UMovieScene* MovieScene,
 		const FSequenceInfo& SequenceInfo
 	);

@@ -40,7 +40,7 @@ bool FChronicle_EditorStyle::TryInitializing()
 		return false;
 	}
 
-	StyleInstance = MakeShared<FSlateStyleSet>("FDialogueGraphEditorStyle");
+	StyleInstance = MakeShared<FSlateStyleSet>("ChronicleEditorStyle");
 	return true;
 }
 

@@ -1,9 +1,47 @@
-﻿#include "UChronicle_PlaybackFunctionLibrary.h"
+﻿#include "AChronicle_CinematicSequenceActor.h"
 
 #include "CineCameraActor.h"
 #include "LevelSequencePlayer.h"
+#include "Components/InstancedStaticMeshComponent.h"
 
-void UChronicle_PlaybackFunctionLibrary::OffsetSpawnableTransforms(
+void AChronicle_CinematicSequenceActor::UpdateParticipantsPreview(UInstancedStaticMeshComponent* MeshComponent)
+{
+#if WITH_EDITORONLY_DATA
+    if (!MeshComponent)
+    {
+        return;
+    }
+    
+    MeshComponent->ClearInstances();
+
+    for (const FTransform& Transform : ParticipantTransforms)
+    {
+        MeshComponent->AddInstance(Transform, false);
+    }
+#endif
+}
+
+void AChronicle_CinematicSequenceActor::UpdateCamerasPreview(UInstancedStaticMeshComponent* MeshComponent)
+{
+#if WITH_EDITORONLY_DATA
+    if (!MeshComponent)
+    {
+        return;
+    }
+    
+    MeshComponent->ClearInstances();
+
+    const FQuat RotationDelta = FQuat(FVector::UpVector, FMath::DegreesToRadians(90.0f));
+
+    for (FTransform Transform : CameraTransforms)
+    {
+        Transform.SetRotation(RotationDelta * Transform.GetRotation());
+        MeshComponent->AddInstance(Transform, false);
+    }
+#endif
+}
+
+void AChronicle_CinematicSequenceActor::OffsetSpawnableTransforms(
     ALevelSequenceActor* LevelSequenceActor,
     const FVector& LocationOffset,
     const FRotator& RotationOffset
@@ -42,7 +80,7 @@ void UChronicle_PlaybackFunctionLibrary::OffsetSpawnableTransforms(
     }
 }
 
-void UChronicle_PlaybackFunctionLibrary::OffsetResponseCamera(
+void AChronicle_CinematicSequenceActor::OffsetResponseCamera(
     const ALevelSequenceActor* LevelSequenceActor,
     const FTransform& ResponseCameraTransform,
     const FVector& LocationOffset,
@@ -81,7 +119,7 @@ void UChronicle_PlaybackFunctionLibrary::OffsetResponseCamera(
     }
 }
 
-void UChronicle_PlaybackFunctionLibrary::SetPlaybackPosition(
+void AChronicle_CinematicSequenceActor::SetPlaybackPosition(
     ALevelSequenceActor* LevelSequenceActor,
     const FFrameNumber StartFrame
 )
