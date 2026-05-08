@@ -1,37 +1,30 @@
 ﻿#pragma once
 
-#include "FChronicle_AnimationExecutionToken.h"
-#include "Channels/MovieSceneObjectPathChannel.h"
+#include "FChronicle_AnimationData.h"
+#include "UChronicle_AnimationSection.h"
 #include "Evaluation/MovieSceneEvalTemplate.h"
 #include "FChronicle_AnimationTrackEvaluator.generated.h"
 
 USTRUCT()
-struct FChronicle_AnimationTrackEvaluator : public FMovieSceneEvalTemplate
+struct CINEMATICTIMELINE_API FChronicle_AnimationTrackEvaluator : public FMovieSceneEvalTemplate
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	UPROPERTY()
-	FMovieSceneObjectPathChannel AnimationChannel;
+public:
+    UPROPERTY()
+    FChronicle_AnimationData AnimationData;
 
-	virtual UScriptStruct& GetScriptStructImpl() const override
-	{
-		return *StaticStruct();
-	}
+public:
+    FChronicle_AnimationTrackEvaluator() = default;
+    explicit FChronicle_AnimationTrackEvaluator(const UChronicle_AnimationSection& InSection);
 
-	virtual void Evaluate(
-		const FMovieSceneEvaluationOperand& Operand,
-		const FMovieSceneContext& Context,
-		const FPersistentEvaluationData& PersistentData,
-		FMovieSceneExecutionTokens& ExecutionTokens
-	) const override
-	{
-		UObject* Value;
-		
-		if (!AnimationChannel.Evaluate(Context.GetTime(), Value))
-		{
-			return;
-		}
+private:
+    virtual UScriptStruct& GetScriptStructImpl() const override;
 
-		ExecutionTokens.Add(FChronicle_AnimationExecutionToken(Cast<UAnimSequence>(Value)));
-	}
+    virtual void Evaluate(
+        const FMovieSceneEvaluationOperand& Operand,
+        const FMovieSceneContext& Context,
+        const FPersistentEvaluationData& PersistentData,
+        FMovieSceneExecutionTokens& ExecutionTokens
+    ) const override;
 };

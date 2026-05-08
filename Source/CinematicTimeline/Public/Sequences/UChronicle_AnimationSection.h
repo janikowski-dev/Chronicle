@@ -1,15 +1,18 @@
 ﻿#pragma once
 
+#include "FChronicle_AnimationData.h"
 #include "MovieSceneSection.h"
-#include "Channels/MovieSceneObjectPathChannel.h"
 #include "UChronicle_AnimationSection.generated.h"
 
 UCLASS()
-class UChronicle_AnimationSection : public UMovieSceneSection
+class CINEMATICTIMELINE_API UChronicle_AnimationSection : public UMovieSceneSection
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+
 public:
-	UPROPERTY()
-	FMovieSceneObjectPathChannel AnimationChannel;
+    UPROPERTY(EditAnywhere)
+    FChronicle_AnimationData AnimationData;
+
+public:
+    UChronicle_AnimationSection();
 };

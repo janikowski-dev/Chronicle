@@ -1,6 +1,7 @@
 ﻿#pragma once
-#include "FChronicle_EmotionId.h"
 
+#include "FChronicle_AnimationData.h"
+#include "FChronicle_EmotionId.h"
 #include "FChronicle_EmotionAnimationEntry.generated.h"
 
 USTRUCT()
@@ -12,5 +13,5 @@ struct FChronicle_EmotionAnimationEntry
 	FChronicle_EmotionId EmotionId;
 
 	UPROPERTY(EditAnywhere)
-	TArray<TObjectPtr<UAnimSequence>> Sequences;
+	TArray<FChronicle_AnimationData> Sequences;
 };

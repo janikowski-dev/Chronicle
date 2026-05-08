@@ -1,7 +1,9 @@
 ﻿#include "Sequences/UChronicle_AnimationTrack.h"
 
-#include "MovieSceneSection.h"
-#include "Sequences/UChronicle_AnimationSection.h"
+FMovieSceneEvalTemplatePtr UChronicle_AnimationTrack::CreateTemplateForSection(const UMovieSceneSection& InSection) const
+{
+	return FChronicle_AnimationTrackEvaluator(*CastChecked<UChronicle_AnimationSection>(&InSection));
+}
 
 UMovieSceneSection* UChronicle_AnimationTrack::CreateNewSection()
 {
@@ -11,21 +13,6 @@ UMovieSceneSection* UChronicle_AnimationTrack::CreateNewSection()
 void UChronicle_AnimationTrack::AddSection(UMovieSceneSection& Section)
 {
 	Sections.Add(&Section);
-}
-
-bool UChronicle_AnimationTrack::SupportsType(TSubclassOf<UMovieSceneSection> SectionClass) const
-{
-	return SectionClass == UChronicle_AnimationSection::StaticClass();
-}
-
-bool UChronicle_AnimationTrack::HasSection(const UMovieSceneSection& Section) const
-{
-	return Sections.Contains(&Section);
-}
-
-bool UChronicle_AnimationTrack::IsEmpty() const
-{
-	return Sections.IsEmpty();
 }
 
 void UChronicle_AnimationTrack::RemoveSection(UMovieSceneSection& Section)
@@ -38,7 +25,22 @@ void UChronicle_AnimationTrack::RemoveSectionAt(int32 SectionIndex)
 	Sections.RemoveAt(SectionIndex);
 }
 
+bool UChronicle_AnimationTrack::HasSection(const UMovieSceneSection& Section) const
+{
+	return Sections.Contains(&Section);
+}
+
+bool UChronicle_AnimationTrack::IsEmpty() const
+{
+	return Sections.IsEmpty();
+}
+
+bool UChronicle_AnimationTrack::SupportsType(TSubclassOf<UMovieSceneSection> SectionClass) const
+{
+	return SectionClass == UChronicle_AnimationSection::StaticClass();
+}
+
 const TArray<UMovieSceneSection*>& UChronicle_AnimationTrack::GetAllSections() const
 {
-	return Sections;
+	return reinterpret_cast<const TArray<UMovieSceneSection*>&>(Sections);
 }

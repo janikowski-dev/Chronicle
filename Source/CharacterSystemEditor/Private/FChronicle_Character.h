@@ -22,5 +22,5 @@ struct FChronicle_Character
 	TArray<FChronicle_EmotionAnimationEntry> AnimationEntries;
 
 	UPROPERTY(EditAnywhere)
-	TArray<TObjectPtr<UAnimSequence>> FallbackAnimations;
+	TArray<FChronicle_AnimationData> FallbackAnimations;
 };

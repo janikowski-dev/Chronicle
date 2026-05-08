@@ -7,11 +7,12 @@
 
 struct CINEMATICTIMELINEEDITOR_API FTrackInfo
 {
+	FChronicle_AnimationData Animation;
 	TSoftObjectPtr<USoundBase> Sound;
-	UAnimSequence* Animation;
 	FFrameNumber StartFrame;
 	FFrameNumber EndFrame;
 	FGuid ParticipantId;
+	FGuid EmotionId;
 	FGuid Id;
 };
 
@@ -20,6 +21,8 @@ struct CINEMATICTIMELINEEDITOR_API FSequenceInfo
 	TMap<FGuid, FTransform> TransformByParticipantIds;
 	TMap<FGuid, FGuid> CameraIdByParticipantIds;
 	TMap<FGuid, FGuid> ModelIdByParticipantIds;
+	TArray<FString> AnimationTrackNames;
+	TArray<FGuid> AnimationOwnerIds;
 	FFrameNumber TotalFrameCount;
 	TArray<FTrackInfo> Tracks;
 	FGuid Id;
@@ -28,6 +31,8 @@ struct CINEMATICTIMELINEEDITOR_API FSequenceInfo
 class CINEMATICTIMELINEEDITOR_API FChronicle_CinematicBlueprintUtilities
 {
 public:
+	static void RandomizeAnimations(UChronicle_CinematicData* CinematicData);
+	
 	static UBlueprint* CreateBlueprintFromParent(
 		UClass* ParentClass,
 		const FString& PackagePath,
@@ -37,7 +42,7 @@ public:
 		const TArray<FTransform>& CameraTransforms,
 		const TArray<FTransform>& ParticipantTransforms
 	);
-
+	
 	static FChronicle_SequenceInfo InitSequence(
 		ULevelSequence* LevelSequence,
 		UChronicle_CinematicData* CinematicData,
@@ -45,6 +50,12 @@ public:
 	);
 
 private:
+	static void RandomizeAnimation(
+		UChronicle_CinematicData* CinematicData,
+		const FChronicle_DialogueNodeData& Node,
+		const TSharedPtr<FGuid>& ParticipantId
+	);
+	
 	static bool TryGetMovieScene(const ULevelSequence* LevelSequence, UMovieScene*& MovieScene);
 	static void ApplyInfo(UMovieScene* MovieScene, const FSequenceInfo& SequenceInfo);
 

@@ -8,5 +8,5 @@ struct CHARACTERSYSTEMEDITOR_API FChronicle_EmotionId
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FGuid Id;
+	FGuid Value;
 };

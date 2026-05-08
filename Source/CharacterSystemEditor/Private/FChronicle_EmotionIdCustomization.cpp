@@ -28,7 +28,7 @@ void FChronicle_EmotionIdCustomization::CustomizeHeader(
         ComboOptions.Add(MakeShared<FString>(Name));
     }
 
-    TSharedPtr<IPropertyHandle> IdHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FChronicle_EmotionId, Id));
+    TSharedPtr<IPropertyHandle> IdHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FChronicle_EmotionId, Value));
 
     auto GetCurrentLabel = [this, IdHandle]() -> FText
     {

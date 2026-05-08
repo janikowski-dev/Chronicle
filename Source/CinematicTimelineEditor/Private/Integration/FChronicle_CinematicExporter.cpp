@@ -11,7 +11,7 @@ UChronicle_CinematicData* FChronicle_CinematicExporter::ConvertToCinematicData(c
     return Output;
 }
 
-UChronicle_CinematicData* FChronicle_CinematicExporter::ExportToCinematicData(const UChronicle_DialogueData* Input, const FString Path)
+UChronicle_CinematicData* FChronicle_CinematicExporter::ExportToCinematicData(const UChronicle_DialogueData* Input, const FString& Path)
 {
     UPackage* Package = CreatePackage(*Path);
     Package->FullyLoad();
@@ -28,12 +28,7 @@ UChronicle_CinematicData* FChronicle_CinematicExporter::ExportToCinematicData(co
     FString PackageFilename;
     FPackageName::TryConvertLongPackageNameToFilename(Path,PackageFilename,FPackageName::GetAssetPackageExtension());
 
-    FSavePackageArgs SaveArgs;
-    SaveArgs.TopLevelFlags = RF_Public | RF_Standalone;
-    SaveArgs.Error = GError;
-    SaveArgs.bForceByteSwapping = false;
-    SaveArgs.bWarnOfLongFilename = true;
-
+    const FSavePackageArgs SaveArgs = GetSaveArgs();
     UPackage::SavePackage(Package, Output, *PackageFilename, SaveArgs);
     UEditorLoadingAndSavingUtils::SavePackages({ Package }, false);
     FAssetRegistryModule::AssetCreated(Output);
@@ -292,4 +287,14 @@ void FChronicle_CinematicExporter::PopulateOutput(const UChronicle_DialogueData*
     {
         Sequence.bIsEntrySequence = Sequence.Nodes.Num() > 0 && FirstRootChildId == Sequence.Nodes[0].Id;
     }
+}
+
+FSavePackageArgs FChronicle_CinematicExporter::GetSaveArgs()
+{
+    FSavePackageArgs SaveArgs;
+    SaveArgs.TopLevelFlags = RF_Public | RF_Standalone;
+    SaveArgs.Error = GError;
+    SaveArgs.bForceByteSwapping = false;
+    SaveArgs.bWarnOfLongFilename = true;
+    return SaveArgs;
 }

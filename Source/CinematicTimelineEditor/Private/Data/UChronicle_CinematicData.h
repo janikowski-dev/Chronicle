@@ -15,6 +15,9 @@ public:
 	TMap<FGuid, TSoftClassPtr<AChronicle_CharacterActor>> ActorsById;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TMap<FGuid, FChronicle_AnimationData> AnimationsByLine;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TMap<FGuid, TSoftObjectPtr<USoundBase>> SoundsByLine;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

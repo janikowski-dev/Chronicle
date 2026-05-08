@@ -43,6 +43,9 @@ public:
 	static TArray<FChronicle_CinematicEntry> GetAll();
 	
 	UFUNCTION(BlueprintCallable, Category="Chronicle|Cinematics")
+	static void RandomizeAnimations(UChronicle_CinematicData* CinematicData);
+	
+	UFUNCTION(BlueprintCallable, Category="Chronicle|Cinematics")
 	static FChronicle_SequenceInfo InitSequence(
 		ULevelSequence* LevelSequence,
 		UChronicle_CinematicData* CinematicData,
