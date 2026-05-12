@@ -146,7 +146,12 @@ void FChronicle_DialogueExporter::ReadRoles(UChronicle_DialogueNode* Node, FChro
     if (const UChronicle_DialogueLineNode* LineNode = Cast<UChronicle_DialogueLineNode>(Node))
     {
         const FName SpeakerName = FChronicle_CharacterDirectory::GetAll().GetName(LineNode->SpeakerId);
-        NodeData.Subtitle = SpeakerName.ToString() + TEXT(": ") + Node->GetText().ToString();
+
+        if (!Node->GetText().IsEmptyOrWhitespace())
+        {
+            NodeData.Subtitle = SpeakerName.ToString() + TEXT(": ") + Node->GetText().ToString();
+        }
+        
         NodeData.ListenerId = LineNode->ListenerId;
         NodeData.SpeakerId = LineNode->SpeakerId;
     }
