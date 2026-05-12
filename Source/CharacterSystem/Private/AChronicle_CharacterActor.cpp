@@ -7,6 +7,12 @@ AChronicle_CharacterActor::AChronicle_CharacterActor()
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
 }
 
+void AChronicle_CharacterActor::BeginPlay()
+{
+	Super::BeginPlay();
+	PlayAnimation(IdleAnimationData);
+}
+
 void AChronicle_CharacterActor::PlayAnimation(const FChronicle_AnimationData& Data) const
 {
 	if (UAnimSequence* Animation = GetAnimation(Data))

@@ -16,6 +16,7 @@ public:
 
 public:
 	AChronicle_CharacterActor();
+	virtual void BeginPlay() override;
 	void PlayAnimation(const FChronicle_AnimationData& Data) const;
 	
 private:

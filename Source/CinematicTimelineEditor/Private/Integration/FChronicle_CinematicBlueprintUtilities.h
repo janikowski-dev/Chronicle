@@ -24,8 +24,12 @@ struct CINEMATICTIMELINEEDITOR_API FSequenceInfo
 	TMap<FGuid, FGuid> ModelIdByParticipantIds;
 	TArray<FString> AnimationTrackNames;
 	TArray<FGuid> AnimationOwnerIds;
+	FFrameNumber EntryEndFrameCount;
 	FFrameNumber TotalFrameCount;
 	TArray<FTrackInfo> Tracks;
+	FGuid MainParticipantId;
+	FGuid EntryCameraId;
+	bool bIsEntry;
 	FGuid Id;
 };
 
@@ -89,6 +93,11 @@ private:
 	);
 	
 	static void PopulateSubtitleTrack(
+		UMovieScene* MovieScene,
+		const FSequenceInfo& SequenceInfo
+	);
+	
+	static void PopulateEntryTrack(
 		UMovieScene* MovieScene,
 		const FSequenceInfo& SequenceInfo
 	);

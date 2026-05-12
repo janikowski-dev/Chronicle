@@ -16,8 +16,12 @@
 #include "LevelSequence.h"
 #include "Sequences/UChronicle_AnimationSection.h"
 #include "Sequences/UChronicle_AnimationTrack.h"
+#include "Sequences/UChronicle_EntrySection.h"
+#include "Sequences/UChronicle_EntryTrack.h"
 #include "Sequences/UChronicle_SubtitleSection.h"
 #include "Sequences/UChronicle_SubtitleTrack.h"
+
+constexpr int32 EntryDurationFrame = 60;
 
 FChronicle_SequenceInfo FChronicle_CinematicBlueprintUtilities::InitSequence(
 	ULevelSequence* LevelSequence,
@@ -35,6 +39,7 @@ FChronicle_SequenceInfo FChronicle_CinematicBlueprintUtilities::InitSequence(
 		PopulateAudioTrack(MovieScene, Info);
 		PopulateAnimationTrack(MovieScene, Info);
 		PopulateSubtitleTrack(MovieScene, Info);
+		PopulateEntryTrack(MovieScene, Info);
 		ApplyInfo(MovieScene, Info);
 		ApplyChanges(LevelSequence, CinematicData, SequenceData);
 		return ConvertToRuntimeInfo(LevelSequence, Info, CinematicData, SequenceData);
@@ -338,8 +343,20 @@ FSequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToInfo(
 	const FChronicle_SequenceData& SequenceData
 )
 {
-	FFrameNumber FrameCounter = 0;
+	const FFrameRate TickResolution = MovieScene->GetTickResolution();
+	const FFrameRate DisplayRate = MovieScene->GetDisplayRate();
 	FSequenceInfo SequenceInfo;
+	
+	if (SequenceData.bIsEntrySequence)
+	{
+		SequenceInfo.EntryEndFrameCount = FFrameRate::TransformTime(FFrameTime(EntryDurationFrame), DisplayRate, TickResolution).FloorToFrame();
+	}
+	else
+	{
+		SequenceInfo.EntryEndFrameCount = 0;
+	}
+	
+	FFrameNumber FrameCounter = SequenceInfo.EntryEndFrameCount;
 
 	for (const FChronicle_DialogueNodeData& Node : SequenceData.Nodes)
 	{
@@ -351,7 +368,6 @@ FSequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToInfo(
 		FTrackInfo TrackInfo;
 		
 		const USoundBase* Sound = CinematicData->SoundsByLine[Node.Id].LoadSynchronous();
-		const FFrameRate TickResolution = MovieScene->GetTickResolution();
 		const double SoundDuration = Sound->GetDuration();
 		const FFrameNumber FrameDuration = (SoundDuration * TickResolution).FloorToFrame();
 
@@ -369,6 +385,8 @@ FSequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToInfo(
 		FrameCounter += FrameDuration;
 	}
 
+	SequenceInfo.MainParticipantId = CinematicData->ParticipantIds[0];
+	SequenceInfo.bIsEntry = SequenceData.bIsEntrySequence;
 	SequenceInfo.TotalFrameCount = FrameCounter;
 	SequenceInfo.Id = SequenceData.Id;
 
@@ -393,10 +411,15 @@ FSequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToInfo(
 			CameraTransform = MatchingPair->CameraTransform;
 		}
 
+		if (SequenceData.bIsEntrySequence && ParticipantId == CinematicData->ParticipantIds[0])
+		{
+			SequenceInfo.EntryCameraId = AddCamera(MovieScene, CameraTransform);
+		}
+
 		FGuid CameraId = AddCamera(MovieScene, CameraTransform);
 		SequenceInfo.CameraIdByParticipantIds.Add(ParticipantId, CameraId);
 
-		TSoftClassPtr<AChronicle_CharacterActor> CharacterClass = CinematicData->ActorsById[ParticipantId].LoadSynchronous();
+		const TSoftClassPtr<AChronicle_CharacterActor> CharacterClass = CinematicData->ActorsById[ParticipantId].LoadSynchronous();
 		FGuid ModelId = AddModel(MovieScene, CharacterClass, ParticipantTransform);
 		SequenceInfo.ModelIdByParticipantIds.Add(ParticipantId, ModelId);
 
@@ -418,6 +441,16 @@ void FChronicle_CinematicBlueprintUtilities::PopulateCameraCutTrack(
 	
 	UMovieSceneCameraCutTrack* CameraCutTrack = Cast<UMovieSceneCameraCutTrack>(MovieScene->GetCameraCutTrack());
 
+	if (SequenceInfo.bIsEntry)
+	{
+		UMovieSceneCameraCutSection* CameraSection = Cast<UMovieSceneCameraCutSection>(CameraCutTrack->CreateNewSection());
+		CameraSection->SetRange(TRange<FFrameNumber>(0, SequenceInfo.EntryEndFrameCount));
+		
+		const FMovieSceneObjectBindingID CameraBindingID(SequenceInfo.EntryCameraId);
+		CameraSection->SetCameraBindingID(CameraBindingID);
+		CameraCutTrack->AddSection(*CameraSection);
+	}
+	
 	for (const FTrackInfo& Track : SequenceInfo.Tracks)
 	{
 		UMovieSceneCameraCutSection* CameraSection = Cast<UMovieSceneCameraCutSection>(CameraCutTrack->CreateNewSection());
@@ -508,6 +541,32 @@ void FChronicle_CinematicBlueprintUtilities::PopulateSubtitleTrack(
 		Section->Subtitle = TrackInfo.Subtitle;
 		SubtitleTrack->AddSection(*Section);
 	}
+}
+
+void FChronicle_CinematicBlueprintUtilities::PopulateEntryTrack(
+	UMovieScene* MovieScene,
+	const FSequenceInfo& SequenceInfo
+)
+{
+	if (!SequenceInfo.bIsEntry)
+	{
+		return;
+	}
+	
+	UChronicle_EntryTrack* Track = MovieScene->AddTrack<UChronicle_EntryTrack>();
+	
+	if (UMovieSceneNameableTrack* Nameable = Cast<UMovieSceneNameableTrack>(Track))
+	{
+		Nameable->SetDisplayName(FText::FromString("Entry Track"));
+	}
+	
+	Track->SetSortingOrder(3);
+	
+	UChronicle_EntrySection* Section = Cast<UChronicle_EntrySection>(Track->CreateNewSection());
+	Section->SetRange(TRange<FFrameNumber>(0, SequenceInfo.EntryEndFrameCount));
+	Section->MainParticipantId = SequenceInfo.ModelIdByParticipantIds[SequenceInfo.MainParticipantId];
+	Section->CameraId = SequenceInfo.EntryCameraId;
+	Track->AddSection(*Section);
 }
 
 FGuid FChronicle_CinematicBlueprintUtilities::AddCamera(
