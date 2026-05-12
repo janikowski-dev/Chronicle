@@ -1,6 +1,6 @@
-﻿#include "Sequences/UChronicle_EntryTrack.h"
+﻿#include "Sequences/Entry/UChronicle_EntryTrack.h"
 
-#include "Sequences/FChronicle_EntryTrackEvaluator.h"
+#include "Sequences/Entry/FChronicle_EntryTrackEvaluator.h"
 
 FMovieSceneEvalTemplatePtr UChronicle_EntryTrack::CreateTemplateForSection(const UMovieSceneSection& InSection) const
 {

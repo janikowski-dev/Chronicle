@@ -1,6 +1,6 @@
-﻿#include "Sequences/UChronicle_SubtitleTrack.h"
+﻿#include "Sequences/Subtitle/UChronicle_SubtitleTrack.h"
 
-#include "Sequences/FChronicle_SubtitleTrackEvaluator.h"
+#include "Sequences/Subtitle/FChronicle_SubtitleTrackEvaluator.h"
 
 FMovieSceneEvalTemplatePtr UChronicle_SubtitleTrack::CreateTemplateForSection(const UMovieSceneSection& InSection) const
 {

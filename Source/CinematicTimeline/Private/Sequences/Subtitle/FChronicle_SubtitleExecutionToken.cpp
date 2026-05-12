@@ -1,4 +1,4 @@
-﻿#include "Sequences/FChronicle_SubtitleExecutionToken.h"
+﻿#include "Sequences/Subtitle/FChronicle_SubtitleExecutionToken.h"
 
 #include "IMovieScenePlayer.h"
 #include "UChronicle_SubtitleSubsystem.h"

@@ -1,4 +1,4 @@
-﻿#include "Sequences/UChronicle_EntrySection.h"
+﻿#include "Sequences/Entry/UChronicle_EntrySection.h"
 
 UChronicle_EntrySection::UChronicle_EntrySection()
 {

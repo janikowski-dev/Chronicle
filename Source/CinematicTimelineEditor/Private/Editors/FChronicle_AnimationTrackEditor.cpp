@@ -1,6 +1,6 @@
 ﻿#include "FChronicle_AnimationTrackEditor.h"
 #include "SequencerSectionPainter.h"
-#include "Sequences/UChronicle_AnimationTrack.h"
+#include "Sequences/Animation/UChronicle_AnimationTrack.h"
 
 class FChronicle_AnimationSectionPainter : public ISequencerSection
 {

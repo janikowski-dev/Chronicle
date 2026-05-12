@@ -1,6 +1,6 @@
-﻿#include "Sequences/FChronicle_EntryTrackEvaluator.h"
+﻿#include "Sequences/Entry/FChronicle_EntryTrackEvaluator.h"
 
-#include "Sequences/FChronicle_EntryExecutionToken.h"
+#include "Sequences/Entry/FChronicle_EntryExecutionToken.h"
 
 FChronicle_EntryTrackEvaluator::FChronicle_EntryTrackEvaluator(
 	const UChronicle_EntrySection& InSection

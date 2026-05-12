@@ -1,4 +1,4 @@
-﻿#include "Sequences/UChronicle_AnimationSection.h"
+﻿#include "Sequences/Animation/UChronicle_AnimationSection.h"
 
 UChronicle_AnimationSection::UChronicle_AnimationSection()
 {

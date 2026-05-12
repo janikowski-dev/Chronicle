@@ -1,6 +1,6 @@
-﻿#include "Sequences/FChronicle_SubtitleTrackEvaluator.h"
+﻿#include "Sequences/Subtitle/FChronicle_SubtitleTrackEvaluator.h"
 
-#include "Sequences/FChronicle_SubtitleExecutionToken.h"
+#include "Sequences/Subtitle/FChronicle_SubtitleExecutionToken.h"
 
 FChronicle_SubtitleTrackEvaluator::FChronicle_SubtitleTrackEvaluator(
 	const UChronicle_SubtitleSection& InSection

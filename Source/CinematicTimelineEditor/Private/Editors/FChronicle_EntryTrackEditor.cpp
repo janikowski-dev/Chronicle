@@ -1,6 +1,6 @@
 ﻿#include "FChronicle_EntryTrackEditor.h"
 #include "SequencerSectionPainter.h"
-#include "Sequences/UChronicle_EntryTrack.h"
+#include "Sequences/Entry/UChronicle_EntryTrack.h"
 
 class FChronicle_EntrySectionPainter : public ISequencerSection
 {

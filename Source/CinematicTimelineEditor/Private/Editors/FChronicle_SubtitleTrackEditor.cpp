@@ -1,6 +1,6 @@
 ﻿#include "FChronicle_SubtitleTrackEditor.h"
 #include "SequencerSectionPainter.h"
-#include "Sequences/UChronicle_SubtitleTrack.h"
+#include "Sequences/Subtitle/UChronicle_SubtitleTrack.h"
 
 class FChronicle_SubtitleSectionPainter : public ISequencerSection
 {

@@ -1,4 +1,4 @@
-﻿#include "Sequences/UChronicle_SubtitleSection.h"
+﻿#include "Sequences/Subtitle/UChronicle_SubtitleSection.h"
 
 UChronicle_SubtitleSection::UChronicle_SubtitleSection()
 {

@@ -1,4 +1,4 @@
-﻿#include "Sequences/UChronicle_AnimationTrack.h"
+﻿#include "Sequences/Animation/UChronicle_AnimationTrack.h"
 
 FMovieSceneEvalTemplatePtr UChronicle_AnimationTrack::CreateTemplateForSection(const UMovieSceneSection& InSection) const
 {

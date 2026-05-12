@@ -14,12 +14,11 @@
 #include "Tracks/MovieSceneSpawnTrack.h"
 #include "UObject/SavePackage.h"
 #include "LevelSequence.h"
-#include "Sequences/UChronicle_AnimationSection.h"
-#include "Sequences/UChronicle_AnimationTrack.h"
-#include "Sequences/UChronicle_EntrySection.h"
-#include "Sequences/UChronicle_EntryTrack.h"
-#include "Sequences/UChronicle_SubtitleSection.h"
-#include "Sequences/UChronicle_SubtitleTrack.h"
+#include "Sequences/Animation/UChronicle_AnimationTrack.h"
+#include "Sequences/Entry/UChronicle_EntrySection.h"
+#include "Sequences/Entry/UChronicle_EntryTrack.h"
+#include "Sequences/Subtitle/UChronicle_SubtitleSection.h"
+#include "Sequences/Subtitle/UChronicle_SubtitleTrack.h"
 
 constexpr int32 EntryDurationFrame = 60;
 
@@ -560,13 +559,12 @@ void FChronicle_CinematicBlueprintUtilities::PopulateEntryTrack(
 		Nameable->SetDisplayName(FText::FromString("Entry Track"));
 	}
 	
-	Track->SetSortingOrder(3);
-	
 	UChronicle_EntrySection* Section = Cast<UChronicle_EntrySection>(Track->CreateNewSection());
 	Section->SetRange(TRange<FFrameNumber>(0, SequenceInfo.EntryEndFrameCount));
 	Section->MainParticipantId = SequenceInfo.ModelIdByParticipantIds[SequenceInfo.MainParticipantId];
 	Section->CameraId = SequenceInfo.EntryCameraId;
 	Track->AddSection(*Section);
+	Track->SetSortingOrder(3);
 }
 
 FGuid FChronicle_CinematicBlueprintUtilities::AddCamera(
