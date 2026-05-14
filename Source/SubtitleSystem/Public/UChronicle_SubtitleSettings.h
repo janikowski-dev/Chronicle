@@ -9,8 +9,8 @@ class SUBTITLESYSTEM_API UChronicle_SubtitleSettings : public UDeveloperSettings
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, Config, Category="Subtitles")
-	TSoftClassPtr<UUserWidget> SubtitleWidgetClass;
+	UPROPERTY(EditAnywhere, Config, Category="Chronicle|Subtitles")
+	TSubclassOf<UUserWidget> SubtitleWidgetClass;
 
 public:
 	virtual FName GetCategoryName() const override;

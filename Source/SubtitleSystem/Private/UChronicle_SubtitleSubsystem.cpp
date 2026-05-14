@@ -30,16 +30,14 @@ void UChronicle_SubtitleSubsystem::HideSubtitles()
 
 void UChronicle_SubtitleSubsystem::ShowSubtitleInternal(const FText& Text)
 {
-    const TSoftClassPtr<UUserWidget> SubtitleWidgetClass = GetDefault<UChronicle_SubtitleSettings>()->SubtitleWidgetClass;
+    const TSubclassOf<UUserWidget> WidgetClass = GetDefault<UChronicle_SubtitleSettings>()->SubtitleWidgetClass;
     
-    if (SubtitleWidgetClass.IsNull())
+    if (!WidgetClass)
     {
         return;
     }
 
     APlayerController* PlayerController = GetGameInstance()->GetFirstLocalPlayerController();
-    const TSubclassOf<UUserWidget> WidgetClass = SubtitleWidgetClass.LoadSynchronous();
-    
     SubtitleWidget = CreateWidget<UUserWidget>(PlayerController, WidgetClass);
     
     if (SubtitleWidget && SubtitleWidget->GetClass()->ImplementsInterface(UChronicle_SubtitleWidget::StaticClass()))
@@ -51,15 +49,14 @@ void UChronicle_SubtitleSubsystem::ShowSubtitleInternal(const FText& Text)
 
 void UChronicle_SubtitleSubsystem::ShowResponsesInternal(const TArray<FText>& Responses)
 {
-    const TSoftClassPtr<UUserWidget> SubtitleWidgetClass = GetDefault<UChronicle_SubtitleSettings>()->SubtitleWidgetClass;
+    const TSubclassOf<UUserWidget> WidgetClass = GetDefault<UChronicle_SubtitleSettings>()->SubtitleWidgetClass;
     
-    if (SubtitleWidgetClass.IsNull())
+    if (!WidgetClass)
     {
         return;
     }
 
     APlayerController* PlayerController = GetGameInstance()->GetFirstLocalPlayerController();
-    const TSubclassOf<UUserWidget> WidgetClass = SubtitleWidgetClass.LoadSynchronous();
     SubtitleWidget = CreateWidget<UUserWidget>(PlayerController, WidgetClass);
     
     if (SubtitleWidget && SubtitleWidget->GetClass()->ImplementsInterface(UChronicle_SubtitleWidget::StaticClass()))
