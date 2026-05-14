@@ -4,15 +4,23 @@
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "CineCameraActor.h"
+#include "CineCameraComponent.h"
+#include "FChronicle_CharacterDirectory.h"
 #include "MovieScene.h"
-#include "Animation/SkeletalMeshActor.h"
 #include "Sections/MovieSceneAudioSection.h"
 #include "Sections/MovieSceneCameraCutSection.h"
 #include "Tracks/MovieSceneCameraCutTrack.h"
 #include "Tracks/MovieSceneAudioTrack.h"
-#include "Tracks/MovieSceneFloatTrack.h"
 #include "Tracks/MovieSceneSpawnTrack.h"
 #include "UObject/SavePackage.h"
+#include "LevelSequence.h"
+#include "Sequences/Animation/UChronicle_AnimationTrack.h"
+#include "Sequences/Entry/UChronicle_EntrySection.h"
+#include "Sequences/Entry/UChronicle_EntryTrack.h"
+#include "Sequences/Subtitle/UChronicle_SubtitleSection.h"
+#include "Sequences/Subtitle/UChronicle_SubtitleTrack.h"
+
+constexpr int32 EntryDurationFrame = 60;
 
 FChronicle_SequenceInfo FChronicle_CinematicBlueprintUtilities::InitSequence(
 	ULevelSequence* LevelSequence,
@@ -24,9 +32,13 @@ FChronicle_SequenceInfo FChronicle_CinematicBlueprintUtilities::InitSequence(
 	
 	if (TryGetMovieScene(LevelSequence, MovieScene))
 	{
+		RandomizeAnimations(CinematicData);
 		const FSequenceInfo Info = ConvertToInfo(MovieScene, CinematicData, SequenceData);
 		PopulateCameraCutTrack(MovieScene, Info);
 		PopulateAudioTrack(MovieScene, Info);
+		PopulateAnimationTrack(MovieScene, Info);
+		PopulateSubtitleTrack(MovieScene, Info);
+		PopulateEntryTrack(MovieScene, Info);
 		ApplyInfo(MovieScene, Info);
 		ApplyChanges(LevelSequence, CinematicData, SequenceData);
 		return ConvertToRuntimeInfo(LevelSequence, Info, CinematicData, SequenceData);
@@ -35,11 +47,47 @@ FChronicle_SequenceInfo FChronicle_CinematicBlueprintUtilities::InitSequence(
 	return {};
 }
 
+// Since we run this method each time before calling InitSequence(), we could technically extract AnimationsByLine from CinematicData.
+// But it's implemented this way, so it's open for potential randomization changes in the editors.
+void FChronicle_CinematicBlueprintUtilities::RandomizeAnimations(UChronicle_CinematicData* CinematicData)
+{
+	FChronicle_CharacterDirectory::Refresh();
+
+	for (TSharedPtr SharedId : FChronicle_CharacterDirectory::GetAll().GetSharedIds())
+	for (FChronicle_SequenceData SequencesData : CinematicData->SequencesData)
+	for (FChronicle_DialogueNodeData Node : SequencesData.Nodes)
+	{
+		RandomizeAnimation(CinematicData, Node, SharedId);
+	}
+}
+
+void FChronicle_CinematicBlueprintUtilities::RandomizeAnimation(
+	UChronicle_CinematicData* CinematicData,
+	const FChronicle_DialogueNodeData& Node,
+	const TSharedPtr<FGuid>& ParticipantId
+)
+{
+	if (*ParticipantId != Node.SpeakerId)
+	{
+		return;
+	}
+
+	const FChronicle_AnimationData AnimationData = FChronicle_CharacterDirectory::GetAll().GetRandomAnimation(
+		Node.SpeakerId,
+		Node.EmotionId
+	);
+	
+	CinematicData->AnimationsByLine.Add(Node.Id, AnimationData);
+}
+
 UBlueprint* FChronicle_CinematicBlueprintUtilities::CreateBlueprintFromParent(
 	UClass* ParentClass,
 	const FString& PackagePath,
 	const FString& BlueprintName,
-	const FChronicle_DialogueInfo& Info
+	const FChronicle_DialogueInfo& Info,
+	const FTransform& ResponseTransform,
+	const TArray<FTransform>& CameraTransforms,
+	const TArray<FTransform>& ParticipantTransforms
 )
 {
 	if (!Info.Id.IsValid() || !ParentClass)
@@ -49,13 +97,9 @@ UBlueprint* FChronicle_CinematicBlueprintUtilities::CreateBlueprintFromParent(
 
 	const FString FullPath = PackagePath / BlueprintName;
 	UPackage* Package = CreatePackage(*FullPath);
-	UBlueprint* Blueprint;
-
-	if (UObject* ExistingObj = StaticFindObject(UBlueprint::StaticClass(), Package, *BlueprintName))
-	{
-		Blueprint = Cast<UBlueprint>(ExistingObj);
-	}
-	else
+	UBlueprint* Blueprint = LoadObject<UBlueprint>(Package, *BlueprintName);
+	
+	if (!Blueprint)
 	{
 		Blueprint = FKismetEditorUtilities::CreateBlueprint(
 			ParentClass,
@@ -73,13 +117,67 @@ UBlueprint* FChronicle_CinematicBlueprintUtilities::CreateBlueprintFromParent(
 	{
 		if (UObject* CDO = Blueprint->GeneratedClass->GetDefaultObject())
 		{
-			FProperty* Prop = FindFProperty<FProperty>(Blueprint->GeneratedClass, TEXT("Info"));
+			FProperty* InfoProperty = FindFProperty<FProperty>(Blueprint->GeneratedClass, TEXT("Info"));
 
-			if (FStructProperty* StructProp = CastField<FStructProperty>(Prop))
+			if (FStructProperty* StructProperty = CastField<FStructProperty>(InfoProperty))
 			{
-				void* StructPtr = StructProp->ContainerPtrToValuePtr<void>(CDO);
-				StructProp->Struct->CopyScriptStruct(StructPtr, &Info);
-				FPropertyChangedEvent PropertyChangedEvent(StructProp);
+				void* StructPtr = StructProperty->ContainerPtrToValuePtr<void>(CDO);
+				StructProperty->Struct->CopyScriptStruct(StructPtr, &Info);
+				FPropertyChangedEvent PropertyChangedEvent(StructProperty);
+				CDO->PostEditChangeProperty(PropertyChangedEvent);
+				Blueprint->Modify();
+				FBlueprintEditorUtils::MarkBlueprintAsModified(Blueprint);
+			}
+			
+			FProperty* ResponseTransformProperty = FindFProperty<FProperty>(Blueprint->GeneratedClass, TEXT("ResponseCameraTransform"));
+
+			if (FStructProperty* StructProperty = CastField<FStructProperty>(ResponseTransformProperty))
+			{
+				void* StructPtr = StructProperty->ContainerPtrToValuePtr<void>(CDO);
+				StructProperty->Struct->CopyScriptStruct(StructPtr, &ResponseTransform);
+				FPropertyChangedEvent PropertyChangedEvent(StructProperty);
+				CDO->PostEditChangeProperty(PropertyChangedEvent);
+				Blueprint->Modify();
+				FBlueprintEditorUtils::MarkBlueprintAsModified(Blueprint);
+			}
+
+			FProperty* ParticipantTransformsProperty = FindFProperty<FProperty>(Blueprint->GeneratedClass, TEXT("ParticipantTransforms"));
+
+			if (FArrayProperty* ArrayProperty = CastField<FArrayProperty>(ParticipantTransformsProperty))
+			{
+				void* ArrayPtr = ArrayProperty->ContainerPtrToValuePtr<void>(CDO);
+				FScriptArrayHelper ArrayHelper(ArrayProperty, ArrayPtr);
+    
+				ArrayHelper.Resize(ParticipantTransforms.Num());
+    
+				for (int32 i = 0; i < ParticipantTransforms.Num(); i++)
+				{
+					void* ElementPtr = ArrayHelper.GetRawPtr(i);
+					CastField<FStructProperty>(ArrayProperty->Inner)->Struct->CopyScriptStruct(ElementPtr, &ParticipantTransforms[i]);
+				}
+    
+				FPropertyChangedEvent PropertyChangedEvent(ArrayProperty);
+				CDO->PostEditChangeProperty(PropertyChangedEvent);
+				Blueprint->Modify();
+				FBlueprintEditorUtils::MarkBlueprintAsModified(Blueprint);
+			}
+
+			FProperty* CameraTransformsProperty = FindFProperty<FProperty>(Blueprint->GeneratedClass, TEXT("CameraTransforms"));
+
+			if (FArrayProperty* ArrayProperty = CastField<FArrayProperty>(CameraTransformsProperty))
+			{
+				void* ArrayPtr = ArrayProperty->ContainerPtrToValuePtr<void>(CDO);
+				FScriptArrayHelper ArrayHelper(ArrayProperty, ArrayPtr);
+    
+				ArrayHelper.Resize(CameraTransforms.Num());
+    
+				for (int32 i = 0; i < CameraTransforms.Num(); i++)
+				{
+					void* ElementPtr = ArrayHelper.GetRawPtr(i);
+					CastField<FStructProperty>(ArrayProperty->Inner)->Struct->CopyScriptStruct(ElementPtr, &CameraTransforms[i]);
+				}
+    
+				FPropertyChangedEvent PropertyChangedEvent(ArrayProperty);
 				CDO->PostEditChangeProperty(PropertyChangedEvent);
 				Blueprint->Modify();
 				FBlueprintEditorUtils::MarkBlueprintAsModified(Blueprint);
@@ -93,7 +191,7 @@ UBlueprint* FChronicle_CinematicBlueprintUtilities::CreateBlueprintFromParent(
 
 	FKismetEditorUtilities::CompileBlueprint(Blueprint);
 
-	FString PackageFileName = FPackageName::LongPackageNameToFilename(
+	const FString PackageFileName = FPackageName::LongPackageNameToFilename(
 		Package->GetName(),
 		FPackageName::GetAssetPackageExtension()
 	);
@@ -120,7 +218,7 @@ bool FChronicle_CinematicBlueprintUtilities::TryGetMovieScene(const ULevelSequen
 	{
 		return false;
 	}
-	
+
 	MovieScene->SetClockSource(EUpdateClockSource::Audio);
 	return true;
 }
@@ -145,6 +243,7 @@ FChronicle_SequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToRuntime
 	}
 
 	RuntimeInfo.Sequence = TSoftObjectPtr<ULevelSequence>(FSoftObjectPath(LevelSequence));
+	RuntimeInfo.Text = FText::FromString(SequenceData.Nodes[0].Text);
 	RuntimeInfo.bIsEntrySequence = SequenceData.bIsEntrySequence;
 	RuntimeInfo.Id = SequenceInfo.Id;
 
@@ -165,6 +264,7 @@ FChronicle_SequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToRuntime
 			}
 			
 			Transition.Type = EChronicle_TransitionType::AutoContinue;
+			Transition.Callbacks = MatchingNode->Callbacks;
 			Transition.NodeId = SequenceData.NextNodeId;
 			Transition.Rules = MatchingNode->Rules;
 			Transition.SequenceId = OtherData.Id;
@@ -242,22 +342,41 @@ FSequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToInfo(
 	const FChronicle_SequenceData& SequenceData
 )
 {
-	FFrameNumber FrameCounter = 0;
+	const FFrameRate TickResolution = MovieScene->GetTickResolution();
+	const FFrameRate DisplayRate = MovieScene->GetDisplayRate();
 	FSequenceInfo SequenceInfo;
+	
+	if (SequenceData.bIsEntrySequence)
+	{
+		SequenceInfo.EntryEndFrameCount = FFrameRate::TransformTime(FFrameTime(EntryDurationFrame), DisplayRate, TickResolution).FloorToFrame();
+	}
+	else
+	{
+		SequenceInfo.EntryEndFrameCount = 0;
+	}
+	
+	FFrameNumber FrameCounter = SequenceInfo.EntryEndFrameCount;
 
 	for (const FChronicle_DialogueNodeData& Node : SequenceData.Nodes)
 	{
+		if (Node.Type == EChronicle_DialogueNodeType::Response)
+		{
+			continue;
+		}
+		
 		FTrackInfo TrackInfo;
 		
 		const USoundBase* Sound = CinematicData->SoundsByLine[Node.Id].LoadSynchronous();
-		const FFrameRate TickResolution = MovieScene->GetTickResolution();
 		const double SoundDuration = Sound->GetDuration();
 		const FFrameNumber FrameDuration = (SoundDuration * TickResolution).FloorToFrame();
 
+		TrackInfo.Animation = CinematicData->AnimationsByLine[Node.Id];
 		TrackInfo.Sound = CinematicData->SoundsByLine[Node.Id];
-		TrackInfo.StartFrame = FrameCounter;
+		TrackInfo.Subtitle = FText::FromString(Node.Subtitle);
 		TrackInfo.EndFrame = FrameDuration + FrameCounter;
 		TrackInfo.ParticipantId = Node.SpeakerId;
+		TrackInfo.EmotionId = Node.EmotionId;
+		TrackInfo.StartFrame = FrameCounter;
 		TrackInfo.Id = Node.Id;
 
 		SequenceInfo.Tracks.Add(TrackInfo);
@@ -265,39 +384,47 @@ FSequenceInfo FChronicle_CinematicBlueprintUtilities::ConvertToInfo(
 		FrameCounter += FrameDuration;
 	}
 
+	SequenceInfo.MainParticipantId = CinematicData->ParticipantIds[0];
+	SequenceInfo.bIsEntry = SequenceData.bIsEntrySequence;
 	SequenceInfo.TotalFrameCount = FrameCounter;
 	SequenceInfo.Id = SequenceData.Id;
-	
+
+	const UChronicle_ShotPresetData* Preset = CinematicData->PresetData.LoadSynchronous();
 	const int ParticipantCount = CinematicData->ParticipantIds.Num();
-	
-	for (int i = 0; i < ParticipantCount; i++)
+
+	for (int I = 0; I < ParticipantCount; I++)
 	{
-		constexpr float Radius = 350.0f;
-		const FGuid& ParticipantId = CinematicData->ParticipantIds[i];
+		const FGuid& ParticipantId = CinematicData->ParticipantIds[I];
 
-		const float Angle = 2.0f * PI * i / ParticipantCount;
-		const FVector Position(FMath::Cos(Angle) * Radius, FMath::Sin(Angle) * Radius, 0.0f);
+		const FShotPair* MatchingPair = Preset ? Preset->ShotPairs.FindByPredicate([I](const FShotPair& Pair)
+		{
+			return Pair.ShotIndex == I;
+		}) : nullptr;
 
-		const FVector DirectionToCenter = (FVector::ZeroVector - Position).GetSafeNormal();
-		const FRotator LookAtRotation = FRotator(0.0f, DirectionToCenter.Rotation().Yaw - 90.0f, 0.0f);
+		FTransform ParticipantTransform;
+		FTransform CameraTransform;
 
-		SequenceInfo.TransformByParticipantIds.Add(ParticipantId, FTransform(LookAtRotation, Position));
-	}
+		if (MatchingPair)
+		{
+			ParticipantTransform = MatchingPair->ParticipantTransform;
+			CameraTransform = MatchingPair->CameraTransform;
+		}
 
-	for (const FGuid& ParticipantId : CinematicData->ParticipantIds)
-	{
-		const FTransform* ParticipantTransform = SequenceInfo.TransformByParticipantIds.Find(ParticipantId);
-		const FVector ParticipantLocation = ParticipantTransform->GetLocation();
-		const FVector CameraLocation = FVector::ZeroVector;
-		const FRotator CameraRotation = (ParticipantLocation - CameraLocation).Rotation();
-		const FTransform CameraTransform(CameraRotation, CameraLocation);
+		if (SequenceData.bIsEntrySequence && ParticipantId == CinematicData->ParticipantIds[0])
+		{
+			SequenceInfo.EntryCameraId = AddCamera(MovieScene, CameraTransform);
+		}
 
 		FGuid CameraId = AddCamera(MovieScene, CameraTransform);
 		SequenceInfo.CameraIdByParticipantIds.Add(ParticipantId, CameraId);
 
-		USkeletalMesh* SkeletalMesh = CinematicData->ActorsById[ParticipantId].LoadSynchronous();
-		FGuid ModelId = AddModel(MovieScene, SkeletalMesh, *ParticipantTransform);
+		const TSoftClassPtr<AChronicle_CharacterActor> CharacterClass = CinematicData->ActorsById[ParticipantId].LoadSynchronous();
+		FGuid ModelId = AddModel(MovieScene, CharacterClass, ParticipantTransform);
 		SequenceInfo.ModelIdByParticipantIds.Add(ParticipantId, ModelId);
+
+		SequenceInfo.AnimationTrackNames.Add(CharacterClass->GetDisplayNameText().ToString());
+		SequenceInfo.TransformByParticipantIds.Add(ParticipantId, ParticipantTransform);
+		SequenceInfo.AnimationOwnerIds.Add(ParticipantId);
 	}
 	
 	return SequenceInfo;
@@ -313,6 +440,16 @@ void FChronicle_CinematicBlueprintUtilities::PopulateCameraCutTrack(
 	
 	UMovieSceneCameraCutTrack* CameraCutTrack = Cast<UMovieSceneCameraCutTrack>(MovieScene->GetCameraCutTrack());
 
+	if (SequenceInfo.bIsEntry)
+	{
+		UMovieSceneCameraCutSection* CameraSection = Cast<UMovieSceneCameraCutSection>(CameraCutTrack->CreateNewSection());
+		CameraSection->SetRange(TRange<FFrameNumber>(0, SequenceInfo.EntryEndFrameCount));
+		
+		const FMovieSceneObjectBindingID CameraBindingID(SequenceInfo.EntryCameraId);
+		CameraSection->SetCameraBindingID(CameraBindingID);
+		CameraCutTrack->AddSection(*CameraSection);
+	}
+	
 	for (const FTrackInfo& Track : SequenceInfo.Tracks)
 	{
 		UMovieSceneCameraCutSection* CameraSection = Cast<UMovieSceneCameraCutSection>(CameraCutTrack->CreateNewSection());
@@ -330,7 +467,7 @@ void FChronicle_CinematicBlueprintUtilities::PopulateAudioTrack(
 )
 {
 	UMovieSceneTrack* AudioTrack = MovieScene->AddTrack<UMovieSceneAudioTrack>();
-
+	
 	if (UMovieSceneNameableTrack* Nameable = Cast<UMovieSceneNameableTrack>(AudioTrack))
 	{
 		Nameable->SetDisplayName(FText::FromString("Main Track"));
@@ -350,6 +487,86 @@ void FChronicle_CinematicBlueprintUtilities::PopulateAudioTrack(
 	}
 }
 
+void FChronicle_CinematicBlueprintUtilities::PopulateAnimationTrack(
+	UMovieScene* MovieScene,
+	const FSequenceInfo& SequenceInfo
+)
+{
+	for (int32 I = 0; I < SequenceInfo.AnimationTrackNames.Num(); I++)
+	{
+		const FGuid& OwnerId = SequenceInfo.AnimationOwnerIds[I];
+		const FGuid* CharacterGuid = SequenceInfo.ModelIdByParticipantIds.Find(OwnerId);
+
+		UChronicle_AnimationTrack* AnimationTrack = MovieScene->AddTrack<UChronicle_AnimationTrack>(*CharacterGuid);
+
+		if (UMovieSceneNameableTrack* Nameable = Cast<UMovieSceneNameableTrack>(AnimationTrack))
+		{
+			Nameable->SetDisplayName(FText::FromString(SequenceInfo.AnimationTrackNames[I]));
+		}
+
+		for (const FTrackInfo& TrackInfo : SequenceInfo.Tracks)
+		{
+			if (OwnerId != TrackInfo.ParticipantId)
+			{
+				continue;
+			}
+
+			UChronicle_AnimationSection* Section = Cast<UChronicle_AnimationSection>(AnimationTrack->CreateNewSection());
+			Section->SetRange(TRange<FFrameNumber>(TrackInfo.StartFrame - 5, TrackInfo.EndFrame));
+			Section->AnimationData = TrackInfo.Animation;
+			AnimationTrack->AddSection(*Section);
+		}
+	}
+}
+
+void FChronicle_CinematicBlueprintUtilities::PopulateSubtitleTrack(
+	UMovieScene* MovieScene,
+	const FSequenceInfo& SequenceInfo
+)
+{
+	UChronicle_SubtitleTrack* SubtitleTrack = MovieScene->AddTrack<UChronicle_SubtitleTrack>();
+	
+	if (UMovieSceneNameableTrack* Nameable = Cast<UMovieSceneNameableTrack>(SubtitleTrack))
+	{
+		Nameable->SetDisplayName(FText::FromString("Subtitle Track"));
+	}
+	
+	SubtitleTrack->SetSortingOrder(2);
+	
+	for (FTrackInfo TrackInfo : SequenceInfo.Tracks)
+	{
+		UChronicle_SubtitleSection* Section = Cast<UChronicle_SubtitleSection>(SubtitleTrack->CreateNewSection());
+		Section->SetRange(TRange<FFrameNumber>(TrackInfo.StartFrame, TrackInfo.EndFrame));
+		Section->Subtitle = TrackInfo.Subtitle;
+		SubtitleTrack->AddSection(*Section);
+	}
+}
+
+void FChronicle_CinematicBlueprintUtilities::PopulateEntryTrack(
+	UMovieScene* MovieScene,
+	const FSequenceInfo& SequenceInfo
+)
+{
+	if (!SequenceInfo.bIsEntry)
+	{
+		return;
+	}
+	
+	UChronicle_EntryTrack* Track = MovieScene->AddTrack<UChronicle_EntryTrack>();
+	
+	if (UMovieSceneNameableTrack* Nameable = Cast<UMovieSceneNameableTrack>(Track))
+	{
+		Nameable->SetDisplayName(FText::FromString("Entry Track"));
+	}
+	
+	UChronicle_EntrySection* Section = Cast<UChronicle_EntrySection>(Track->CreateNewSection());
+	Section->SetRange(TRange<FFrameNumber>(0, SequenceInfo.EntryEndFrameCount));
+	Section->MainParticipantId = SequenceInfo.ModelIdByParticipantIds[SequenceInfo.MainParticipantId];
+	Section->CameraId = SequenceInfo.EntryCameraId;
+	Track->AddSection(*Section);
+	Track->SetSortingOrder(3);
+}
+
 FGuid FChronicle_CinematicBlueprintUtilities::AddCamera(
 	UMovieScene* MovieScene,
 	const FTransform& SpawnTransform
@@ -362,9 +579,14 @@ FGuid FChronicle_CinematicBlueprintUtilities::AddCamera(
 		RF_NoFlags
 	);
 
-	FTransform AdjustedTransform = SpawnTransform;
-	AdjustedTransform.SetLocation(SpawnTransform.GetLocation() + FVector(0.0f, 0.0f, 150.0f));
-	TmpTemplate->SetActorTransform(AdjustedTransform);
+	TmpTemplate->SetActorTransform(SpawnTransform);
+	
+	UCineCameraComponent* CameraComponent = TmpTemplate->GetCineCameraComponent();
+	CameraComponent->CurrentFocalLength = 75.0f;
+	CameraComponent->CurrentAperture = 2.8f;
+	CameraComponent->Filmback.SensorWidth = 36.0f;
+	CameraComponent->Filmback.SensorHeight = 20.25f;
+	CameraComponent->FocusSettings.FocusMethod = ECameraFocusMethod::DoNotOverride;
 
 	const FGuid CameraGuid = MovieScene->AddSpawnable(TEXT("Camera"), *TmpTemplate);
 
@@ -379,29 +601,30 @@ FGuid FChronicle_CinematicBlueprintUtilities::AddCamera(
 
 FGuid FChronicle_CinematicBlueprintUtilities::AddModel(
 	UMovieScene* MovieScene,
-	USkeletalMesh* SkeletalMesh,
+	const TSoftClassPtr<AChronicle_CharacterActor> CharacterClass,
 	const FTransform& SpawnTransform
 )
 {
-	ASkeletalMeshActor* TmpTemplate = NewObject<ASkeletalMeshActor>(
+	const UClass* LoadedClass = CharacterClass.LoadSynchronous();
+
+	AChronicle_CharacterActor* TmpTemplate = NewObject<AChronicle_CharacterActor>(
 		MovieScene,
-		ASkeletalMeshActor::StaticClass(),
-		MakeUniqueObjectName(MovieScene, ASkeletalMeshActor::StaticClass()),
+		LoadedClass,
+		MakeUniqueObjectName(MovieScene, LoadedClass),
 		RF_NoFlags
 	);
 
-	TmpTemplate->GetSkeletalMeshComponent()->SetSkeletalMesh(SkeletalMesh);
 	TmpTemplate->SetActorTransform(SpawnTransform);
 
-	const FGuid MeshGuid = MovieScene->AddSpawnable(*SkeletalMesh->GetName(), *TmpTemplate);
+	const FGuid CharacterGuid = MovieScene->AddSpawnable(*LoadedClass->GetName(), *TmpTemplate);
 
-	if (UMovieSceneSpawnTrack* SpawnTrack = MovieScene->AddTrack<UMovieSceneSpawnTrack>(MeshGuid))
+	if (UMovieSceneSpawnTrack* SpawnTrack = MovieScene->AddTrack<UMovieSceneSpawnTrack>(CharacterGuid))
 	{
 		SpawnTrack->Modify();
 		SpawnTrack->AddSection(*SpawnTrack->CreateNewSection());
 	}
 
-	return MeshGuid;
+	return CharacterGuid;
 }
 
 void FChronicle_CinematicBlueprintUtilities::ApplyChanges(

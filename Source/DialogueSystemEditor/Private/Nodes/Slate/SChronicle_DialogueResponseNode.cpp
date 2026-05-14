@@ -1,6 +1,7 @@
 ﻿#include "SChronicle_DialogueResponseNode.h"
 
 #include "FChronicle_CharacterDirectory.h"
+#include "FChronicle_EmotionDirectory.h"
 #include "Editors/FChronicle_RuleEditor.h"
 #include "Nodes/Unreal/UChronicle_DialogueResponseNode.h"
 #include "Utils/FChronicle_Colors.h"
@@ -34,7 +35,7 @@ void SChronicle_DialogueResponseNode::AddBody(const TSharedRef<SVerticalBox>& Bo
 {
 	Box->AddSlot()
 	.AutoHeight()
-	.Padding(4)
+	.Padding(4.0f)
 	[
 		FChronicle_SlateHelper::MakeCharacterDisplay(
 			FChronicle_EditorStyle::Get().GetBrush("Icons.Speaker"),

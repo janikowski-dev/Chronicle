@@ -13,6 +13,7 @@ public:
 	virtual void AllocateDefaultPins() override;
 	virtual FText GetTitle() const override;
 	virtual FText GetText() const override;
+	virtual bool QualifiesForInnerGraph() const override;
 	
 public:
 	UPROPERTY()

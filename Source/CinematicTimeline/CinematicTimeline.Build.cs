@@ -14,6 +14,8 @@ public class CinematicTimeline : ModuleRules
 		
 		PrivateDependencyModuleNames.AddRange([
 			"ChronicleCore",
+			"CharacterSystem",
+			"SubtitleSystem",
 			"LevelSequence",
 			"MovieScene",
 			"MovieSceneTracks",

@@ -1,6 +1,6 @@
 # Cinematic Timeline
 
-**Cinematic Timeline** is a runtime extension for the **Dialogue System**. It allows you to bind **voiceovers** and **character models** to existing Dialogue Graphs, then automatically generate a runtime actor that plays through the sequence according to the dialogue's logic.
+**Cinematic Timeline** is a runtime extension for the **Dialogue System**. It allows you to bind **voiceovers**, **positioning presets** and **character models** to existing Dialogue Graphs, then automatically generate a runtime actor that plays through the sequence according to the dialogue's logic.
 
 ## How To Use
 
@@ -20,10 +20,9 @@
 
 1. Assign character models to dialogue participants
 
-> To learn about characters and their models, refer to the [Character System Documentation](../Docs/CharacterSystem.md).
+> To learn about characters and their models, refer to the [Character System Documentation](Docs/CharacterSystem.md).
 
 2. Assign voiceovers to individual lines - only sound assets prefixed with **VO_** will be available
-3. Use the navigation buttons to follow the dialogue flow and verify the setup
 
 ### Use in runtime
 
@@ -34,13 +33,4 @@ The naming follows a fixed convention - if the source Dialogue Asset was named *
 To use it:
 
 1. Add the **CIN_** actor to your scene
-2. By default it plays on **Begin Play** - this can be changed in `/Chronicle/Actors/BP_CinematicSequenceActor`
-
-## Integration
-
-The Cinematic Timeline is still a work in progress and is **not recommended for production use** yet. The current runtime integration is intentionally minimal and serves primarily as a showcase.
-
-What's still needed:
-- More flexible playback control
-- Improved runtime actor configuration
-- Better integration with the broader Chronicle systems
+2. Trigger cinematic with **OnCinematicStartRequired Event** on **CIN_** actor

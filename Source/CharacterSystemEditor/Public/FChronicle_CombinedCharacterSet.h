@@ -3,12 +3,15 @@
 #include "FChronicle_CharacterSet.h"
 #include "IChronicle_CharacterSet.h"
 
-class FChronicle_CombinedCharacterSet : public IChronicle_CharacterSet
+struct FChronicle_AnimationData;
+
+class CHARACTERSYSTEMEDITOR_API FChronicle_CombinedCharacterSet : public IChronicle_CharacterSet
 {
 public:
 	FChronicle_CombinedCharacterSet(FChronicle_CharacterSet& InSet1, FChronicle_CharacterSet& InSet2);
 	
 public:
+	virtual FChronicle_AnimationData GetRandomAnimation(const FGuid& Id, const FGuid& EmotionId) const override;
 	virtual void Refresh(const TArray<FChronicle_Character>& Characters) override;
 	virtual TArray<TSharedPtr<FGuid>> GetSharedIds() const override;
 	virtual FName GetName(FGuid Id) const override;

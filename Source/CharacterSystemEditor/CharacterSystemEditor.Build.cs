@@ -7,6 +7,7 @@ public class CharacterSystemEditor : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		
 		PublicDependencyModuleNames.AddRange([
+			"CharacterSystem",
 			"Core",
 			"CoreUObject",
 			"Engine"
@@ -14,10 +15,15 @@ public class CharacterSystemEditor : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange([
 			"ChronicleCore",
+			"ChronicleCoreEditor",
+			"PropertyEditor",
 			"AssetRegistry",
 			"AssetTools",
 			"UnrealEd",
-			"DeveloperSettings"
+			"Slate",
+			"SlateCore",
+			"DeveloperSettings",
+			"InputCore"
 		]);
 	}
 }

@@ -36,11 +36,12 @@ Chronicle is divided into separate modules for clarity and easier maintenance. E
 
 Planned features for Chronicle in no particular order:
 
-- Extending Cinematic Timeline (animations support, more fancy sequences generation, flow debugger)
-- Nice looking UI for Rules and Characters setup
-- Rules resolving runtime system
-- More restrictive Dialogue Graphs creation (to prevent setup errors)
-- Localization support
+- Smoothen transitions between sequences (Cinematic Timeline)
+- Fix animation transitions (Cinematic Timeline)
+- Add conversation flow debugger (Cinematic Timeline)
+- Improve sequences generation (Cinematic Timeline)
+- Add more designer-friendly project setup (Emotion Subsystem, Rule System and Character System)
+- Localization support (Dialogue System and Cinematic Timeline)
 
 ## Installation
 
@@ -61,8 +62,12 @@ Usage and integration instructions are included in each module’s README:
 
 - [Dialogue System](Docs/DialogueSystem.md) – Create and manage branching conversations with visual nodes
 - [Cinematic Timeline](Docs/CinematicTimeline.md) – Convert dialogue graphs to in-game cinematic sequences
+- [Character System](Docs/CharacterSystem.md) – Manage characters - models and animations
 - [Rule System](Docs/RuleSystem.md) – Define game logic and conditions
-- [Character System](Docs/CharacterSystem.md) – Manage characters
+
+## Sample Project
+
+Chronicle has sample project, which can be found here: https://github.com/janikowski-dev/Chronicle-Sample
 
 ## Contributing
 

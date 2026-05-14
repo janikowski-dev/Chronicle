@@ -15,6 +15,7 @@ public class CinematicTimelineEditor : ModuleRules
 		PrivateDependencyModuleNames.AddRange([
 			"ChronicleCore",
 			"CinematicTimeline",
+			"CharacterSystem",
 			"CharacterSystemEditor",
 			"LevelSequence",
 			"AssetRegistry",
@@ -28,7 +29,8 @@ public class CinematicTimelineEditor : ModuleRules
 			"MovieSceneTracks",
 			"MovieSceneTools",
 			"Sequencer",
-			"MovieScene"
+			"MovieScene",
+			"Projects"
 		]);
 	}
 }

@@ -43,6 +43,9 @@ public:
 	static TArray<FChronicle_CinematicEntry> GetAll();
 	
 	UFUNCTION(BlueprintCallable, Category="Chronicle|Cinematics")
+	static void RandomizeAnimations(UChronicle_CinematicData* CinematicData);
+	
+	UFUNCTION(BlueprintCallable, Category="Chronicle|Cinematics")
 	static FChronicle_SequenceInfo InitSequence(
 		ULevelSequence* LevelSequence,
 		UChronicle_CinematicData* CinematicData,
@@ -54,6 +57,9 @@ public:
 	    UClass* ParentClass,
 	    const FString& PackagePath,
 	    const FString& BlueprintName,
-		const FChronicle_DialogueInfo& Info
+		const FChronicle_DialogueInfo& Info,
+		const FTransform& ResponseTransform,
+		const TArray<FTransform>& CameraTransforms,
+		const TArray<FTransform>& ParticipantTransforms
 	);
 };

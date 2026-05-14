@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "0.3.0",
+	"VersionName": "0.4.0",
 	"FriendlyName": "Chronicle",
 	"Description": "Narration-driven game toolkit: dialogue graphs, rules management, character management, and cinematic timeline.",
 	"Category": "Tools",
@@ -18,8 +18,28 @@
 		{
 			"Name": "ChronicleCore",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "PreDefault"
 		},
+		{
+			"Name": "ChronicleCoreEditor",
+			"Type": "Editor",
+			"LoadingPhase": "PreDefault"
+		},
+        {
+            "Name": "SubtitleSystem",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "DialogueSystemEditor",
+            "Type": "Editor",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "CharacterSystemEditor",
+            "Type": "Editor",
+            "LoadingPhase": "Default"
+        },
         {
             "Name": "CinematicTimeline",
             "Type": "Runtime",
@@ -31,17 +51,12 @@
             "LoadingPhase": "Default"
         },
 		{
-			"Name": "DialogueSystemEditor",
-			"Type": "Editor",
+			"Name": "RuleSystem",
+			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		},
 		{
 			"Name": "RuleSystemEditor",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "CharacterSystemEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
 		}

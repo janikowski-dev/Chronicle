@@ -15,3 +15,8 @@ FText UChronicle_DialogueResponseNode::GetText() const
 {
 	return Text;
 }
+
+bool UChronicle_DialogueResponseNode::QualifiesForInnerGraph() const
+{
+	return true;
+}

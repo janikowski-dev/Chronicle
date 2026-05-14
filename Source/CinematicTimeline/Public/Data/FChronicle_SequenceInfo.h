@@ -19,6 +19,9 @@ struct CINEMATICTIMELINE_API FChronicle_SequenceInfo
 	TSoftObjectPtr<ULevelSequence> Sequence;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FText Text;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsEntrySequence;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

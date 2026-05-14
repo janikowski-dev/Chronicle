@@ -60,6 +60,11 @@ TArray<FChronicle_CinematicEntry> UChronicle_CinematicFunctionLibrary::GetAll()
 	return GetDefault<UChronicle_ExportInfo>()->Entries;
 }
 
+void UChronicle_CinematicFunctionLibrary::RandomizeAnimations(UChronicle_CinematicData* CinematicData)
+{
+	FChronicle_CinematicBlueprintUtilities::RandomizeAnimations(CinematicData);
+}
+
 FChronicle_SequenceInfo UChronicle_CinematicFunctionLibrary::InitSequence(
 	ULevelSequence* LevelSequence,
 	UChronicle_CinematicData* CinematicData,
@@ -73,8 +78,18 @@ UBlueprint* UChronicle_CinematicFunctionLibrary::CreateBlueprintFromParent(
 	UClass* ParentClass,
 	const FString& PackagePath,
 	const FString& BlueprintName,
-	const FChronicle_DialogueInfo& Info
+	const FChronicle_DialogueInfo& Info,
+	const FTransform& ResponseTransform,
+	const TArray<FTransform>& CameraTransforms,
+	const TArray<FTransform>& ParticipantTransforms
 )
 {
-	return FChronicle_CinematicBlueprintUtilities::CreateBlueprintFromParent(ParentClass, PackagePath, BlueprintName, Info);
+	return FChronicle_CinematicBlueprintUtilities::CreateBlueprintFromParent(ParentClass,
+		PackagePath,
+		BlueprintName,
+		Info,
+		ResponseTransform,
+		CameraTransforms,
+		ParticipantTransforms
+	);
 }

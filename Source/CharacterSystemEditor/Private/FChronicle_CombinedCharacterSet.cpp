@@ -1,5 +1,8 @@
 ﻿#include "FChronicle_CombinedCharacterSet.h"
 
+#include "FChronicle_AnimationData.h"
+#include "FChronicle_CharacterSet.h"
+
 FChronicle_CombinedCharacterSet::FChronicle_CombinedCharacterSet(FChronicle_CharacterSet& InSet1, FChronicle_CharacterSet& InSet2)
 	: Set1(InSet1)
 	, Set2(InSet2)
@@ -15,6 +18,25 @@ TArray<TSharedPtr<FGuid>> FChronicle_CombinedCharacterSet::GetSharedIds() const
 	TArray<TSharedPtr<FGuid>> Combined = Set1.GetSharedIds();
 	Combined.Append(Set2.GetSharedIds());
 	return Combined;
+}
+
+FChronicle_AnimationData FChronicle_CombinedCharacterSet::GetRandomAnimation(const FGuid& Id, const FGuid& EmotionId) const
+{
+	FChronicle_AnimationData Sequence1 = Set1.GetRandomAnimation(Id, EmotionId);
+	
+	if (Sequence1 != FChronicle_AnimationData{})
+	{
+		return Sequence1;
+	}
+
+	FChronicle_AnimationData Sequence2 = Set2.GetRandomAnimation(Id, EmotionId);
+	
+	if (Sequence2 != FChronicle_AnimationData{})
+	{
+		return Sequence2;
+	}
+
+	return {};
 }
 
 FName FChronicle_CombinedCharacterSet::GetName(const FGuid Id) const

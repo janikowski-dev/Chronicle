@@ -1,9 +1,25 @@
 ﻿#include "FChronicle_CinematicTimelineEditorModule.h"
 
-#define LOCTEXT_NAMESPACE "FCinematicTimelineEditorModule"
+#include "ISequencerModule.h"
+#include "Editors/FChronicle_AnimationTrackEditor.h"
+#include "Editors/FChronicle_EntryTrackEditor.h"
+#include "Editors/FChronicle_SubtitleTrackEditor.h"
+
+#define LOCTEXT_NAMESPACE "ChronicleCinematicTimelineEditorModule"
 
 void FChronicle_CinematicTimelineEditorModule::StartupModule()
 {
+	FModuleManager::LoadModuleChecked<ISequencerModule>("Sequencer").RegisterTrackEditor(
+		FOnCreateTrackEditor::CreateStatic(&FChronicle_AnimationTrackEditor::CreateTrackEditor)
+	);
+	
+	FModuleManager::LoadModuleChecked<ISequencerModule>("Sequencer").RegisterTrackEditor(
+		FOnCreateTrackEditor::CreateStatic(&FChronicle_SubtitleTrackEditor::CreateTrackEditor)
+	);
+	
+	FModuleManager::LoadModuleChecked<ISequencerModule>("Sequencer").RegisterTrackEditor(
+		FOnCreateTrackEditor::CreateStatic(&FChronicle_EntryTrackEditor::CreateTrackEditor)
+	);
 }
 
 void FChronicle_CinematicTimelineEditorModule::ShutdownModule()

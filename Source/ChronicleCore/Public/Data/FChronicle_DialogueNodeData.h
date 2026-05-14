@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "EChronicle_DialogueNodeType.h"
+#include "FChronicle_CallbackData.h"
 #include "FChronicle_RuleData.h"
 #include "FChronicle_DialogueNodeData.generated.h"
 
@@ -16,7 +17,13 @@ struct CHRONICLECORE_API FChronicle_DialogueNodeData
 	EChronicle_DialogueNodeType Type = EChronicle_DialogueNodeType::Root;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FGuid EmotionId;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	FString Text;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FString Subtitle;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	FGuid SpeakerId;
@@ -28,7 +35,7 @@ struct CHRONICLECORE_API FChronicle_DialogueNodeData
 	TArray<FChronicle_RuleData> Rules;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TArray<FGuid> Callbacks;
+	TArray<FChronicle_CallbackData> Callbacks;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TArray<FGuid> Children;
