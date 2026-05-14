@@ -8,6 +8,12 @@
 
 ## How To Use
 
+### Add a model
+
+1. Right click the `Content Browser`
+2. Create `Blueprint Class`
+3. Select `Chronicle_CharacterActor` as parent class
+
 ### Add a character
 
 1. Navigate to `Edit → Project Settings → Chronicle → Characters`
