@@ -32,6 +32,7 @@ It stores:
 - Dialogue line content
 - Speaker
 - Listener
+- Emotion reference
 
 By default, the **Player** is set as the listener, but this can be manually set in node.
 
@@ -43,7 +44,7 @@ The **Response Node** represents a player dialogue choice.
 
 It stores:
 
-- The response text shown to the player
+- The response text shown to the player as a dialogue option
 
 Unlike Line Nodes, Response Nodes do not define a speaker or listener - the **Player** is implicitly the speaker when selecting a response.
 
@@ -65,7 +66,7 @@ This ensures consistency while preventing accidental modification of the origina
 
 **Line** and **Response** nodes can be configured internally through their dedicated node editor.
 
-Each node supports:
+Each edge node supports:
 
 - **Availability Requirements** – conditions that must be met for the node to be accessible
 - **Post-Execution Callbacks** – logic executed after the node runs
@@ -123,18 +124,19 @@ This allows you to quickly inspect dialogue logic without opening each node indi
 
 The package is still work in progress. If you were to use it right now, you'd need:
 
-- System that runs dialogues
-- Resolver for conditions checks
-- Handler for callbacks
-
-All of which will be implemented as soon as possible.
-
 Right now, dialogue data can be used in your runtime systems via:
 
 - **UDialogueData instance** – the runtime UObject generated from your Dialogue Asset
 - **JSON export** – copy dialogue data to the clipboard for external tools or runtime parsing
+- **Cinematic Timeline** - view 
 
 This allows you to integrate dialogues directly into gameplay logic, AI systems, or UI.
+
+## Extend Emotions
+
+Emotions are defined through the **Emotion Subsystem**. To modify them, please navigate to `Edit → Project Settings → Chronicle → Emotions`:
+
+![Emotions Overview](../Assets/Emotions_Overview.png)
 
 ## Extend Conditions & Callbacks
 

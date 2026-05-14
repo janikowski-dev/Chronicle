@@ -17,7 +17,7 @@
 
 1. Each character has a **unique GUID** for identification
 2. Modify its **name** in the field
-3. Add **models** that can be used by the character for cinematic sequences
+3. Add **models** and **animations** that can be used by the character for cinematic sequences
 
 ## Integration
 
@@ -26,6 +26,12 @@ To integrate with runtime systems, use **FChronicle_CharacterDirectory** methods
 ## Inner Integrations
 
 Cinematic Timeline is integrated out of the box with Character System.
+
+## Extend Emotions
+
+Emotions are defined through the **Emotion Subsystem**. To modify them, please navigate to `Edit → Project Settings → Chronicle → Emotions`:
+
+![Emotions Overview](../Assets/Emotions_Overview.png)
 
 ## Planned Features
 
