@@ -37,6 +37,7 @@ Chronicle is divided into separate modules for clarity and easier maintenance. E
 Planned features for Chronicle in no particular order:
 
 - Smoothen transitions between sequences (Cinematic Timeline)
+- Add facial animations (Cinematic Timeline)
 - Fix animation transitions (Cinematic Timeline)
 - Add conversation flow debugger (Cinematic Timeline)
 - Improve sequences generation (Cinematic Timeline)
