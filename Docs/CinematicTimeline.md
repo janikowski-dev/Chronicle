@@ -18,11 +18,12 @@
 
 ![Dialogue System Overview](../Assets/Cinematic_Timeline_Overview.png)
 
-1. Assign character models to dialogue participants
+1. Assign sequence preset
+2. Assign character models to dialogue participants
 
 > To learn about characters and their models, refer to the [Character System Documentation](Docs/CharacterSystem.md).
 
-2. Assign voiceovers to individual lines - only sound assets prefixed with **VO_** will be available
+3. Assign voiceovers to individual lines - only sound assets prefixed with **VO_** will be available
 
 ### Use in runtime
 
