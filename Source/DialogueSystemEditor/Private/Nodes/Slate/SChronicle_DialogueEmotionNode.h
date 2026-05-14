@@ -15,5 +15,4 @@ private:
 	TFunction<void(FGuid)> SelectEmotion();
 };
 
-extern template class SChronicle_DialogueEmotionNode<UChronicle_DialogueResponseNode>;
 extern template class SChronicle_DialogueEmotionNode<UChronicle_DialogueLineNode>;

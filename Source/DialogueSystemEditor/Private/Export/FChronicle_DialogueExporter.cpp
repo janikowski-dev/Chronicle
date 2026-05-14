@@ -81,6 +81,7 @@ FChronicle_DialogueNodeData FChronicle_DialogueExporter::ReadNodeData(UChronicle
 {
     FChronicle_DialogueNodeData NodeData;
     ReadLinkData(Node, NodeData);
+    ReadLineData(Node, NodeData);
     ReadSharedData(Node, NodeData);
     ReadType(Node,NodeData);
     ReadRoles(Node, NodeData);
@@ -109,6 +110,14 @@ void FChronicle_DialogueExporter::ReadLinkData(UEdGraphNode* Node, FChronicle_Di
     }
 }
 
+void FChronicle_DialogueExporter::ReadLineData(UEdGraphNode* Node, FChronicle_DialogueNodeData& NodeData)
+{
+    if (const UChronicle_DialogueLineNode* LineNode = Cast<UChronicle_DialogueLineNode>(Node))
+    {
+        NodeData.EmotionId = LineNode->EmotionId;
+    }
+}
+
 void FChronicle_DialogueExporter::ReadNodeData(UChronicle_DialogueData* Data, const FChronicle_DialogueNodeData& NodeData)
 {
     Data->Nodes.Add(NodeData);
@@ -117,7 +126,6 @@ void FChronicle_DialogueExporter::ReadNodeData(UChronicle_DialogueData* Data, co
 void FChronicle_DialogueExporter::ReadSharedData(const UChronicle_DialogueNode* Node, FChronicle_DialogueNodeData& NodeData)
 {
     NodeData.Text = Node->GetText().ToString();
-    NodeData.EmotionId = Node->EmotionId;
     NodeData.Id = Node->Id;
 }
 

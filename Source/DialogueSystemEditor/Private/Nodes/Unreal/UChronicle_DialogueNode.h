@@ -29,7 +29,5 @@ public:
 	UPROPERTY()
 	bool bIsHidden = false;
 	UPROPERTY()
-	FGuid EmotionId;
-	UPROPERTY()
 	FGuid Id;
 };

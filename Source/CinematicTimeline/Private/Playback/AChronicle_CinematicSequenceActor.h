@@ -44,6 +44,9 @@ public:
 	);
 	
 	UFUNCTION(BlueprintCallable, Category="Chronicle|Runtime")
+	static void LockOnTheLastFrame(ALevelSequenceActor* LevelSequenceActor);
+	
+	UFUNCTION(BlueprintCallable, Category="Chronicle|Runtime")
 	static void SetPlaybackPosition(
 		ALevelSequenceActor* LevelSequenceActor,
 		FFrameNumber StartFrame

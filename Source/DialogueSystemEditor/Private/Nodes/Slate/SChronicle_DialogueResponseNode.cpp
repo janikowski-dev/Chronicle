@@ -31,22 +31,6 @@ FReply SChronicle_DialogueResponseNode::OnMouseButtonDoubleClick(const FGeometry
 	return FReply::Handled();
 }
 
-FReply SChronicle_DialogueResponseNode::OpenEmotionSelectionWindow()
-{
-	return FChronicle_SlateHelper::OpenMenuWindow(
-		FText::FromString("Select Emotion"),
-		FText::FromString("No emotions to choose"),
-		GetAvailableEmotions(),
-		SelectEmotion()
-	);
-}
-
-FReply SChronicle_DialogueResponseNode::ResetEmotion()
-{
-	SelectEmotion()(FGuid());
-	return FReply::Handled();
-}
-
 void SChronicle_DialogueResponseNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 {
 	Box->AddSlot()
@@ -65,18 +49,6 @@ void SChronicle_DialogueResponseNode::AddBody(const TSharedRef<SVerticalBox>& Bo
 		FChronicle_SlateHelper::MakeTextField(
 			TAttribute<FText>(this, &SChronicle_DialogueResponseNode::GetText),
 			FOnTextCommitted::CreateSP(this, &SChronicle_DialogueResponseNode::SetText)
-		)
-	];
-
-	Box->AddSlot()
-	.AutoHeight()
-	.Padding(4.0f)
-	.HAlign(HAlign_Center)
-	[
-		FChronicle_SlateHelper::MakeEmotionSelectionButton(
-			FOnClicked::CreateSP(this, &SChronicle_DialogueResponseNode::OpenEmotionSelectionWindow),
-			FOnClicked::CreateSP(this, &SChronicle_DialogueResponseNode::ResetEmotion),
-			FChronicle_EmotionDirectory::GetAll().GetName(TypedNode->EmotionId)
 		)
 	];
 }
@@ -125,26 +97,4 @@ void SChronicle_DialogueResponseNode::FixAssignedId() const
 	});
 
 	TypedNode->SpeakerId = PlayerId ? **PlayerId : FGuid();
-}
-
-TArray<TPair<FName, FGuid>> SChronicle_DialogueResponseNode::GetAvailableEmotions() const
-{
-	TArray<TPair<FName, FGuid>> Emotions;
-	
-	for (TSharedPtr SharedId : FChronicle_EmotionDirectory::GetAll().GetSharedIds())
-	{
-		Emotions.Emplace(FName(FChronicle_EmotionDirectory::GetAll().GetName(*SharedId)), *SharedId);
-	}
-
-	return Emotions;
-}
-
-TFunction<void(FGuid)> SChronicle_DialogueResponseNode::SelectEmotion()
-{
-	return [this](const FGuid EmotionId)
-	{
-		TypedNode->Modify();
-		TypedNode->EmotionId = EmotionId;
-		UpdateGraphNode();
-	};
 }

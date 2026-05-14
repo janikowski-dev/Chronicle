@@ -24,9 +24,4 @@ private:
 	
 	void OpenNodeEditor() const;
 	void FixAssignedId() const;
-	
-	FReply OpenEmotionSelectionWindow() ;
-	TArray<TPair<FName, FGuid>> GetAvailableEmotions() const;
-	TFunction<void(FGuid)> SelectEmotion();
-	FReply ResetEmotion();
 };

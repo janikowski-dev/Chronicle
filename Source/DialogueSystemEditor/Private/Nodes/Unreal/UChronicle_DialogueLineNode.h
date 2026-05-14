@@ -24,4 +24,6 @@ public:
 	FGuid SpeakerId;
 	UPROPERTY()
 	FGuid ListenerId;
+	UPROPERTY()
+	FGuid EmotionId;
 };

@@ -47,5 +47,4 @@ TFunction<void(FGuid)> SChronicle_DialogueEmotionNode<TNodeType>::SelectEmotion(
 	};
 }
 
-template class SChronicle_DialogueEmotionNode<UChronicle_DialogueResponseNode>;
 template class SChronicle_DialogueEmotionNode<UChronicle_DialogueLineNode>;

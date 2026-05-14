@@ -161,6 +161,15 @@ void AChronicle_CinematicSequenceActor::OffsetResponseCamera(
     }
 }
 
+void AChronicle_CinematicSequenceActor::LockOnTheLastFrame(ALevelSequenceActor* LevelSequenceActor)
+{
+    const ULevelSequence* LevelSequence = Cast<ULevelSequence>(LevelSequenceActor->GetSequence());
+    const UMovieScene* MovieScene = LevelSequence->GetMovieScene();
+    const TRange<FFrameNumber> PlaybackRange = MovieScene->GetPlaybackRange();
+    const FFrameNumber LastTick = UE::MovieScene::DiscreteExclusiveUpper(PlaybackRange) - 1;
+    SetPlaybackPosition(LevelSequenceActor, LastTick);
+}
+
 void AChronicle_CinematicSequenceActor::SetPlaybackPosition(
     ALevelSequenceActor* LevelSequenceActor,
     const FFrameNumber StartFrame

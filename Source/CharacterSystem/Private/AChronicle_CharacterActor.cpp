@@ -1,10 +1,12 @@
 ﻿#include "AChronicle_CharacterActor.h"
-
 #include "Animation/AnimSingleNodeInstance.h"
 
 AChronicle_CharacterActor::AChronicle_CharacterActor()
 {
-	GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponent"));
+	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	MeshComponent->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	RootComponent = MeshComponent;
 }
 
 void AChronicle_CharacterActor::BeginPlay()
@@ -17,9 +19,9 @@ void AChronicle_CharacterActor::PlayAnimation(const FChronicle_AnimationData& Da
 {
 	if (UAnimSequence* Animation = GetAnimation(Data))
 	{
-		GetMesh()->PlayAnimation(Animation, true);
-		GetMesh()->TickAnimation(0.0f, false);
-		GetMesh()->RefreshBoneTransforms();
+		MeshComponent->PlayAnimation(Animation, true);
+		MeshComponent->TickAnimation(0.0f, false);
+		MeshComponent->RefreshBoneTransforms();
 	}
 }
 
@@ -31,13 +33,13 @@ UAnimSequence* AChronicle_CharacterActor::GetAnimation(const FChronicle_Animatio
 	{
 		return nullptr;
 	}
-	
-	UAnimSingleNodeInstance* SingleNode = GetMesh()->GetSingleNodeInstance();
 
-	if (SingleNode->GetCurrentAsset() == Animation)
+	UAnimSingleNodeInstance* SingleNode = MeshComponent->GetSingleNodeInstance();
+
+	if (SingleNode && SingleNode->GetCurrentAsset() == Animation)
 	{
 		return nullptr;
 	}
-	
+
 	return Animation;
 }
