@@ -32,6 +32,8 @@ Chronicle is divided into separate modules for clarity and easier maintenance. E
 
 [See full Character System documentation →](Docs/CharacterSystem.md)
 
+> **Development paused.** Chronicle is currently on hold. It's been a solo project from the start, and without other contributors I don't have the bandwidth to keep active development going right now. The repository stays public and the code remains usable under the MIT license - feel free to clone, fork, or build on it. The roadmap below is kept for reference rather than as a committed plan. If you'd like to help revive the project, see Contributing.
+
 ## Roadmap (ish)
 
 Planned features for Chronicle in no particular order:
@@ -68,8 +70,8 @@ Usage and integration instructions are included in each module’s README:
 
 ## Sample Project
 
-Chronicle has sample project, which can be found here: https://github.com/janikowski-dev/Chronicle-Sample
+Chronicle has a sample project, which can be found here: https://github.com/janikowski-dev/Chronicle-Sample
 
 ## Contributing
 
-Chronicle is open for contributions! If you'd like to help expand features, improve documentation, or provide bug fixes, please fork the repository and submit a pull request.
+Chronicle is open for contributions. Active development is paused, but the project is very much open to people who want to pick things up - bug fixes, documentation, or new features are all welcome. Fork the repository and submit a pull request, and feel free to open an issue first if you'd like to coordinate.

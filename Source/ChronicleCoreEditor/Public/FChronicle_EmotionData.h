@@ -11,6 +11,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FGuid Id = FGuid::NewGuid();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString Name;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FString Name = FString("New Emotion");
 };

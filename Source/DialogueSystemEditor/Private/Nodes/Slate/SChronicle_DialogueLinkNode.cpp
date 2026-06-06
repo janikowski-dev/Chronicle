@@ -52,16 +52,6 @@ void SChronicle_DialogueLinkNode::AddBody(const TSharedRef<SVerticalBox>& Box)
             TAttribute<FText>(this, &SChronicle_DialogueLinkNode::GetSpeakerName)
         )
     ];
-
-    Box->AddSlot()
-    .AutoHeight()
-    .Padding(4)
-    [
-        FChronicle_SlateHelper::MakeCharacterDisplay(
-            FChronicle_EditorStyle::Get().GetBrush("Icons.Listener"),
-            TAttribute<FText>(this, &SChronicle_DialogueLinkNode::GetListenerName)
-        )
-    ];
     
     Box->AddSlot()
     .AutoHeight()

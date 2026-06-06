@@ -50,18 +50,6 @@ void SChronicle_DialogueLineNode::AddBody(const TSharedRef<SVerticalBox>& Box)
 	
 	Box->AddSlot()
 	.AutoHeight()
-	.Padding(4)
-	[
-		FChronicle_SlateHelper::MakeCharacterSelector(
-			FChronicle_EditorStyle::Get().GetBrush("Icons.Listener"),
-			TAttribute<FText>(this, &SChronicle_DialogueLineNode::GetListenerName),
-			SComboBox<TSharedPtr<FGuid>>::FOnSelectionChanged::CreateSP(this, &SChronicle_DialogueLineNode::SetListener),
-			&TypedGraph->SharedParticipantIds
-		)
-	];
-	
-	Box->AddSlot()
-	.AutoHeight()
 	[
 		FChronicle_SlateHelper::MakeTextField(
 			TAttribute<FText>(this, &SChronicle_DialogueLineNode::GetText),

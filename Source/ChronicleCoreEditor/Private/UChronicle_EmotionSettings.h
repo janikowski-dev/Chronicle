@@ -16,6 +16,6 @@ public:
 	FString GetName(FGuid Id) const;
 
 public:
-	UPROPERTY(Config, EditAnywhere)
+	UPROPERTY(Config, VisibleAnywhere)
 	TArray<FChronicle_EmotionData> Emotions;
 };
