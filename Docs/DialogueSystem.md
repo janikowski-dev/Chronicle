@@ -134,7 +134,7 @@ This allows you to integrate dialogues directly into gameplay logic, AI systems,
 
 ## Extend Emotions
 
-Emotions are defined through the **Emotion Subsystem**. To modify them, please navigate to `Edit → Project Settings → Chronicle → Emotions`:
+Emotions are defined through the **Emotion Subsystem**. To modify them, please navigate to `Tools → Emotion Editor`:
 
 ![Emotions Overview](../Assets/Emotions_Overview.png)
 
